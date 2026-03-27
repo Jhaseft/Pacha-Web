@@ -10,7 +10,7 @@ import { loginWithEmail } from "../../lib/auth";
 const ROLE_REDIRECTS: Record<string, string> = {
   USER: "/dashboard",
   ANFITRIONA: "/dashboard",
-  ADMIN: "/dashboard",
+  ADMIN: "/admin",
 };
 
 export default function LoginPage() {
