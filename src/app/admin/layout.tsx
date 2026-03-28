@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -40,6 +40,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const { user, isHydrated, logout } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     if (!isHydrated) return;
@@ -55,11 +56,58 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     );
   }
 
+
   return (
     <div className="flex min-h-screen bg-black">
-      {/* Sidebar */}
-      <aside className="w-56 shrink-0 bg-[#A11213] flex flex-col">
-        {/* Logo */}
+
+      <header className="md:hidden fixed top-0 left-0 right-0 z-40 bg-[#A11213] flex items-center justify-between px-4 py-3 border-b border-red-800/60">
+        <div className="flex items-center gap-2">
+          <Image src="/logofull.jpeg" alt="Pachamama" width={32} height={32} className="rounded-lg object-cover" />
+          <span className="text-white font-black text-base tracking-tight">Pachamama</span>
+        </div>
+        <button onClick={() => setMenuOpen(!menuOpen)} className="text-white p-1">
+          {menuOpen ? (
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          ) : (
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+          )}
+        </button>
+      </header>
+
+      {menuOpen && (
+        <div className="md:hidden fixed top-[57px] left-0 right-0 z-30 bg-[#A11213] border-b border-red-800/60 flex flex-col px-3 py-2">
+          {NAV_ITEMS.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setMenuOpen(false)}
+                className={`flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-bold transition-colors
+                  ${isActive ? "bg-white/20 text-white" : "text-red-200"}`}
+              >
+                {item.icon}
+                {item.label}
+              </Link>
+            );
+          })}
+          <button
+            onClick={() => { logout(); router.replace("/login"); }}
+            className="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-bold text-red-200 w-full"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+            </svg>
+            Cerrar sesión
+          </button>
+        </div>
+      )}
+
+      <aside className="hidden md:flex w-56 shrink-0 bg-[#A11213] flex-col">
         <div className="flex items-center gap-3 px-5 py-5 border-b border-red-800/60">
           <Image
             src="/logofull.jpeg"
@@ -71,7 +119,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <span className="text-white font-black text-base tracking-tight">Pachamama</span>
         </div>
 
-        {/* Nav */}
         <nav className="flex-1 px-3 py-4 flex flex-col gap-1">
           {NAV_ITEMS.map((item) => {
             const isActive = pathname === item.href;
@@ -92,7 +139,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           })}
         </nav>
 
-        {/* Logout */}
         <div className="px-3 py-4 border-t border-red-800/60">
           <button
             onClick={() => { logout(); router.replace("/login"); }}
@@ -106,8 +152,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
       </aside>
 
-      {/* Main content */}
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto pt-[57px] md:pt-0">
         {children}
       </main>
     </div>
