@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const API_URL =
     process.env.NEXT_PUBLIC_API_URL ??
-    "https://paginas-pachamama-backend.pk1ooa.easypanel.host";
+    "https://caja-negra-pachamama-backend.wkhbmg.easypanel.host";
 
 // Creamos la instancia base
 export const apiAxios = axios.create({
