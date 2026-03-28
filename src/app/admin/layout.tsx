@@ -34,6 +34,24 @@ const NAV_ITEMS = [
       </svg>
     ),
   },
+  {
+    label: "Retiros",
+    href: "/admin/withdrawalRequest/list",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+      </svg>
+    ),
+  },
+  {
+    label: "Historial de pagos",
+    href: "/admin/historyPayment",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
+      </svg>
+    ),
+  },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -88,7 +106,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       {/* ── Mobile dropdown menu ── */}
       {menuOpen && (
-        <div className="md:hidden fixed top-[57px] left-0 right-0 z-30 bg-gradient-to-b from-[#A11213] to-[#7a0d0e] border-b border-red-800/60 flex flex-col px-3 py-3 shadow-xl">
+        <div className="md:hidden fixed top-14.25 left-0 right-0 z-30 bg-linear-to-b from-[#A11213] to-[#7a0d0e] border-b border-red-800/60 flex flex-col px-3 py-3 shadow-xl">
           {NAV_ITEMS.map((item) => {
             const isActive = pathname === item.href;
             return (
@@ -117,7 +135,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       )}
 
       {/* ── Desktop sidebar ── */}
-      <aside className="hidden md:flex w-60 shrink-0 flex-col bg-gradient-to-b from-[#A11213] to-[#7a0d0e] shadow-2xl">
+      <aside className="hidden md:flex w-60 shrink-0 flex-col bg-linear-to-b from-[#A11213] to-[#7a0d0e] shadow-2xl">
         {/* Logo */}
         <div className="flex items-center gap-3 px-5 py-6">
           <Image src="/logofull.jpeg" alt="Pachamama" width={40} height={40} className="rounded-xl object-cover shadow-lg ring-2 ring-white/20" />
@@ -188,7 +206,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto pt-[57px] md:pt-0">
+        <main className="flex-1 overflow-y-auto pt-14.25 md:pt-0">
           {children}
         </main>
       </div>

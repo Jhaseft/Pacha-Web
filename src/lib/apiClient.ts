@@ -1,9 +1,8 @@
 import axios from "axios";
 
-/**const API_URL =
+export const API_URL =
     process.env.NEXT_PUBLIC_API_URL ??
-    "https://paginas-pachamama-backend.pk1ooa.easypanel.host";*/
-export const API_URL = "http://192.168.100.9:4000";
+    "https://paginas-pachamama-backend.pk1ooa.easypanel.host";
 
 // Creamos la instancia base
 export const apiAxios = axios.create({
