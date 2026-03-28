@@ -49,56 +49,89 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   if (!isHydrated || !user) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen bg-[#0d0d0d] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-10 h-10 border-2 border-[#A11213] border-t-transparent rounded-full animate-spin" />
+          <p className="text-white/30 text-sm">Cargando panel...</p>
+        </div>
       </div>
     );
   }
 
+  const initials = `${user.firstName?.[0] ?? ""}${user.lastName?.[0] ?? ""}`.toUpperCase() || "AD";
+
   return (
-    <div className="flex min-h-screen bg-black">
-      {/* Sidebar */}
-      <aside className="w-56 shrink-0 bg-[#A11213] flex flex-col">
+    <div className="flex min-h-screen bg-[#0d0d0d]">
+      {/* ── Sidebar ── */}
+      <aside className="w-60 shrink-0 flex flex-col bg-gradient-to-b from-[#A11213] to-[#7a0d0e] shadow-2xl">
+
         {/* Logo */}
-        <div className="flex items-center gap-3 px-5 py-5 border-b border-red-800/60">
+        <div className="flex items-center gap-3 px-5 py-6">
           <Image
             src="/logofull.jpeg"
             alt="Pachamama"
-            width={36}
-            height={36}
-            className="rounded-lg object-cover"
+            width={40}
+            height={40}
+            className="rounded-xl object-cover shadow-lg ring-2 ring-white/20"
           />
-          <span className="text-white font-black text-base tracking-tight">Pachamama</span>
+          <div>
+            <p className="text-white font-black text-base tracking-tight leading-tight">Pachamama</p>
+            <p className="text-red-200/70 text-[10px] font-medium uppercase tracking-widest">Admin Panel</p>
+          </div>
         </div>
 
-        {/* Nav */}
-        <nav className="flex-1 px-3 py-4 flex flex-col gap-1">
+        {/* Divider */}
+        <div className="mx-4 h-px bg-white/10 mb-4" />
+
+        {/* Nav label */}
+        <p className="text-red-200/50 text-[10px] font-bold uppercase tracking-widest px-5 mb-2">Menú</p>
+
+        {/* Nav items */}
+        <nav className="flex-1 px-3 flex flex-col gap-1">
           {NAV_ITEMS.map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold transition-colors
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-150
                   ${isActive
-                    ? "bg-white/20 text-white"
-                    : "text-red-200 hover:bg-white/10 hover:text-white"
+                    ? "bg-white text-[#A11213] shadow-md"
+                    : "text-red-100 hover:bg-white/10 hover:text-white"
                   }`}
               >
-                {item.icon}
+                <span className={isActive ? "text-[#A11213]" : ""}>{item.icon}</span>
                 {item.label}
+                {isActive && (
+                  <span className="ml-auto w-1.5 h-1.5 rounded-full bg-[#A11213]" />
+                )}
               </Link>
             );
           })}
         </nav>
 
-        {/* Logout */}
-        <div className="px-3 py-4 border-t border-red-800/60">
+        {/* User info + Logout */}
+        <div className="mx-4 h-px bg-white/10 mt-4 mb-3" />
+        <div className="px-3 pb-5 flex flex-col gap-1">
+          {/* User chip */}
+          <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/10">
+            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+              <span className="text-white text-xs font-black">{initials}</span>
+            </div>
+            <div className="min-w-0">
+              <p className="text-white text-xs font-bold truncate">
+                {user.firstName ? `${user.firstName} ${user.lastName ?? ""}`.trim() : "Administrador"}
+              </p>
+              <p className="text-red-200/60 text-[10px] truncate">{user.email ?? ""}</p>
+            </div>
+          </div>
+
+          {/* Logout */}
           <button
             onClick={() => { logout(); router.replace("/login"); }}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-red-200 hover:bg-white/10 hover:text-white transition-colors w-full"
+            className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-red-200/70 hover:bg-white/10 hover:text-white transition-all w-full"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
             </svg>
             Cerrar sesión
@@ -106,10 +139,23 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
       </aside>
 
-      {/* Main content */}
-      <main className="flex-1 overflow-y-auto">
-        {children}
-      </main>
+      {/* ── Main ── */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Topbar */}
+        <header className="bg-[#111] border-b border-white/5 px-8 py-4 flex items-center justify-between shrink-0">
+          <p className="text-white/40 text-sm">
+            {new Date().toLocaleDateString("es-PE", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
+          </p>
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+            <span className="text-white/40 text-xs">Sistema activo</span>
+          </div>
+        </header>
+
+        <main className="flex-1 overflow-y-auto">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }
