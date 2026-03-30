@@ -371,21 +371,21 @@ export default function LandingPage() {
                 {/* Download buttons */}
                 <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
 
-                  {/* Google Play */}
+                  {/* Android APK */}
                   <a
-                    href="#"
+                    href="https://github.com/Jhaseft/Pachamama_Frontend/releases/download/apk/application-a1a328cb-2cf5-45ba-8332-c5fe8190b862.1.apk"
+                    download
                     className="group flex items-center gap-4 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#A11213]/40
                       rounded-2xl px-5 py-3.5 transition-all w-full sm:w-auto min-w-[190px]"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 shrink-0" viewBox="0 0 24 24" fill="none">
-                      <path d="M3.18 1.07 13.44 11.3 3.18 21.54a1.64 1.64 0 0 1-.43-1.11V2.18c0-.42.16-.8.43-1.11Z" fill="#EA4335"/>
-                      <path d="m16.49 8.02-2.7 2.7L3.18 1.07C3.53.72 4.04.56 4.58.82l11.91 7.2Z" fill="#FBBC04"/>
-                      <path d="m16.49 14.59-11.91 7.2c-.54.26-1.05.1-1.4-.25l10.61-10.62 2.7 2.67Z" fill="#34A853"/>
-                      <path d="m20.5 10.03-3.14 1.9-2.87-2.86 2.87-2.87 3.14 1.9c.9.54.9 1.39 0 1.93Z" fill="#4285F4"/>
-                    </svg>
+                    <div className="w-8 h-8 shrink-0 bg-[#A11213]/20 rounded-xl flex items-center justify-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="#A11213">
+                        <path d="M17.523 15.341a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm-11.046 0a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM2.1 8.4h19.8A1.1 1.1 0 0 1 23 9.5v6a1.1 1.1 0 0 1-1.1 1.1H21v2.65a.75.75 0 0 1-1.5 0V16.6H4.5v2.65a.75.75 0 0 1-1.5 0V16.6h-.9A1.1 1.1 0 0 1 1 15.5v-6A1.1 1.1 0 0 1 2.1 8.4Zm.9 1.5v5h18v-5H3ZM8.22 2.47a.75.75 0 0 1 1.02-.28L12 3.8l2.76-1.61a.75.75 0 1 1 .75 1.3L13.5 4.8V7.4h-3V4.8L8.5 3.49a.75.75 0 0 1-.28-1.02Z" />
+                      </svg>
+                    </div>
                     <div className="text-left">
-                      <p className="text-white/40 text-[10px] uppercase tracking-wider leading-none mb-0.5">Disponible en</p>
-                      <p className="text-white font-black text-base leading-tight">Google Play</p>
+                      <p className="text-white/40 text-[10px] uppercase tracking-wider leading-none mb-0.5">Descargar para</p>
+                      <p className="text-white font-black text-base leading-tight">Android (.apk)</p>
                     </div>
                   </a>
 
