@@ -371,6 +371,38 @@ export default function DashboardPage() {
           </p>
         </div>
 
+        {/* ── Descargar App ── */}
+        <div className="pb-10">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <div className="h-0.5 w-10 bg-white/10" />
+            <p className="text-white/20 text-xs uppercase tracking-widest font-semibold">App Móvil</p>
+            <div className="h-0.5 w-10 bg-white/10" />
+          </div>
+
+          <a
+            href="https://github.com/Jhaseft/Pachamama_Frontend/releases/download/apk/application-a1a328cb-2cf5-45ba-8332-c5fe8190b862.1.apk"
+            download
+            className="flex items-center gap-4 bg-white/5 hover:bg-white/10 active:scale-[0.98] border border-white/10 rounded-3xl px-5 py-4 transition-all"
+          >
+            {/* Android icon */}
+            <div className="w-12 h-12 bg-[#A11213]/20 rounded-2xl flex items-center justify-center shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-7 h-7" viewBox="0 0 24 24" fill="#A11213">
+                <path d="M17.523 15.341a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm-11.046 0a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM2.1 8.4h19.8A1.1 1.1 0 0 1 23 9.5v6a1.1 1.1 0 0 1-1.1 1.1H21v2.65a.75.75 0 0 1-1.5 0V16.6H4.5v2.65a.75.75 0 0 1-1.5 0V16.6h-.9A1.1 1.1 0 0 1 1 15.5v-6A1.1 1.1 0 0 1 2.1 8.4Zm.9 1.5v5h18v-5H3ZM8.22 2.47a.75.75 0 0 1 1.02-.28L12 3.8l2.76-1.61a.75.75 0 1 1 .75 1.3L13.5 4.8V7.4h-3V4.8L8.5 3.49a.75.75 0 0 1-.28-1.02Z" />
+              </svg>
+            </div>
+
+            <div className="flex-1 min-w-0">
+              <p className="text-white font-bold text-sm leading-tight">Descargar App Pachamama</p>
+              <p className="text-white/40 text-xs mt-0.5">Versión Android (.apk)</p>
+            </div>
+
+            {/* Arrow */}
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-white/30 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+            </svg>
+          </a>
+        </div>
+
       </div>
     </div>
   );
