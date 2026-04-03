@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "../../context/AuthContext";
 import { apiGetAllPackages } from "../../lib/packages";
@@ -25,7 +25,7 @@ function DiamondOutline({ className = "w-9 h-9" }: { className?: string }) {
   );
 }
 
-export default function DashboardPage() {
+function DashboardContent() {
   const { user, token, isHydrated, logout } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -294,5 +294,13 @@ export default function DashboardPage() {
 
       </div>
     </div>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense>
+      <DashboardContent />
+    </Suspense>
   );
 }
