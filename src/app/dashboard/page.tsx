@@ -1,18 +1,11 @@
 "use client";
 
-import { useEffect, useState, useRef, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState, useCallback } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "../../context/AuthContext";
 import { apiGetAllPackages } from "../../lib/packages";
-import { apiCulqiChargeMe, apiGetMyWallet } from "../../lib/culqi";
+import { apiFlowCreatePayment, apiGetMyWallet } from "../../lib/flow";
 import type { PackageData } from "@/types/package";
-
-declare global {
-  interface Window {
-    Culqi: any;
-    culqi: () => void;
-  }
-}
 
 function DiamondFilled({ className = "w-8 h-8" }: { className?: string }) {
   return (
@@ -35,6 +28,7 @@ function DiamondOutline({ className = "w-9 h-9" }: { className?: string }) {
 export default function DashboardPage() {
   const { user, token, isHydrated, logout } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [balance, setBalance] = useState<number | null>(null);
   const [balanceLoading, setBalanceLoading] = useState(true);
@@ -44,124 +38,12 @@ export default function DashboardPage() {
   const [paying, setPaying] = useState(false);
   const [payingPkgId, setPayingPkgId] = useState<string | null>(null);
   const [payError, setPayError] = useState("");
-  const [paySuccess, setPaySuccess] = useState<{ credits: number; newBalance: number } | null>(null);
-
-  // Refs to avoid stale closures and for cleanup
-  const pendingPkgRef = useRef<PackageData | null>(null);
-  const tokenRef = useRef<string | null>(null);
-  const observerRef = useRef<MutationObserver | null>(null);
-  const modalOpenRef = useRef(false);
-
-  // Keep tokenRef in sync
-  useEffect(() => { tokenRef.current = token; }, [token]);
+  const [paySuccess, setPaySuccess] = useState(false);
 
   // ── Auth guard ─────────────────────────────────────────────────────────────
   useEffect(() => {
     if (isHydrated && !user) router.replace("/login");
   }, [isHydrated, user, router]);
-
-  // ── Load Culqi.js once ─────────────────────────────────────────────────────
-  useEffect(() => {
-    if (document.getElementById("culqi-script")) return;
-    const script = document.createElement("script");
-    script.id = "culqi-script";
-    script.src = "https://checkout.culqi.com/js/v4";
-    script.async = true;
-    document.head.appendChild(script);
-  }, []);
-
-  // ── Reset all payment state ─────────────────────────────────────────────────
-  const resetPayState = useCallback(() => {
-    setPaying(false);
-    setPayingPkgId(null);
-    pendingPkgRef.current = null;
-    modalOpenRef.current = false;
-    observerRef.current?.disconnect();
-    observerRef.current = null;
-  }, []);
-
-  // ── Watch for Culqi modal being closed via DOM removal ─────────────────────
-  // Safety net: Culqi v4 sometimes doesn't call window.culqi() on X-close
-  const startModalWatcher = useCallback(() => {
-    observerRef.current?.disconnect();
-
-    // Give Culqi 800ms to inject its modal into the DOM first
-    const startTimer = setTimeout(() => {
-      const observer = new MutationObserver(() => {
-        if (!modalOpenRef.current) return;
-        // Culqi v4 injects an iframe with src containing "culqi" or a div with culqi id
-        const modalEl =
-          document.querySelector('iframe[src*="culqi"]') ??
-          document.getElementById("culqi-checkout") ??
-          document.querySelector('[class*="culqi"]') ??
-          document.querySelector('[id*="culqi"]');
-
-        if (!modalEl) {
-          // Modal was removed from DOM — user closed it
-          observer.disconnect();
-          // Give window.culqi() 400ms to fire first (it has priority if called)
-          setTimeout(() => {
-            if (modalOpenRef.current && pendingPkgRef.current) {
-              resetPayState();
-            }
-          }, 400);
-        }
-      });
-
-      observer.observe(document.body, { childList: true, subtree: true });
-      observerRef.current = observer;
-    }, 800);
-
-    return () => clearTimeout(startTimer);
-  }, [resetPayState]);
-
-  // ── Culqi global callback ──────────────────────────────────────────────────
-  useEffect(() => {
-    window.culqi = async () => {
-      const culqiToken: string | undefined = window.Culqi?.token?.id;
-      const error = window.Culqi?.error;
-      const pkg = pendingPkgRef.current;
-      const authToken = tokenRef.current;
-
-      // Always disconnect the observer — culqi() was called, observer no longer needed
-      observerRef.current?.disconnect();
-      observerRef.current = null;
-      modalOpenRef.current = false;
-
-      if (!culqiToken) {
-        // User cancelled / closed modal / payment error
-        if (error?.user_message) {
-          setPayError(error.user_message);
-        }
-        resetPayState();
-        return;
-      }
-
-      if (!pkg || !authToken) {
-        resetPayState();
-        return;
-      }
-
-      // Token received — process the charge
-      try {
-        const result = await apiCulqiChargeMe(
-          { culqiToken, packageId: pkg.id! },
-          authToken,
-        );
-        setBalance(Number(result.newBalance));
-        setPaySuccess({ credits: result.credits, newBalance: Number(result.newBalance) });
-        setPayError("");
-      } catch (e: any) {
-        setPayError(e.message ?? "Error al procesar el pago");
-      } finally {
-        resetPayState();
-        window.Culqi?.close();
-      }
-    };
-  }, [resetPayState]);
-
-  // ── Cleanup observer on unmount ────────────────────────────────────────────
-  useEffect(() => () => { observerRef.current?.disconnect(); }, []);
 
   // ── Load wallet balance ────────────────────────────────────────────────────
   const loadBalance = useCallback(async () => {
@@ -186,28 +68,37 @@ export default function DashboardPage() {
       .finally(() => setPkgLoading(false));
   }, []);
 
-  // ── Open Culqi modal ───────────────────────────────────────────────────────
-  const handleBuy = (pkg: PackageData) => {
-    if (!window.Culqi) {
-      setPayError("El sistema de pagos no está listo. Recarga la página.");
-      return;
-    }
-    setPayError("");
-    setPaySuccess(null);
-    pendingPkgRef.current = pkg;
-    setPayingPkgId(pkg.id!);
-    modalOpenRef.current = true;
+  // ── Detectar retorno desde Flow ────────────────────────────────────────────
+  // Flow redirige al usuario de vuelta con ?token=xxx en la URL
+  useEffect(() => {
+    const flowToken = searchParams.get("token");
+    if (!flowToken) return;
 
-    window.Culqi.publicKey = process.env.NEXT_PUBLIC_CULQI_PUBLIC_KEY ?? "";
-    window.Culqi.settings({
-      title: "Pachamama",
-      currency: "PEN",
-      description: `${pkg.credits.toLocaleString()} créditos`,
-      amount: Math.round(Number(pkg.price) * 100),
-    });
+    // Limpiar el param de la URL sin recargar
+    window.history.replaceState({}, "", "/dashboard");
+
+    // El webhook del backend ya procesó el pago; refresca el saldo
+    setPaySuccess(true);
+    setTimeout(() => loadBalance(), 2000);
+  }, [searchParams, loadBalance]);
+
+  // ── Iniciar pago con Flow ──────────────────────────────────────────────────
+  const handleBuy = async (pkg: PackageData) => {
+    if (!token) return;
+    setPayError("");
+    setPaySuccess(false);
     setPaying(true);
-    window.Culqi.open();
-    startModalWatcher();
+    setPayingPkgId(pkg.id!);
+
+    try {
+      const { paymentUrl } = await apiFlowCreatePayment(pkg.id!, token);
+      // Redirige al checkout de Flow
+      window.location.href = paymentUrl;
+    } catch (e: any) {
+      setPayError(e.message ?? "Error al iniciar el pago");
+      setPaying(false);
+      setPayingPkgId(null);
+    }
   };
 
   // ── Loading screen ─────────────────────────────────────────────────────────
@@ -274,14 +165,12 @@ export default function DashboardPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg>
             <div>
-              <p className="text-green-400 text-sm font-bold">
-                ¡{paySuccess.credits.toLocaleString()} créditos acreditados!
-              </p>
+              <p className="text-green-400 text-sm font-bold">¡Pago procesado!</p>
               <p className="text-green-400/70 text-xs mt-0.5">
-                Nuevo saldo: {paySuccess.newBalance.toLocaleString()} créditos
+                Tus créditos serán acreditados en breve.
               </p>
             </div>
-            <button onClick={() => setPaySuccess(null)} className="ml-auto text-green-400/40 hover:text-green-400/80 transition-colors shrink-0">
+            <button onClick={() => setPaySuccess(false)} className="ml-auto text-green-400/40 hover:text-green-400/80 transition-colors shrink-0">
               <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
               </svg>
@@ -367,7 +256,7 @@ export default function DashboardPage() {
           )}
 
           <p className="text-white/15 text-xs text-center mt-8">
-            Pagos procesados de forma segura por Culqi
+            Pagos procesados de forma segura por Flow
           </p>
         </div>
 
