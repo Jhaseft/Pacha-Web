@@ -1,58 +1,59 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { useAuth } from "../../context/AuthContext";
-import { loginWithEmail } from "../../lib/auth";
+import { resetPassword } from "../../../lib/auth";
 
-const ROLE_REDIRECTS: Record<string, string> = {
-  USER: "/dashboard",
-  ANFITRIONA: "/dashboard",
-  ADMIN: "/admin",
-};
-
-export default function LoginPage() {
+function ResetPasswordForm() {
   const router = useRouter();
-  const { setSession } = useAuth();
+  const searchParams = useSearchParams();
+  const email = searchParams.get("email") ?? "";
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [code, setCode] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  async function handleLogin() {
-    const trimEmail = email.trim().toLowerCase();
-    const trimPass = password.trim();
+  async function handleSubmit() {
+    const trimCode = code.trim();
+    const trimPass = newPassword.trim();
+    const trimConfirm = confirmPassword.trim();
 
-    if (!trimEmail || !trimPass) {
-      setError("Ingresa tu correo y contraseña.");
+    if (!trimCode || !trimPass || !trimConfirm) {
+      setError("Completa todos los campos.");
       return;
     }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimEmail)) {
-      setError("Ingresa un correo válido.");
+    if (trimCode.length !== 6 || !/^\d+$/.test(trimCode)) {
+      setError("El código debe ser de 6 dígitos.");
+      return;
+    }
+    if (trimPass.length < 6) {
+      setError("La contraseña debe tener al menos 6 caracteres.");
+      return;
+    }
+    if (trimPass !== trimConfirm) {
+      setError("Las contraseñas no coinciden.");
       return;
     }
 
     try {
       setLoading(true);
       setError("");
-      const res = await loginWithEmail(trimEmail, trimPass);
-      await setSession(res.access_token, res.user);
-      router.replace(ROLE_REDIRECTS[res.user.role] ?? "/dashboard");
+      await resetPassword(email, trimCode, trimPass);
+      router.replace("/login");
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "No se pudo iniciar sesión."
+        err instanceof Error
+          ? err.message
+          : "No se pudo restablecer la contraseña."
       );
     } finally {
       setLoading(false);
     }
-  }
-
-  function handleKeyDown(e: React.KeyboardEvent) {
-    if (e.key === "Enter") handleLogin();
   }
 
   return (
@@ -69,46 +70,40 @@ export default function LoginPage() {
           />
         </div>
 
-        <h1 className="text-white text-3xl font-bold mb-1">Iniciar sesión</h1>
+        <h1 className="text-white text-3xl font-bold mb-1">Nueva contraseña</h1>
         <p className="text-white/60 text-base mb-8">
-          Accede con tu correo y contraseña.
+          Ingresa el código que enviamos a{" "}
+          <span className="text-white font-semibold">{email}</span> y elige una
+          nueva contraseña.
         </p>
 
         <div className="mb-4">
           <label className="text-white text-base font-semibold block mb-2">
-            Email
+            Código de verificación
           </label>
           <input
-            type="email"
-            placeholder="correo@ejemplo.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            onKeyDown={handleKeyDown}
-            autoComplete="email"
-            className="w-full bg-neutral-900 border border-white/30 rounded-xl px-4 py-3 text-white placeholder-[#555] outline-none focus:border-white transition-colors"
+            type="text"
+            inputMode="numeric"
+            placeholder="123456"
+            maxLength={6}
+            value={code}
+            onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
+            autoComplete="one-time-code"
+            className="w-full bg-neutral-900 border border-white/30 rounded-xl px-4 py-3 text-white placeholder-[#555] outline-none focus:border-white transition-colors tracking-widest text-center text-xl font-bold"
           />
         </div>
 
-        <div className="mb-2">
-          <div className="flex items-center justify-between mb-2">
-            <label className="text-white text-base font-semibold">
-              Contraseña
-            </label>
-            <Link
-              href="/login/forgot-password"
-              className="text-white/50 text-sm hover:text-white transition-colors"
-            >
-              ¿Olvidaste tu contraseña?
-            </Link>
-          </div>
+        <div className="mb-4">
+          <label className="text-white text-base font-semibold block mb-2">
+            Nueva contraseña
+          </label>
           <div className="relative">
             <input
               type={showPass ? "text" : "password"}
               placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              onKeyDown={handleKeyDown}
-              autoComplete="current-password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              autoComplete="new-password"
               className="w-full bg-neutral-900 border border-white/30 rounded-xl px-4 py-3 text-white placeholder-[#555] outline-none focus:border-white transition-colors pr-12"
             />
             <button
@@ -131,32 +126,45 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {error && (
-          <p className="text-red-400 text-sm mt-3 mb-1">{error}</p>
-        )}
+        <div className="mb-2">
+          <label className="text-white text-base font-semibold block mb-2">
+            Confirmar contraseña
+          </label>
+          <input
+            type={showPass ? "text" : "password"}
+            placeholder="••••••••"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            autoComplete="new-password"
+            className="w-full bg-neutral-900 border border-white/30 rounded-xl px-4 py-3 text-white placeholder-[#555] outline-none focus:border-white transition-colors"
+          />
+        </div>
+
+        {error && <p className="text-red-400 text-sm mt-3 mb-1">{error}</p>}
 
         <button
-          onClick={handleLogin}
+          onClick={handleSubmit}
           disabled={loading}
           className="w-full bg-red-600 text-white font-semibold rounded-full py-4 mt-6 hover:bg-red-700 active:bg-red-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {loading ? "Ingresando..." : "Iniciar sesión"}
+          {loading ? "Guardando..." : "Restablecer contraseña"}
         </button>
 
-        <div className="mt-6 flex items-center gap-3">
-          <div className="flex-1 h-px bg-white/10" />
-          <span className="text-white/30 text-sm">o</span>
-          <div className="flex-1 h-px bg-white/10" />
-        </div>
-
         <Link
-          href="/login/cliente"
+          href="/login/forgot-password"
           className="block text-center text-white/50 text-sm mt-6 hover:text-white transition-colors"
         >
-          ¿No tienes cuenta?{" "}
-          <span className="text-white underline">Crear cuenta con celular</span>
+          ¿No recibiste el código? Volver a enviar
         </Link>
       </div>
     </div>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense>
+      <ResetPasswordForm />
+    </Suspense>
   );
 }
