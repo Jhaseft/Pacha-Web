@@ -375,7 +375,7 @@ export default function LandingPage() {
 
                   {/* Android APK */}
                   <a
-                    href="https://github.com/Jhaseft/Pachamama_Frontend/releases/download/apk/application-a1a328cb-2cf5-45ba-8332-c5fe8190b862.1.apk"
+                    href={process.env.NEXT_PUBLIC_APK_URL}
                     download
                     className="group flex items-center gap-4 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#A11213]/40
                       rounded-2xl px-5 py-3.5 transition-all w-full sm:w-auto min-w-[190px]"
