@@ -1,5 +1,4 @@
-const APK_URL =
-  "https://github.com/Jhaseft/Pachamama_Frontend/releases/download/apk/application-a1a328cb-2cf5-45ba-8332-c5fe8190b862.1.apk";
+const APK_URL = process.env.NEXT_PUBLIC_APK_URL;
 
 export function AppDownloadButton() {
   return (

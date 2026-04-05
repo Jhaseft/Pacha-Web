@@ -269,7 +269,7 @@ function DashboardContent() {
           </div>
 
           <a
-            href="https://github.com/Jhaseft/Pachamama_Frontend/releases/download/apk/application-a1a328cb-2cf5-45ba-8332-c5fe8190b862.1.apk"
+            href={process.env.NEXT_PUBLIC_APK_URL}
             download
             className="flex items-center gap-4 bg-white/5 hover:bg-white/10 active:scale-[0.98] border border-white/10 rounded-3xl px-5 py-4 transition-all"
           >
