@@ -1,50 +1,51 @@
-import { Clock, CheckCircle, XCircle, CreditCard } from "lucide-react";
+import { Clock, CheckCircle, XCircle, CreditCard, Wallet } from "lucide-react";
 import { WithdrawalRequest, WithdrawalStatus } from "@/types/withdrawalRequest";
 
-const statusConfig: Record<WithdrawalStatus, { label: string; color: string; icon: React.ReactNode }> = {
-  PENDING:  { label: "Pendiente", color: "#fbbf24", icon: <Clock  className="w-3.5 h-3.5" /> },
-  APPROVED: { label: "Aprobado",  color: "#00ff88", icon: <CheckCircle className="w-3.5 h-3.5" /> },
-  REJECTED: { label: "Rechazado", color: "#ff3b5c", icon: <XCircle className="w-3.5 h-3.5" /> },
+const statusConfig: Record<WithdrawalStatus, { label: string; bg: string; text: string; icon: React.ReactNode }> = {
+  PENDING:  { label: "Pendiente", bg: "bg-yellow-500/10", text: "text-yellow-400", icon: <Clock       size={13} /> },
+  APPROVED: { label: "Aprobado",  bg: "bg-green-500/10",  text: "text-green-400",  icon: <CheckCircle size={13} /> },
+  REJECTED: { label: "Rechazado", bg: "bg-red-500/10",    text: "text-red-400",    icon: <XCircle     size={13} /> },
 };
 
 export function WithdrawalHistoryItem({ item }: { item: WithdrawalRequest }) {
   const config = statusConfig[item.status];
 
   return (
-    <div className="bg-[#0e0202] rounded-[22px] p-4 mb-3 border border-red-600 flex items-center justify-between shadow-[0_6px_20px_rgba(225,29,72,0.3)]">
-      <div className="flex items-center flex-1 pr-3 gap-3">
-        
-        <div className="rounded-[28px] p-1 flex items-center justify-center shrink-0 w-14 h-14 border-2 border-[#ff3b5c] bg-[#2d0a0a] shadow-[0_0_10px_rgba(255,59,92,0.7)]">
-          <CreditCard className="w-9 h-9 text-[#ff3b5c]" />
+    <div className="bg-[#111] border border-white/5 rounded-2xl overflow-hidden hover:border-white/10 transition-colors mb-2">
+      {/* Main row */}
+      <div className="px-4 py-3.5 flex items-center gap-4">
+        {/* Icon */}
+        <div className="w-10 h-10 rounded-xl bg-pink-500/10 border border-pink-500/10 flex items-center justify-center shrink-0">
+          <CreditCard size={18} className="text-pink-400" />
         </div>
 
-        <div className="flex-1 min-w-0">
-          <p className="text-white font-black text-base leading-5 tracking-tight truncate">
+        {/* Info */}
+        <div className="min-w-0 flex-1">
+          <p className="text-white font-semibold text-sm truncate">
             {item.anfitriona.firstName} {item.anfitriona.lastName ?? ""}
           </p>
-          <div className="flex items-baseline gap-2 mt-1">
-            <span className="font-bold text-lg text-[#4ade80] drop-shadow-[0_0_8px_#22c55e]">
-              ${item.soles.toFixed(2)}
-            </span>
-            <span className="font-medium text-sm text-[#f87171] drop-shadow-[0_0_6px_#ef4444]">
-              {item.credits.toFixed(0)} Cred
-            </span>
-          </div>
-          <p className="text-zinc-400 text-xs mt-1 font-medium">
+          <p className="text-white/40 text-xs mt-0.5">
             {new Date(item.updatedAt).toLocaleDateString("es-ES", {
               day: "2-digit", month: "2-digit", year: "numeric",
               hour: "2-digit", minute: "2-digit",
             })}
           </p>
         </div>
+
+        {/* Status badge */}
+        <span className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold ${config.bg} ${config.text}`}>
+          {config.icon}
+          {config.label}
+        </span>
       </div>
 
-      <div
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border shrink-0"
-        style={{ backgroundColor: config.color + "15", borderColor: config.color + "50", color: config.color }}
-      >
-        {config.icon}
-        <span className="text-xs font-bold uppercase tracking-wider">{config.label}</span>
+      {/* Bottom bar — amount on mobile */}
+      <div className="flex items-center gap-2 bg-white/2 border-t border-white/5 px-4 py-2">
+        <Wallet size={13} className="text-white/20 shrink-0" />
+        <span className="text-white/25 text-[11px]">Monto:</span>
+        <span className="text-green-400 text-xs font-bold">${item.soles.toFixed(2)}</span>
+        <span className="text-white/25 text-[11px]">·</span>
+        <span className="text-red-400 text-[11px] font-semibold">{item.credits.toFixed(0)} créditos</span>
       </div>
     </div>
   );

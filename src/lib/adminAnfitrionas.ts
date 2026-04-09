@@ -2,17 +2,34 @@ import { apiFetch } from "./api";
 
 export type AnfitrionaData = {
   id: string;
-  firstName: string | null;
-  lastName: string | null;
+  firstName: string;
+  lastName: string;
   phoneNumber: string;
-  email: string | null;
+  email?: string;
   isActive: boolean;
-  wallet?: { balance: number | string } | null;
+  wallet?: {
+    balance: number | string;
+  };
+  anfitrionaProfile?: {
+    username: string;
+    avatarUrl?: string;
+    bio: string;
+    rateCredits: number;
+    isOnline: boolean;
+  };
 };
 
 export type PaginatedAnfitrionas = {
   data: AnfitrionaData[];
-  nextCursor: string | null;
+  nextCursor?: string | null;
+};
+
+export type EditAnfitrionaRequest = {
+  phoneNumber?: string;
+  username?: string;
+  bio?: string;
+  rateCredits?: number;
+  email?: string;
 };
 
 export async function getAllAnfitrionas(
@@ -36,6 +53,30 @@ export async function toggleAnfitrionaStatus(
   return apiFetch(
     `/admin/anfitrionas/${id}/status`,
     { method: "PATCH", body: JSON.stringify({ isActive }) },
+    token,
+  );
+}
+
+export async function adminUpdateAnfitrionaProfile(
+  token: string,
+  id: string,
+  payload: { firstName?: string; lastName?: string; username?: string; bio?: string },
+) {
+  return apiFetch(
+    `/admin/anfitrionas/${id}/profile`,
+    { method: "PATCH", body: JSON.stringify(payload) },
+    token,
+  );
+}
+
+export async function editAnfitriona(
+  token: string,
+  id: string,
+  data: EditAnfitrionaRequest,
+): Promise<AnfitrionaData> {
+  return apiFetch<AnfitrionaData>(
+    `/admin/anfitrionas/${id}/edit`,
+    { method: "PATCH", body: JSON.stringify(data) },
     token,
   );
 }

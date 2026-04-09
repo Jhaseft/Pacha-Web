@@ -51,10 +51,10 @@ export const apiDeletePackage = async (id: string) => {
 
 // OBTENER UN PAQUETE POR ID
 export const apiGetPackageById = async (id: string) => {
-  try {
-    const response = await apiAxios.get(`/packages/${id}`);
-    return response.data;
-  } catch (error: any) {
-    throw new Error(parseApiError(error, 'No se pudo obtener la informacion del paquete'));
-  }
+    try {
+        const response = await apiAxios.get(`/packages/${id}`);
+        return response.data;
+    } catch (error: any) {
+        throw new Error(parseApiError(error, 'No se pudo obtener la informacion del paquete'));
+    }
 };

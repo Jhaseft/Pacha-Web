@@ -70,7 +70,7 @@ export default function ListWithdrawalRequestPage() {
 
     return (
         <>
-            <div className="p-4 md:p-6 max-w-3xl mx-auto">
+            <div className="p-8">
                 <h1 className="text-white text-2xl font-black tracking-tight mb-4">Solicitudes de retiro</h1>
 
                 <div className="relative mb-5">

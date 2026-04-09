@@ -23,69 +23,73 @@ function ClientRow({ client, onToggle, toggling }: {
   const initials = `${client.firstName?.[0] ?? ""}${client.lastName?.[0] ?? ""}`.toUpperCase() || "?";
 
   return (
-    <div className="bg-[#111] border border-white/5 rounded-2xl px-4 py-3.5 flex items-center gap-4 hover:border-white/10 transition-colors group">
-      {/* Avatar */}
-      <div className="w-10 h-10 rounded-xl bg-[#1e1e1e] border border-white/5 flex items-center justify-center shrink-0">
-        <span className="text-white/50 text-sm font-bold">{initials}</span>
+    <div className="bg-[#111] border border-white/5 rounded-2xl overflow-hidden hover:border-white/10 transition-colors">
+      {/* Main row */}
+      <div className="px-4 py-3.5 flex items-center gap-4">
+        {/* Avatar */}
+        <div className="w-10 h-10 rounded-xl bg-[#1e1e1e] border border-white/5 flex items-center justify-center shrink-0">
+          <span className="text-white/50 text-sm font-bold">{initials}</span>
+        </div>
+
+        {/* Name + contact */}
+        <div className="min-w-0 flex-1">
+          <p className="text-white font-semibold text-sm truncate">{name}</p>
+          <p className="text-white/40 text-xs truncate">{client.email ?? client.phoneNumber}</p>
+        </div>
+
+        {/* Phone */}
+        <p className="text-white/30 text-xs hidden md:block shrink-0 w-32 truncate">
+          {client.phoneNumber}
+        </p>
+
+        {/* Status */}
+        <div className="shrink-0 hidden sm:block">
+          <StatusBadge active={client.isActive} />
+        </div>
+
+        {/* Toggle */}
+        <button
+          onClick={() => onToggle(client)}
+          disabled={toggling}
+          title={client.isActive ? "Suspender" : "Activar"}
+          className={`shrink-0 flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold transition-all disabled:opacity-40
+            ${client.isActive
+              ? "bg-red-500/10 text-red-400 hover:bg-red-500/20"
+              : "bg-green-500/10 text-green-400 hover:bg-green-500/20"
+            }`}
+        >
+          {toggling ? (
+            <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+          ) : client.isActive ? (
+            <>
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
+              </svg>
+              <span className="hidden sm:inline">Suspender</span>
+            </>
+          ) : (
+            <>
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+              </svg>
+              <span className="hidden sm:inline">Activar</span>
+            </>
+          )}
+        </button>
       </div>
 
-      {/* Name + contact */}
-      <div className="min-w-0 flex-1">
-        <p className="text-white font-semibold text-sm truncate">{name}</p>
-        <p className="text-white/40 text-xs truncate">{client.email ?? client.phoneNumber}</p>
-      </div>
-
-      {/* Phone — visible on md+ */}
-      <p className="text-white/30 text-xs hidden md:block shrink-0 w-32 truncate">
-        {client.phoneNumber}
-      </p>
-
-      {/* Wallet */}
-      <div className="shrink-0 text-right hidden lg:block w-24">
+      {/* Wallet bar */}
+      <div className="flex items-center gap-2 bg-white/2 border-t border-white/5 px-4 py-2">
+        <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 text-white/20 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 12m18 0v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18v-6m18 0V9M3 12V9m18-3a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 9m18 0V9" />
+        </svg>
+        <span className="text-white/25 text-[11px]">Créditos:</span>
         {client.wallet != null ? (
-          <>
-            <p className="text-white font-semibold text-sm">${Number(client.wallet.balance).toFixed(2)}</p>
-            <p className="text-white/30 text-xs">créditos</p>
-          </>
+          <span className="text-white/80 text-xs font-bold">{Number(client.wallet.balance).toFixed(2)}</span>
         ) : (
-          <p className="text-white/20 text-xs">—</p>
+          <span className="text-white/20 text-[11px]">—</span>
         )}
       </div>
-
-      {/* Status */}
-      <div className="shrink-0 hidden sm:block">
-        <StatusBadge active={client.isActive} />
-      </div>
-
-      {/* Toggle */}
-      <button
-        onClick={() => onToggle(client)}
-        disabled={toggling}
-        title={client.isActive ? "Suspender" : "Activar"}
-        className={`shrink-0 flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold transition-all disabled:opacity-40
-          ${client.isActive
-            ? "bg-red-500/10 text-red-400 hover:bg-red-500/20"
-            : "bg-green-500/10 text-green-400 hover:bg-green-500/20"
-          }`}
-      >
-        {toggling ? (
-          <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-        ) : client.isActive ? (
-          <>
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
-            </svg>
-            <span className="hidden sm:inline">Suspender</span>
-          </>
-        ) : (
-          <>
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-            </svg>
-            <span className="hidden sm:inline">Activar</span>
-          </>
-        )}
-      </button>
     </div>
   );
 }
@@ -149,7 +153,7 @@ export default function ClientesPage() {
   const suspended = clients.filter((c) => !c.isActive).length;
 
   return (
-    <div className="p-8 max-w-5xl">
+    <div className="p-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
         <div>

@@ -29,3 +29,16 @@ export type AdminStats = {
 export async function getAdminStats(token: string): Promise<AdminStats> {
   return apiFetch<AdminStats>("/admin/stats", { method: "GET" }, token);
 }
+
+export type AnfitrionaStats = {
+  balance: { credits: number; soles: string };
+  earnings: {
+    today:     { credits: number; soles: string };
+    thisMonth: { credits: number; soles: string };
+    total:     { credits: number; soles: string };
+  };
+};
+
+export async function getAnfitrionaStats(token: string, anfitrionaId: string): Promise<AnfitrionaStats> {
+  return apiFetch<AnfitrionaStats>(`/admin/stats/anfitriona/${anfitrionaId}`, { method: "GET" }, token);
+}

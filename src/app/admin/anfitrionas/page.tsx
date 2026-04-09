@@ -3,6 +3,9 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useAuth } from "../../../context/AuthContext";
 import { getAllAnfitrionas, toggleAnfitrionaStatus, type AnfitrionaData } from "../../../lib/adminAnfitrionas";
+import { getAnfitrionaStats, type AnfitrionaStats } from "../../../lib/adminStats";
+import AnfitrionaDetailPanel from "./AnfitrionaDetailPanel";
+import { Search, X, Ban, Check, Loader2, Wallet, UserX, Users } from "lucide-react";
 
 function StatusBadge({ active }: { active: boolean }) {
   return (
@@ -14,66 +17,90 @@ function StatusBadge({ active }: { active: boolean }) {
   );
 }
 
-function AnfitrionaRow({ anfitriona, onToggle, toggling }: {
+function AnfitrionaRow({ anfitriona, onToggle, toggling, token, onClick }: {
   anfitriona: AnfitrionaData;
   onToggle: (a: AnfitrionaData) => void;
   toggling: boolean;
+  token: string;
+  onClick: () => void;
 }) {
   const name = `${anfitriona.firstName ?? ""} ${anfitriona.lastName ?? ""}`.trim() || "Sin nombre";
   const initials = `${anfitriona.firstName?.[0] ?? ""}${anfitriona.lastName?.[0] ?? ""}`.toUpperCase() || "?";
+  const avatarUrl = anfitriona.anfitrionaProfile?.avatarUrl;
+  const isOnline = anfitriona.anfitrionaProfile?.isOnline;
+
+  const [stats, setStats] = useState<AnfitrionaStats | null>(null);
+
+  useEffect(() => {
+    getAnfitrionaStats(token, anfitriona.id)
+      .then(setStats)
+      .catch(() => {});
+  }, [anfitriona.id, token]);
 
   return (
-    <div className="bg-[#111] border border-white/5 rounded-2xl px-4 py-3.5 flex items-center gap-4 hover:border-white/10 transition-colors">
-      {/* Avatar with pink tint */}
-      <div className="w-10 h-10 rounded-xl bg-pink-500/10 border border-pink-500/10 flex items-center justify-center shrink-0">
-        <span className="text-pink-400 text-sm font-bold">{initials}</span>
+    <div
+      className="bg-[#111] border border-white/5 rounded-2xl overflow-hidden hover:border-white/10 transition-colors cursor-pointer"
+      onClick={onClick}
+    >
+      {/* Main row */}
+      <div className="px-4 py-3.5 flex items-center gap-4">
+        {/* Avatar + online dot */}
+        <div className="relative shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-pink-500/10 border border-pink-500/10 overflow-hidden flex items-center justify-center">
+            {avatarUrl ? (
+              <img src={avatarUrl} alt={name} className="w-full h-full object-cover" />
+            ) : (
+              <span className="text-pink-400 text-sm font-bold">{initials}</span>
+            )}
+          </div>
+          <span className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-[#111] ${isOnline ? "bg-green-500" : "bg-zinc-600"}`} />
+        </div>
+
+        {/* Name + email */}
+        <div className="min-w-0 flex-1">
+          <p className="text-white font-semibold text-sm truncate">{name}</p>
+          <p className="text-white/40 text-xs truncate">{anfitriona.email ?? "—"}</p>
+        </div>
+
+        {/* Phone */}
+        <p className="text-white/30 text-xs hidden md:block shrink-0 w-32 truncate">
+          {anfitriona.phoneNumber}
+        </p>
+
+        {/* Status */}
+        <div className="shrink-0 hidden sm:block">
+          <StatusBadge active={anfitriona.isActive} />
+        </div>
+
+        {/* Toggle */}
+        <button
+          onClick={(e) => { e.stopPropagation(); onToggle(anfitriona); }}
+          disabled={toggling}
+          title={anfitriona.isActive ? "Desactivar" : "Activar"}
+          className={`shrink-0 flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold transition-all disabled:opacity-40
+            ${anfitriona.isActive
+              ? "bg-red-500/10 text-red-400 hover:bg-red-500/20"
+              : "bg-green-500/10 text-green-400 hover:bg-green-500/20"
+            }`}
+        >
+          {toggling ? <Loader2 size={14} className="animate-spin" /> : anfitriona.isActive ? <Ban size={14} /> : <Check size={14} />}
+          <span className="hidden sm:inline">{anfitriona.isActive ? "Desactivar" : "Activar"}</span>
+        </button>
       </div>
 
-      {/* Name + email */}
-      <div className="min-w-0 flex-1">
-        <p className="text-white font-semibold text-sm truncate">{name}</p>
-        <p className="text-white/40 text-xs truncate">{anfitriona.email ?? "—"}</p>
-      </div>
-
-      {/* Phone */}
-      <p className="text-white/30 text-xs hidden md:block shrink-0 w-32 truncate">
-        {anfitriona.phoneNumber}
-      </p>
-
-      {/* Status */}
-      <div className="shrink-0 hidden sm:block">
-        <StatusBadge active={anfitriona.isActive} />
-      </div>
-
-      {/* Toggle */}
-      <button
-        onClick={() => onToggle(anfitriona)}
-        disabled={toggling}
-        title={anfitriona.isActive ? "Desactivar" : "Activar"}
-        className={`shrink-0 flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold transition-all disabled:opacity-40
-          ${anfitriona.isActive
-            ? "bg-red-500/10 text-red-400 hover:bg-red-500/20"
-            : "bg-green-500/10 text-green-400 hover:bg-green-500/20"
-          }`}
-      >
-        {toggling ? (
-          <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-        ) : anfitriona.isActive ? (
-          <>
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
-            </svg>
-            <span className="hidden sm:inline">Desactivar</span>
-          </>
+      {/* Wallet bar */}
+      <div className="flex items-center gap-2 bg-white/[0.02] border-t border-white/5 px-4 py-2">
+        <Wallet size={13} className="text-white/20 shrink-0" />
+        <span className="text-white/25 text-[11px]">Saldo:</span>
+        {stats === null ? (
+          <Loader2 size={12} className="text-white/20 animate-spin" />
         ) : (
           <>
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-            </svg>
-            <span className="hidden sm:inline">Activar</span>
+            <span className="text-white/80 text-xs font-bold">S/ {stats.balance.soles}</span>
+            <span className="text-white/25 text-[11px]">({stats.balance.credits} créditos)</span>
           </>
         )}
-      </button>
+      </div>
     </div>
   );
 }
@@ -98,6 +125,7 @@ export default function AnfitrionasPage() {
   const [initialLoading, setInitialLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [togglingId, setTogglingId] = useState<string | null>(null);
+  const [selectedAnfitriona, setSelectedAnfitriona] = useState<AnfitrionaData | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const loadAnfitrionas = useCallback(async (text: string, cursor?: string) => {
@@ -111,7 +139,7 @@ export default function AnfitrionasPage() {
         const ids = new Set(prev.map((a) => a.id));
         return [...prev, ...res.data.filter((a) => !ids.has(a.id))];
       });
-      setNextCursor(res.nextCursor);
+      setNextCursor(res.nextCursor ?? null);
     } catch (err) { console.error(err); }
     finally { setInitialLoading(false); setLoadingMore(false); }
   }, [token]);
@@ -137,7 +165,7 @@ export default function AnfitrionasPage() {
   const inactive = anfitrionas.filter((a) => !a.isActive).length;
 
   return (
-    <div className="p-8 max-w-5xl">
+    <div className="p-8">
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-white text-3xl font-black tracking-tight">Anfitrionas</h1>
@@ -154,9 +182,7 @@ export default function AnfitrionasPage() {
       {/* Search */}
       <div className="relative mb-6">
         <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/25 pointer-events-none">
-          <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-          </svg>
+          <Search size={16} />
         </span>
         <input
           type="text"
@@ -167,21 +193,11 @@ export default function AnfitrionasPage() {
         />
         {search && (
           <button onClick={() => setSearch("")} className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-            </svg>
+            <X size={16} />
           </button>
         )}
       </div>
 
-      {/* Column headers — desktop */}
-      {!initialLoading && anfitrionas.length > 0 && (
-        <div className="hidden md:grid grid-cols-[1fr_120px_80px_auto] gap-4 px-4 mb-2">
-          {["Anfitriona", "Teléfono", "Estado", ""].map((h) => (
-            <p key={h} className="text-white/25 text-xs font-semibold uppercase tracking-wider">{h}</p>
-          ))}
-        </div>
-      )}
 
       {/* List */}
       {initialLoading ? (
@@ -192,16 +208,14 @@ export default function AnfitrionasPage() {
         </div>
       ) : anfitrionas.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-24 gap-3">
-          <svg xmlns="http://www.w3.org/2000/svg" className="w-12 h-12 text-white/10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-          </svg>
+          {search ? <UserX size={48} className="text-white/10" /> : <Users size={48} className="text-white/10" />}
           <p className="text-white/20 text-sm">{search ? "Sin resultados para tu búsqueda" : "No hay anfitrionas"}</p>
         </div>
       ) : (
         <>
           <div className="flex flex-col gap-2">
             {anfitrionas.map((a) => (
-              <AnfitrionaRow key={a.id} anfitriona={a} onToggle={handleToggle} toggling={togglingId === a.id} />
+              <AnfitrionaRow key={a.id} anfitriona={a} onToggle={handleToggle} toggling={togglingId === a.id} token={token!} onClick={() => setSelectedAnfitriona(a)} />
             ))}
           </div>
 
@@ -213,12 +227,23 @@ export default function AnfitrionasPage() {
                 className="flex items-center gap-2 bg-[#A11213] hover:bg-red-800 text-white font-bold px-8 py-3 rounded-full transition-colors disabled:opacity-50 text-sm"
               >
                 {loadingMore
-                  ? <><span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />Cargando...</>
+                  ? <><Loader2 size={16} className="animate-spin" />Cargando...</>
                   : "Cargar más anfitrionas"}
               </button>
             </div>
           )}
         </>
+      )}
+
+      {selectedAnfitriona && (
+        <AnfitrionaDetailPanel
+          anfitriona={selectedAnfitriona}
+          onClose={() => setSelectedAnfitriona(null)}
+          onUpdated={(updated) => {
+            setAnfitrionas((prev) => prev.map((a) => a.id === updated.id ? updated : a));
+            setSelectedAnfitriona(updated);
+          }}
+        />
       )}
     </div>
   );

@@ -82,7 +82,7 @@ export default function AdminDashboardPage() {
   const hasPending = (stats?.deposits.pending ?? 0) + (stats?.withdrawals.pending ?? 0) > 0;
 
   return (
-    <div className="p-8 max-w-6xl">
+    <div className="p-8">
 
       {/* Page title */}
       <div className="mb-8">
@@ -100,7 +100,7 @@ export default function AdminDashboardPage() {
       )}
 
       {/* ── Revenue hero ── */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-[#A11213] via-[#8B0000] to-[#5a0000] rounded-3xl p-8 mb-8 shadow-2xl">
+      <div className="relative overflow-hidden bg-linear-to-br from-[#A11213] via-[#8B0000] to-[#5a0000] rounded-3xl p-8 mb-8 shadow-2xl">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/4" />
         <div className="absolute bottom-0 left-1/3 w-40 h-40 bg-black/10 rounded-full translate-y-1/2" />
         <div className="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -110,7 +110,7 @@ export default function AdminDashboardPage() {
               <div className="h-14 w-44 bg-white/10 rounded-2xl animate-pulse" />
             ) : (
               <p className="text-green-300 text-6xl font-black tracking-tight">
-                ${stats?.deposits.totalRevenue.toLocaleString("es-PE", { minimumFractionDigits: 2 }) ?? "0.00"}
+                Soles {stats?.deposits.totalRevenue.toLocaleString("es-PE", { minimumFractionDigits: 2 }) ?? "0.00"}
               </p>
             )}
           </div>

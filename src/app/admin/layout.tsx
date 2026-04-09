@@ -44,6 +44,26 @@ const NAV_ITEMS = [
     ),
   },
   {
+    label: "Paquetes",
+    href: "/admin/packages",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-5 h-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        strokeWidth={2}
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M3 7.5 12 3l9 4.5M3 7.5v9L12 21m-9-13.5L12 12m9-4.5v9L12 21m0-9v9"
+        />
+      </svg>
+    ),
+  },
+  {
     label: "Historial de pagos",
     href: "/admin/historyPayment",
     icon: (
@@ -52,7 +72,7 @@ const NAV_ITEMS = [
       </svg>
     ),
   },
-  
+
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
