@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Phone, Gem, DollarSign, Building2, CreditCard, XCircle, CheckCircle, Copy } from "lucide-react";
+import { Phone, Gem, DollarSign, Building2, CreditCard, XCircle, CheckCircle, Copy, Mail } from "lucide-react";
 import { WithdrawalRequest } from "@/types/withdrawalRequest";
 
 interface Props {
@@ -65,8 +65,10 @@ export function WithdrawalDetailStep({ item, onReject, onApprove }: Props) {
             <span className="text-zinc-600 text-[10px] uppercase tracking-widest">Valor</span>
           </div>
           <div className="flex items-baseline gap-1.5">
-            <span className="text-green-600 font-black text-2xl">{item.soles.toFixed(2)}</span>
-            <span className="text-green-700 text-xs font-bold uppercase tracking-widest">Soles</span>
+            <span className="text-green-600 font-black text-2xl">{item.payoutAmount.toFixed(2)}</span>
+            <span className="text-green-700 text-xs font-bold uppercase tracking-widest">
+              {item.payoutCurrency === "USD" ? "USD" : "Soles"}
+            </span>
           </div>
         </div>
       </div>
@@ -74,35 +76,56 @@ export function WithdrawalDetailStep({ item, onReject, onApprove }: Props) {
       <div className="bg-[#141414] border border-zinc-800 rounded-2xl p-4 mb-6 flex flex-col gap-4">
         <p className="text-zinc-500 text-[10px] uppercase tracking-widest font-bold">Cuenta de Destino</p>
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-zinc-800 flex items-center justify-center">
-              <Building2 className="w-4 h-4 text-zinc-400" />
+        {item.methodType === "PAYPAL" ? (
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-zinc-800 flex items-center justify-center">
+                <Mail className="w-4 h-4 text-zinc-400" />
+              </div>
+              <div>
+                <p className="text-zinc-500 text-[10px] uppercase tracking-widest">PayPal</p>
+                <p className="text-white font-bold text-[15px]">{item.paypalEmail}</p>
+              </div>
             </div>
-            <div>
-              <p className="text-zinc-500 text-[10px] uppercase tracking-widest">Banco</p>
-              <p className="text-white font-bold text-[15px]">{item.bankName}</p>
-            </div>
+            <button onClick={() => copy(item.paypalEmail ?? "")} className="bg-zinc-800 p-2 rounded-xl hover:bg-zinc-700 transition-colors">
+              <Copy className="w-4 h-4 text-zinc-400" />
+            </button>
           </div>
-          <button onClick={() => copy(item.bankName)} className="bg-zinc-800 p-2 rounded-xl hover:bg-zinc-700 transition-colors">
-            <Copy className="w-4 h-4 text-zinc-400" />
-          </button>
-        </div>
+        ) : (
+          <>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-zinc-800 flex items-center justify-center">
+                  <Building2 className="w-4 h-4 text-zinc-400" />
+                </div>
+                <div>
+                  <p className="text-zinc-500 text-[10px] uppercase tracking-widest">Banco</p>
+                  <p className="text-white font-bold text-[15px]">{item.bankName}</p>
+                </div>
+              </div>
+              <button onClick={() => copy(item.bankName ?? "")} className="bg-zinc-800 p-2 rounded-xl hover:bg-zinc-700 transition-colors">
+                <Copy className="w-4 h-4 text-zinc-400" />
+              </button>
+            </div>
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-zinc-800 flex items-center justify-center">
-              <CreditCard className="w-4 h-4 text-zinc-400" />
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-zinc-800 flex items-center justify-center">
+                  <CreditCard className="w-4 h-4 text-zinc-400" />
+                </div>
+                <div>
+                  <p className="text-zinc-500 text-[10px] uppercase tracking-widest">
+                    {item.methodType === "OTHER_BANK" ? "CCI" : "Número de cuenta"}
+                  </p>
+                  <p className="text-white font-bold text-[15px]">{item.accountNumber}</p>
+                </div>
+              </div>
+              <button onClick={() => copy(item.accountNumber ?? "")} className="bg-zinc-800 p-2 rounded-xl hover:bg-zinc-700 transition-colors">
+                <Copy className="w-4 h-4 text-zinc-400" />
+              </button>
             </div>
-            <div>
-              <p className="text-zinc-500 text-[10px] uppercase tracking-widest">Número de cuenta</p>
-              <p className="text-white font-bold text-[15px]">{item.accountNumber}</p>
-            </div>
-          </div>
-          <button onClick={() => copy(item.accountNumber)} className="bg-zinc-800 p-2 rounded-xl hover:bg-zinc-700 transition-colors">
-            <Copy className="w-4 h-4 text-zinc-400" />
-          </button>
-        </div>
+          </>
+        )}
       </div>
 
       <div className="flex gap-3 mb-4">

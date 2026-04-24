@@ -1,14 +1,18 @@
 // ESTADO DE SOLICITUD
 export type WithdrawalStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
+export type WithdrawalMethodType = 'BCP' | 'OTHER_BANK' | 'PAYPAL';
 
 // SOLICITUD DE RETIRO
 export interface WithdrawalRequest {
     id: string;
     credits: number;
-    soles: number;
+    payoutAmount: number;
+    payoutCurrency: string;
     status: WithdrawalStatus;
-    bankName: string;
-    accountNumber: string;
+    methodType: WithdrawalMethodType;
+    bankName: string | null;
+    accountNumber: string | null;
+    paypalEmail: string | null;
     anfitriona: {
         id: string;
         firstName: string | null;
@@ -18,7 +22,6 @@ export interface WithdrawalRequest {
         anfitrionaProfile: {
             avatarUrl: string | null;
             coverUrl: string | null;
-
         };
     };
     currentBalance: number;
