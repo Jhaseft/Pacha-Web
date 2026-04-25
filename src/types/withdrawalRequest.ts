@@ -1,6 +1,6 @@
 // ESTADO DE SOLICITUD
 export type WithdrawalStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
-export type WithdrawalMethodType = 'BCP' | 'OTHER_BANK' | 'PAYPAL';
+export type WithdrawalMethodType = 'BCP' | 'OTHER_BANK' | 'PAYPAL' | 'BYBIT' | 'BINANCE';
 
 // SOLICITUD DE RETIRO
 export interface WithdrawalRequest {

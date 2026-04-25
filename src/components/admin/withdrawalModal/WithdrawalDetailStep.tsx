@@ -8,8 +8,9 @@ interface Props {
   onApprove: () => void;
 }
 
-export function WithdrawalDetailStep({ item, onReject, onApprove }: Props) {
+export function WithdrawalDetailStep({ item, onReject, onApprove }: Readonly<Props>) {
   const copy = (text: string) => navigator.clipboard.writeText(text);
+  const isCrypto = item.methodType === "BYBIT" || item.methodType === "BINANCE";
 
   return (
     <div className="overflow-y-auto flex-1 pr-1">
@@ -88,6 +89,23 @@ export function WithdrawalDetailStep({ item, onReject, onApprove }: Props) {
               </div>
             </div>
             <button onClick={() => copy(item.paypalEmail ?? "")} className="bg-zinc-800 p-2 rounded-xl hover:bg-zinc-700 transition-colors">
+              <Copy className="w-4 h-4 text-zinc-400" />
+            </button>
+          </div>
+        ) : isCrypto ? (
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-zinc-800 flex items-center justify-center">
+                <CreditCard className="w-4 h-4 text-zinc-400" />
+              </div>
+              <div>
+                <p className="text-zinc-500 text-[10px] uppercase tracking-widest">
+                  {item.methodType === "BYBIT" ? "Bybit ID" : "Binance ID"}
+                </p>
+                <p className="text-white font-bold text-[15px]">{item.accountNumber}</p>
+              </div>
+            </div>
+            <button onClick={() => copy(item.accountNumber ?? "")} className="bg-zinc-800 p-2 rounded-xl hover:bg-zinc-700 transition-colors">
               <Copy className="w-4 h-4 text-zinc-400" />
             </button>
           </div>
