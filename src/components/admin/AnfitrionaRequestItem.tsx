@@ -17,6 +17,8 @@ export function AnfitrionaRequestItem({ item, onPress }: Props) {
   const config = statusConfig[item.status];
   const avatarUrl = item.anfitriona.anfitrionaProfile?.avatarUrl;
   const initials = `${item.anfitriona.firstName?.[0] ?? ""}${item.anfitriona.lastName?.[0] ?? ""}`.toUpperCase() || "?";
+  const currencySymbol = item.payoutCurrency === "USD" ? "$" : "S/";
+  const currencyLabel = item.payoutCurrency === "USD" ? "USD" : "Soles";
 
   return (
     <div
@@ -55,7 +57,7 @@ export function AnfitrionaRequestItem({ item, onPress }: Props) {
 
         {/* Amount */}
         <div className="shrink-0 text-right hidden sm:block">
-          <p className="text-green-400 font-bold text-sm">${item.soles.toFixed(2)}</p>
+          <p className="text-green-400 font-bold text-sm">{currencySymbol}{item.payoutAmount.toFixed(2)}</p>
           <p className="text-red-400 text-xs">{item.credits.toFixed(0)} Cred</p>
         </div>
 
@@ -70,7 +72,7 @@ export function AnfitrionaRequestItem({ item, onPress }: Props) {
       <div className="flex items-center gap-2 bg-white/2 border-t border-white/5 px-4 py-2">
         <Wallet size={13} className="text-white/20 shrink-0" />
         <span className="text-white/25 text-[11px]">Monto:</span>
-        <span className="text-green-400 text-xs font-bold">${item.soles.toFixed(2)}</span>
+        <span className="text-green-400 text-xs font-bold">{currencySymbol}{item.payoutAmount.toFixed(2)} {currencyLabel}</span>
         <span className="text-white/25 text-[11px]">·</span>
         <span className="text-red-400 text-[11px] font-semibold">{item.credits.toFixed(0)} créditos</span>
       </div>

@@ -9,6 +9,8 @@ const statusConfig: Record<WithdrawalStatus, { label: string; bg: string; text: 
 
 export function WithdrawalHistoryItem({ item }: { item: WithdrawalRequest }) {
   const config = statusConfig[item.status];
+  const currencySymbol = item.payoutCurrency === "USD" ? "$" : "S/";
+  const currencyLabel = item.payoutCurrency === "USD" ? "USD" : "Soles";
 
   return (
     <div className="bg-[#111] border border-white/5 rounded-2xl overflow-hidden hover:border-white/10 transition-colors mb-2">
@@ -43,7 +45,7 @@ export function WithdrawalHistoryItem({ item }: { item: WithdrawalRequest }) {
       <div className="flex items-center gap-2 bg-white/2 border-t border-white/5 px-4 py-2">
         <Wallet size={13} className="text-white/20 shrink-0" />
         <span className="text-white/25 text-[11px]">Monto:</span>
-        <span className="text-green-400 text-xs font-bold">${item.soles.toFixed(2)}</span>
+        <span className="text-green-400 text-xs font-bold">{currencySymbol}{item.payoutAmount.toFixed(2)} {currencyLabel}</span>
         <span className="text-white/25 text-[11px]">·</span>
         <span className="text-red-400 text-[11px] font-semibold">{item.credits.toFixed(0)} créditos</span>
       </div>
