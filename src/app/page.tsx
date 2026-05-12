@@ -65,6 +65,8 @@ export default function LandingPage() {
             <a href="#como-funciona" className="hover:text-white transition-colors">Cómo funciona</a>
             <a href="#descargar" className="hover:text-white transition-colors">Descargar app</a>
             <a href="#contacto" className="hover:text-white transition-colors">Contacto</a>
+            <Link href="/soy-nuevo" className="hover:text-white transition-colors">Soy nuevo</Link>
+            <Link href="/trabaja-con-nosotros" className="hover:text-white transition-colors">Trabaja con nosotros</Link>
           </div>
 
           {/* Auth buttons */}
