@@ -110,6 +110,50 @@ export default function TrabajaConNosotrosPage() {
         </div>
       </section>
 
+      {/* Retiro de dinero */}
+      <section className="py-14 px-5 sm:px-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <p className="text-[#A11213] text-xs font-bold uppercase tracking-widest mb-3">Cobra sin complicaciones</p>
+            <h2 className="text-white text-3xl sm:text-4xl font-black tracking-tight mb-3">Retira tu dinero fácilmente</h2>
+            <p className="text-white/45 text-sm max-w-md mx-auto leading-relaxed">
+              Múltiples métodos de retiro disponibles. Cobra cuando quieras y como prefieras.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center gap-8">
+            <div className="w-full sm:w-64 shrink-0 mx-auto sm:mx-0">
+              <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-xl shadow-black/40">
+                <div className="absolute inset-0 bg-[#A11213]/5 pointer-events-none z-0" />
+                <video
+                  src="https://res.cloudinary.com/dai7rtja6/video/upload/v1778645708/Retiro_De_Dinero_Comprimido_owvcmj.mp4"
+                  controls
+                  playsInline
+                  className="relative z-10 w-full rounded-2xl"
+                >
+                  <track kind="captions" />
+                </video>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-3 w-full">
+              {[
+                { label: "Transferencia bancaria", icon: "🏦" },
+                { label: "Binance", icon: "🟡" },
+                { label: "Bybit", icon: "🔵" },
+                { label: "PayPal", icon: "💙" },
+                { label: "Retiros rápidos y seguros", icon: "⚡" },
+              ].map((item) => (
+                <div key={item.label} className="flex items-center gap-3 bg-white/5 border border-white/8 rounded-2xl px-4 py-3">
+                  <span className="text-xl">{item.icon}</span>
+                  <span className="text-white/60 text-sm font-medium">{item.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Beneficios */}
       <section className="py-20 px-5 sm:px-8">
         <div className="max-w-6xl mx-auto">
