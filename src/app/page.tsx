@@ -3,6 +3,7 @@ import Link from "next/link";
 import { LandingPackagesSection } from "@/components/LandingPackagesSection";
 import { LandingContactSection } from "@/components/LandingContactSection";
 import { AppDownloadButton } from "@/components/AppDownloadButton";
+import { MobileMenu } from "@/components/MobileMenu";
 
 // ── Shared icons ──────────────────────────────────────────────────────────────
 function StarIcon() {
@@ -69,8 +70,8 @@ export default function LandingPage() {
             <Link href="/trabaja-con-nosotros" className="hover:text-white transition-colors">Trabaja con nosotros</Link>
           </div>
 
-          {/* Auth buttons */}
-          <div className="flex items-center gap-2">
+          {/* Auth buttons — solo desktop */}
+          <div className="hidden md:flex items-center gap-2">
             <Link
               href="/login"
               className="text-white/70 hover:text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-white/5 transition-all"
@@ -84,6 +85,9 @@ export default function LandingPage() {
               Registrarse
             </Link>
           </div>
+
+          {/* Hamburguesa — solo mobile */}
+          <MobileMenu />
         </div>
       </nav>
 

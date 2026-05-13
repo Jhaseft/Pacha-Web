@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { MobileMenu } from "@/components/MobileMenu";
 
 export default function TrabajaConNosotrosPage() {
   return (
@@ -21,7 +22,7 @@ export default function TrabajaConNosotrosPage() {
               <p className="text-white/30 text-[9px] uppercase tracking-widest hidden sm:block">Karaoke Bar · Tarapoto</p>
             </div>
           </Link>
-          <div className="flex items-center gap-2">
+          <div className="hidden md:flex items-center gap-2">
             <Link href="/login" className="text-white/70 hover:text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-white/5 transition-all">
               Iniciar sesión
             </Link>
@@ -29,6 +30,7 @@ export default function TrabajaConNosotrosPage() {
               Registrarse
             </Link>
           </div>
+          <MobileMenu />
         </div>
       </nav>
 
