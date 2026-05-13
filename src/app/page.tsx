@@ -4,6 +4,7 @@ import { LandingPackagesSection } from "@/components/LandingPackagesSection";
 import { LandingContactSection } from "@/components/LandingContactSection";
 import { AppDownloadButton } from "@/components/AppDownloadButton";
 import { MobileMenu } from "@/components/MobileMenu";
+import { NavExplorar } from "@/components/NavExplorar";
 
 // ── Shared icons ──────────────────────────────────────────────────────────────
 function StarIcon() {
@@ -62,11 +63,7 @@ export default function LandingPage() {
 
           {/* Nav links */}
           <div className="hidden md:flex items-center gap-6 text-sm text-white/50">
-            <a href="#paquetes" className="hover:text-white transition-colors">Paquetes</a>
-            <a href="#features" className="hover:text-white transition-colors">Características</a>
-            <a href="#como-funciona" className="hover:text-white transition-colors">Cómo funciona</a>
-            <a href="#descargar" className="hover:text-white transition-colors">Descargar app</a>
-            <a href="#contacto" className="hover:text-white transition-colors">Contacto</a>
+            <NavExplorar base="" />
             <Link href="/soy-nuevo" className="hover:text-white transition-colors">Soy nuevo</Link>
             <Link href="/trabaja-con-nosotros" className="hover:text-white transition-colors">Trabaja con nosotros</Link>
           </div>

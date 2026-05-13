@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { MobileMenu } from "@/components/MobileMenu";
+import { NavExplorar } from "@/components/NavExplorar";
 
 export default function TrabajaConNosotrosPage() {
   return (
@@ -22,10 +23,9 @@ export default function TrabajaConNosotrosPage() {
               <p className="text-white/30 text-[9px] uppercase tracking-widest hidden sm:block">Bar · Tarapoto</p>
             </div>
           </Link>
-          <div className="hidden md:flex items-center gap-5 text-sm text-white/50">
+          <div className="hidden md:flex items-center gap-6 text-sm text-white/50">
             <Link href="/" className="hover:text-white transition-colors">Inicio</Link>
-            <Link href="/#paquetes" className="hover:text-white transition-colors">Paquetes</Link>
-            <Link href="/#como-funciona" className="hover:text-white transition-colors">Cómo funciona</Link>
+            <NavExplorar base="/" />
             <Link href="/soy-nuevo" className="hover:text-white transition-colors">Soy nuevo</Link>
           </div>
           <div className="hidden md:flex items-center gap-2">
