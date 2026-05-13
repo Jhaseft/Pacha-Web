@@ -34,6 +34,19 @@ function FeatureCard({
     </div>
   );
 }
+function FeatureCard2({
+  title,
+}: {
+
+  title: string;
+
+}) {
+  return (
+    <div className="bg-white/5 border border-white/8 rounded-3xl p-2 hover:bg-white/8 hover:border-[#A11213]/30 transition-all duration-300 group mb-4">
+      <h3 className="text-white font-thin ">{title}</h3>
+    </div>
+  );
+}
 
 export default function LandingPage() {
   return (
@@ -123,18 +136,33 @@ export default function LandingPage() {
 
         {/* Heading */}
         <h1 className="relative text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-none mb-4">
-          <span className="text-white">La mejor</span>
+          <span className="text-white">Habla Ahora Con</span>
           <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A11213] via-[#e03030] to-[#A11213]">
-            experiencia
+            Nuestras Anfitrionas
           </span>
           <br />
           
         </h1>
 
-        <p className="relative text-white/50 text-lg sm:text-xl max-w-xl mb-10 leading-relaxed">
+        <p className="relative text-white/50 text-lg sm:text-xl max-w-xl mb-5 leading-relaxed">
           Conecta con nuestras anfitrionas, compra créditos y disfruta una noche inolvidable en Pachamama.
         </p>
+        <div className="flex gap-2">
+          <FeatureCard2
+            title="💬 Chat gratis"
+          />
+          <FeatureCard2
+            title="📞 Llamadas privadas
+"
+          />
+          <FeatureCard2
+            title="🎥 Videollamadas"
+          />
+          <FeatureCard2
+            title="🔥 Disponible ahora"
+          />
+        </div>
 
         {/* CTA Buttons */}
         <div className="relative flex flex-col sm:flex-row items-center gap-3 mb-12">

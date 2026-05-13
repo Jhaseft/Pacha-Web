@@ -6,18 +6,19 @@ export function AppDownloadButton() {
       href={APK_URL}
       download
       title="Descargar aplicación Android"
-      className="group fixed bottom-6 right-6 z-50 flex items-center gap-3
+      className="group fixed z-50 flex items-center justify-center gap-3
         bg-[#A11213] hover:bg-[#8a0f10] active:scale-95
         text-white font-black
-        pl-4 pr-5 py-3.5 rounded-2xl
+        transition-all duration-200
         shadow-[0_6px_30px_rgba(161,18,19,0.6)]
         hover:shadow-[0_8px_40px_rgba(161,18,19,0.75)]
-        transition-all duration-200"
+        bottom-4 left-4 right-4 rounded-2xl px-5 py-4
+        md:left-auto md:right-6 md:bottom-6 md:w-auto md:px-8 md:py-5 md:rounded-3xl"
     >
       {/* Android icon */}
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="w-6 h-6 shrink-0"
+        className="w-6 h-6 shrink-0 md:w-8 md:h-8"
         viewBox="0 0 24 24"
         fill="white"
       >
@@ -25,10 +26,10 @@ export function AppDownloadButton() {
       </svg>
 
       <span className="flex flex-col leading-tight">
-        <span className="text-white/70 text-[10px] font-semibold uppercase tracking-widest leading-none">
+        <span className="text-white/70 text-xs md:text-sm font-semibold uppercase tracking-widest leading-none">
           Descargar app
         </span>
-        <span className="text-sm leading-tight">Android .apk</span>
+        <span className="text-sm md:text-base leading-tight">Android .apk</span>
       </span>
     </a>
   );
