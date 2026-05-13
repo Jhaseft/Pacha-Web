@@ -58,7 +58,7 @@ export default function TrabajaConNosotrosPage() {
         </h1>
 
         <p className="relative text-white/50 text-lg sm:text-xl max-w-xl mb-10 leading-relaxed">
-          Forma parte del equipo de anfitrionas de Pachamama. Gana dinero desde tu celular, con horarios flexibles y total libertad.
+          Forma parte del equipo de creadoras de Pachamama. Gana dinero desde tu celular, con horarios flexibles y total libertad.
         </p>
 
         <a
@@ -105,7 +105,7 @@ export default function TrabajaConNosotrosPage() {
                 { label: "Horarios 100% flexibles", icon: "🕐" },
                 { label: "Gana dinero desde tu celular", icon: "💰" },
                 { label: "Soporte y acompañamiento constante", icon: "🤝" },
-                { label: "Comunidad de anfitrionas activa", icon: "✨" },
+                { label: "Comunidad de creadoras activa", icon: "✨" },
               ].map((item) => (
                 <div key={item.label} className="flex items-center gap-3 bg-white/5 border border-white/8 rounded-2xl px-4 py-3">
                   <span className="text-xl">{item.icon}</span>
@@ -217,7 +217,7 @@ export default function TrabajaConNosotrosPage() {
               },
               {
                 title: "Comunidad exclusiva",
-                desc: "Únete a una comunidad de anfitrionas que se apoyan mutuamente y comparten experiencias.",
+                desc: "Únete a una comunidad de creadoras que se apoyan mutuamente y comparten experiencias.",
                 icon: (
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-[#A11213]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
