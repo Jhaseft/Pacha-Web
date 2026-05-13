@@ -6,7 +6,7 @@ export function AppDownloadButton() {
       href={APK_URL}
       download
       title="Descargar aplicación Android"
-      className="group fixed bottom-6 right-6 z-50 flex items-center gap-3
+      className="group fixed bottom-6 right-[90px] z-50 flex items-center gap-3
         bg-[#A11213] hover:bg-[#8a0f10] active:scale-95
         text-white font-black
         pl-4 pr-5 py-3.5 rounded-2xl

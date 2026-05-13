@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { Bot } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 type Role = "usuario" | "anfitriona";
@@ -17,9 +18,10 @@ interface Props {
   welcomeMessage: string;
   sugerencias?: string[];
   embedded?: boolean;
+  hideHeader?: boolean;
 }
 
-export function ChatAsistente({ role, titulo, subtitulo, welcomeMessage, sugerencias = [], embedded = false }: Props) {
+export function ChatAsistente({ role, titulo, subtitulo, welcomeMessage, sugerencias = [], embedded = false, hideHeader = false }: Props) {
   const [messages, setMessages] = useState<Message[]>([
     { role: "assistant", content: welcomeMessage },
   ]);
@@ -72,22 +74,24 @@ export function ChatAsistente({ role, titulo, subtitulo, welcomeMessage, sugeren
   }
 
   return (
-    <div className={`flex flex-col text-white ${embedded ? "h-140 rounded-3xl border border-white/8 overflow-hidden bg-white/3" : "h-screen bg-[#0a0a0a]"}`}>
+    <div className={`flex flex-col text-white ${embedded ? "h-full rounded-3xl border border-white/8 overflow-hidden bg-white/3" : "h-screen bg-[#0a0a0a]"}`}>
       {/* Header */}
-      <header className="flex-none flex items-center gap-3 px-4 sm:px-6 py-4 bg-black/80 backdrop-blur-xl border-b border-[#A11213]/30">
-        <Image
-          src="/logofull.jpeg"
-          alt="Pachamama"
-          width={36}
-          height={36}
-          style={{ height: "auto" }}
-          className="rounded-xl object-cover ring-2 ring-[#A11213]/40 flex-none"
-        />
-        <div className="leading-tight">
-          <p className="text-white font-bold text-sm sm:text-base">{titulo}</p>
-          <p className="text-white/40 text-xs">{subtitulo}</p>
-        </div>
-      </header>
+      {!hideHeader && (
+        <header className="flex-none flex items-center gap-3 px-4 sm:px-6 py-4 bg-black/80 backdrop-blur-xl border-b border-[#A11213]/30">
+          <Image
+            src="/logofull.jpeg"
+            alt="Pachamama"
+            width={36}
+            height={36}
+            style={{ height: "auto" }}
+            className="rounded-xl object-cover ring-2 ring-[#A11213]/40 flex-none"
+          />
+          <div className="leading-tight">
+            <p className="text-white font-bold text-sm sm:text-base">{titulo}</p>
+            <p className="text-white/40 text-xs">{subtitulo}</p>
+          </div>
+        </header>
+      )}
 
       {/* Mensajes */}
       <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-5 space-y-4">
@@ -96,13 +100,8 @@ export function ChatAsistente({ role, titulo, subtitulo, welcomeMessage, sugeren
             key={i}
             className={`flex items-end gap-2 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
           >
-            {msg.role === "assistant" && (
-              <div className="flex-none w-8 h-8 rounded-full bg-[#A11213]/20 border border-[#A11213]/30 flex items-center justify-center text-sm">
-                🤖
-              </div>
-            )}
             <div
-              className={`max-w-[80%] sm:max-w-[65%] px-4 py-3 rounded-3xl text-sm leading-relaxed whitespace-pre-wrap ${
+              className={`max-w-[90%] sm:max-w-[80%] px-4 py-3 rounded-3xl text-sm leading-relaxed whitespace-pre-wrap ${
                 msg.role === "user"
                   ? "bg-[#A11213] text-white rounded-br-sm"
                   : "bg-white/5 border border-white/8 text-white/90 rounded-bl-sm"
@@ -116,9 +115,6 @@ export function ChatAsistente({ role, titulo, subtitulo, welcomeMessage, sugeren
         {/* Loader */}
         {loading && (
           <div className="flex items-end gap-2 justify-start">
-            <div className="flex-none w-8 h-8 rounded-full bg-[#A11213]/20 border border-[#A11213]/30 flex items-center justify-center text-sm">
-              🤖
-            </div>
             <div className="bg-white/5 border border-white/8 rounded-3xl rounded-bl-sm px-5 py-4 flex gap-1.5 items-center">
               <span className="w-2 h-2 bg-white/40 rounded-full animate-bounce [animation-delay:0ms]" />
               <span className="w-2 h-2 bg-white/40 rounded-full animate-bounce [animation-delay:150ms]" />
