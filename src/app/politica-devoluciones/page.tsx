@@ -17,7 +17,7 @@ export default function PoliticaDevolucionesPage() {
             />
             <div className="leading-tight hidden sm:block">
               <p className="text-white font-black text-base tracking-tight">Pachamama</p>
-              <p className="text-white/30 text-[9px] uppercase tracking-widest">Karaoke Bar · Tarapoto</p>
+              <p className="text-white/30 text-[9px] uppercase tracking-widest">Bar · Tarapoto</p>
             </div>
           </Link>
           <Link

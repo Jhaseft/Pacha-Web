@@ -20,7 +20,7 @@ export default function TrabajaConNosotrosPage() {
             />
             <div className="leading-tight">
               <p className="text-white font-black text-base tracking-tight hidden sm:block">Pachamama</p>
-              <p className="text-white/30 text-[9px] uppercase tracking-widest hidden sm:block">Karaoke Bar · Tarapoto</p>
+              <p className="text-white/30 text-[9px] uppercase tracking-widest hidden sm:block">Bar · Tarapoto</p>
             </div>
           </Link>
           <div className="hidden md:flex items-center gap-2">
