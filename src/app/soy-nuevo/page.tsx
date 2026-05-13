@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { MobileMenu } from "@/components/MobileMenu";
+import { ChatAsistente } from "@/components/ChatAsistente";
 
 export default function SoyNuevoPage() {
   return (
@@ -254,6 +255,27 @@ export default function SoyNuevoPage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Asistente IA */}
+      <section className="py-20 px-5 sm:px-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <p className="text-[#A11213] text-xs font-bold uppercase tracking-widest mb-3">Asistente inteligente</p>
+            <h2 className="text-white text-3xl sm:text-4xl font-black tracking-tight mb-3">¿Tienes dudas? Pregúntanos</h2>
+            <p className="text-white/45 text-sm max-w-md mx-auto leading-relaxed">
+              Nuestro asistente con IA está disponible 24/7 para responder todas tus preguntas sobre la plataforma.
+            </p>
+          </div>
+          <ChatAsistente
+            role="usuario"
+            titulo="Asistente Pachamama"
+            subtitulo="Soy nuevo · Te ayudo a empezar"
+            welcomeMessage="¡Hola! 👋 Soy el asistente de Pachamama. Estoy aquí para ayudarte a entender cómo funciona la plataforma. ¿Qué quieres saber?"
+            sugerencias={["¿Cómo me registro?", "¿Cómo compro créditos?", "¿Cómo contacto a una anfitriona?"]}
+            embedded
+          />
         </div>
       </section>
 

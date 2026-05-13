@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { MobileMenu } from "@/components/MobileMenu";
+import { ChatAsistente } from "@/components/ChatAsistente";
 
 export default function TrabajaConNosotrosPage() {
   return (
@@ -301,6 +302,27 @@ export default function TrabajaConNosotrosPage() {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Asistente IA */}
+      <section className="py-20 px-5 sm:px-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <p className="text-[#A11213] text-xs font-bold uppercase tracking-widest mb-3">Asistente inteligente</p>
+            <h2 className="text-white text-3xl sm:text-4xl font-black tracking-tight mb-3">¿Tienes dudas? Pregúntanos</h2>
+            <p className="text-white/45 text-sm max-w-md mx-auto leading-relaxed">
+              Nuestro asistente con IA responde todas tus preguntas sobre cómo ser anfitriona en Pachamama.
+            </p>
+          </div>
+          <ChatAsistente
+            role="anfitriona"
+            titulo="Asistente Pachamama"
+            subtitulo="Trabaja con nosotros · Anfitrionas"
+            welcomeMessage="¡Hola! 💫 Soy el asistente de Pachamama para anfitrionas. Te puedo explicar cómo funciona la plataforma, cómo crear tu perfil y cómo empezar a generar ingresos. ¿Qué quieres saber?"
+            sugerencias={["¿Cómo me registro?", "¿Cómo gano dinero?", "¿Cómo retiro mis ganancias?", "¿Qué servicios puedo ofrecer?"]}
+            embedded
+          />
         </div>
       </section>
 

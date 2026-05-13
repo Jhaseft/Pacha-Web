@@ -50,6 +50,7 @@ export default function LandingPage() {
               alt="Pachamama"
               width={36}
               height={36}
+              style={{ height: "auto" }}
               className="rounded-xl object-cover ring-2 ring-[#A11213]/40"
             />
 
@@ -117,6 +118,7 @@ export default function LandingPage() {
             alt="Pachamama"
             width={140}
             height={140}
+            style={{ height: "auto" }}
             className="relative rounded-3xl object-cover ring-4 ring-[#A11213]/30 shadow-2xl"
             priority
           />
