@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { MobileMenu } from "@/components/MobileMenu";
 import { ChatAsistente } from "@/components/ChatAsistente";
 
 export default function SoyNuevoPage() {
@@ -19,10 +20,10 @@ export default function SoyNuevoPage() {
             />
             <div className="leading-tight">
               <p className="text-white font-black text-base tracking-tight hidden sm:block">Pachamama</p>
-              <p className="text-white/30 text-[9px] uppercase tracking-widest hidden sm:block">Karaoke Bar · Tarapoto</p>
+              <p className="text-white/30 text-[9px] uppercase tracking-widest hidden sm:block">Bar · Tarapoto</p>
             </div>
           </Link>
-          <div className="flex items-center gap-2">
+          <div className="hidden md:flex items-center gap-2">
             <Link href="/login" className="text-white/70 hover:text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-white/5 transition-all">
               Iniciar sesión
             </Link>
@@ -30,6 +31,7 @@ export default function SoyNuevoPage() {
               Registrarse
             </Link>
           </div>
+          <MobileMenu />
         </div>
       </nav>
 
@@ -50,7 +52,7 @@ export default function SoyNuevoPage() {
         </h1>
 
         <p className="relative text-white/50 text-lg sm:text-xl max-w-xl mb-10 leading-relaxed">
-          Estás a pocos pasos de vivir la mejor experiencia de karaoke y entretenimiento en Tarapoto. Te explicamos cómo empezar.
+          Estás a pocos pasos de vivir la mejor experiencia de entretenimiento en Tarapoto. Te explicamos cómo empezar.
         </p>
 
         <Link

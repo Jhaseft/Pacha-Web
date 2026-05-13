@@ -3,6 +3,7 @@ import Link from "next/link";
 import { LandingPackagesSection } from "@/components/LandingPackagesSection";
 import { LandingContactSection } from "@/components/LandingContactSection";
 import { AppDownloadButton } from "@/components/AppDownloadButton";
+import { MobileMenu } from "@/components/MobileMenu";
 
 // ── Shared icons ──────────────────────────────────────────────────────────────
 function StarIcon() {
@@ -70,8 +71,8 @@ export default function LandingPage() {
             <Link href="/trabaja-con-nosotros" className="hover:text-white transition-colors">Trabaja con nosotros</Link>
           </div>
 
-          {/* Auth buttons */}
-          <div className="flex items-center gap-2">
+          {/* Auth buttons — solo desktop */}
+          <div className="hidden md:flex items-center gap-2">
             <Link
               href="/login"
               className="text-white/70 hover:text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-white/5 transition-all"
@@ -85,6 +86,9 @@ export default function LandingPage() {
               Registrarse
             </Link>
           </div>
+
+          {/* Hamburguesa — solo mobile */}
+          <MobileMenu />
         </div>
       </nav>
 
@@ -103,7 +107,7 @@ export default function LandingPage() {
         {/* Floating badge */}
         <div className="relative mb-8 inline-flex items-center gap-2 bg-[#A11213]/15 border border-[#A11213]/30 rounded-full px-4 py-1.5">
           <span className="w-1.5 h-1.5 rounded-full bg-[#A11213] animate-pulse" />
-          <span className="text-[#e07070] text-xs font-bold uppercase tracking-widest">Karaoke Bar — Tarapoto, Perú</span>
+          <span className="text-[#e07070] text-xs font-bold uppercase tracking-widest">Bar — Tarapoto, Perú</span>
         </div>
 
         {/* Logo */}
@@ -128,7 +132,7 @@ export default function LandingPage() {
             experiencia
           </span>
           <br />
-          <span className="text-white">de karaoke</span>
+          
         </h1>
 
         <p className="relative text-white/50 text-lg sm:text-xl max-w-xl mb-10 leading-relaxed">
