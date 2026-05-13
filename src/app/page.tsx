@@ -30,7 +30,7 @@ function FeatureCard({
         {icon}
       </div>
       <h3 className="text-white font-bold text-lg mb-2">{title}</h3>
-      <p className="text-white/50 text-sm leading-relaxed">{desc}</p>
+      <p className="text-white/65 text-sm leading-relaxed">{desc}</p>
     </div>
   );
 }
@@ -50,7 +50,7 @@ function FeatureCard2({
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#0a0a0a] text-white overflow-x-hidden pb-24 md:pb-0">
 
       {/* ══════════════════════════════════════════════
           NAVBAR
@@ -105,113 +105,214 @@ export default function LandingPage() {
       {/* ══════════════════════════════════════════════
           HERO
       ══════════════════════════════════════════════ */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center px-5 sm:px-8 pt-24 pb-16 text-center overflow-hidden">
+      <section className="relative min-h-screen flex flex-col lg:flex-row items-center gap-12 lg:gap-0 px-5 sm:px-8 pt-24 pb-20 overflow-hidden">
 
         {/* Background glow */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#A11213]/10 rounded-full blur-[120px]" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#A11213]/5 rounded-full blur-[100px]" />
-          <div className="absolute top-0 right-0 w-72 h-72 bg-red-900/8 rounded-full blur-[80px]" />
+          <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-[#A11213]/12 rounded-full blur-[120px]" />
+          <div className="absolute bottom-0 right-0 w-80 h-80 bg-[#A11213]/6 rounded-full blur-[100px]" />
+          <div className="absolute top-0 right-1/3 w-64 h-64 bg-red-900/6 rounded-full blur-[80px]" />
         </div>
 
-        {/* Floating badge */}
-        <div className="relative mb-8 inline-flex items-center gap-2 bg-[#A11213]/15 border border-[#A11213]/30 rounded-full px-4 py-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#A11213] animate-pulse" />
-          <span className="text-[#e07070] text-xs font-bold uppercase tracking-widest">Bar — Tarapoto, Perú</span>
-        </div>
+        {/* LEFT — Text content */}
+        <div className="relative flex-1 flex flex-col items-center lg:items-start text-center lg:text-left z-10 lg:pr-10">
 
-        {/* Logo */}
-        <div className="relative mb-8">
-          <div className="absolute inset-0 rounded-3xl bg-[#A11213]/20 blur-2xl scale-110" />
-          <Image
-            src="/logofull.jpeg"
-            alt="Pachamama"
-            width={140}
-            height={140}
-            style={{ height: "auto" }}
-            className="relative rounded-3xl object-cover ring-4 ring-[#A11213]/30 shadow-2xl"
-            priority
-          />
-        </div>
+          {/* Online badge */}
+          <div className="mb-6 inline-flex items-center gap-2.5 bg-white/8 border border-white/12 rounded-full px-4 py-2">
+            <div className="flex -space-x-1.5">
+              {["V", "C", "D", "M"].map((l) => (
+                <div key={l} className="w-6 h-6 rounded-full bg-gradient-to-br from-[#A11213] to-[#5a0000] border-2 border-[#0a0a0a] flex items-center justify-center">
+                  <span className="text-white text-[8px] font-black">{l}</span>
+                </div>
+              ))}
+            </div>
+            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse shrink-0" />
+            <span className="text-white/80 text-xs font-semibold uppercase tracking-wider">24 creadoras online ahora</span>
+          </div>
 
-        {/* Heading */}
-        <h1 className="relative text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-none mb-4">
-          <span className="text-white">Habla Ahora Con</span>
-          <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A11213] via-[#e03030] to-[#A11213]">
-            Nuestras Anfitrionas
-          </span>
-          <br />
-          
-        </h1>
+          {/* Heading */}
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.05] mb-5">
+            <span className="text-white">Conecta con</span>
+            <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A11213] via-[#e03030] to-[#ff6060]">
+              creadoras en vivo
+            </span>
+          </h1>
 
-        <p className="relative text-white/50 text-lg sm:text-xl max-w-xl mb-5 leading-relaxed">
-          Conecta con nuestras anfitrionas, compra créditos y disfruta una noche inolvidable en Pachamama.
-        </p>
-        <div className="flex gap-2">
-          <FeatureCard2
-            title="💬 Chat gratis"
-          />
-          <FeatureCard2
-            title="📞 Llamadas privadas
-"
-          />
-          <FeatureCard2
-            title="🎥 Videollamadas"
-          />
-          <FeatureCard2
-            title="🔥 Disponible ahora"
-          />
-        </div>
+          {/* Subtitle */}
+          <p className="text-white/65 text-lg sm:text-xl max-w-lg mb-8 leading-relaxed">
+            Chat gratis, llamadas y videollamadas privadas. Disfruta contenido exclusivo desde tu celular.
+          </p>
 
-        {/* CTA Buttons */}
-        <div className="relative flex flex-col sm:flex-row items-center gap-3 mb-12">
-          <Link
-            href="/login/cliente"
-            className="w-full sm:w-auto bg-[#A11213] hover:bg-[#8a0f10] active:scale-95 text-white font-black text-base
-              px-8 py-4 rounded-2xl transition-all shadow-2xl shadow-[#A11213]/40 flex items-center justify-center gap-2"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-            </svg>
-            Crear cuenta gratis
-          </Link>
-          <Link
-            href="/login"
-            className="w-full sm:w-auto border border-white/15 hover:border-white/30 hover:bg-white/5 text-white font-bold text-base
-              px-8 py-4 rounded-2xl transition-all flex items-center justify-center gap-2"
-          >
-            Ya tengo cuenta
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-            </svg>
-          </Link>
-        </div>
-
-        {/* Social proof */}
-        <div className="relative flex items-center gap-3">
-          <div className="flex -space-x-2">
-            {["A", "M", "L", "R"].map((l) => (
-              <div key={l} className="w-8 h-8 rounded-full bg-gradient-to-br from-[#A11213] to-[#5a0000] border-2 border-[#0a0a0a] flex items-center justify-center">
-                <span className="text-white text-[10px] font-black">{l}</span>
+          {/* Features 2x2 grid */}
+          <div className="grid grid-cols-2 gap-3 mb-8 w-full max-w-sm">
+            {[
+              { emoji: "💬", title: "Chat gratis", desc: "Habla sin límites" },
+              { emoji: "📞", title: "Llamadas privadas", desc: "Conecta más cerca" },
+              { emoji: "🎥", title: "Videollamadas", desc: "Interacción en vivo" },
+              { emoji: "⭐", title: "Contenido exclusivo", desc: "Solo para ti" },
+            ].map((f) => (
+              <div key={f.title} className="flex items-center gap-2.5 bg-white/5 border border-white/8 rounded-2xl p-3">
+                <span className="text-lg leading-none">{f.emoji}</span>
+                <div>
+                  <p className="text-white font-bold text-sm leading-tight">{f.title}</p>
+                  <p className="text-white/50 text-xs">{f.desc}</p>
+                </div>
               </div>
             ))}
           </div>
-          <div className="text-left">
-            <div className="flex items-center gap-0.5 mb-0.5">
-              {[1, 2, 3, 4, 5].map((i) => <StarIcon key={i} />)}
-            </div>
-            <p className="text-white/40 text-xs">+200 usuarios satisfechos</p>
+
+          {/* CTA buttons */}
+          <div id="hero-cta" className="flex flex-col sm:flex-row gap-3 w-full max-w-sm mb-6">
+            <a
+              href={process.env.NEXT_PUBLIC_APK_URL}
+              download
+              className="flex-1 bg-gradient-to-r from-[#A11213] to-[#cc2020] hover:from-[#8a0f10] hover:to-[#b01010]
+                text-white font-black px-5 py-4 rounded-2xl transition-all
+                shadow-2xl shadow-[#A11213]/40 flex items-center justify-center gap-3 active:scale-95"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 shrink-0" viewBox="0 0 24 24" fill="white">
+                <path d="M17.523 15.341a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm-11.046 0a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM2.1 8.4h19.8A1.1 1.1 0 0 1 23 9.5v6a1.1 1.1 0 0 1-1.1 1.1H21v2.65a.75.75 0 0 1-1.5 0V16.6H4.5v2.65a.75.75 0 0 1-1.5 0V16.6h-.9A1.1 1.1 0 0 1 1 15.5v-6A1.1 1.1 0 0 1 2.1 8.4Zm.9 1.5v5h18v-5H3ZM8.22 2.47a.75.75 0 0 1 1.02-.28L12 3.8l2.76-1.61a.75.75 0 1 1 .75 1.3L13.5 4.8V7.4h-3V4.8L8.5 3.49a.75.75 0 0 1-.28-1.02Z" />
+              </svg>
+              <span className="flex flex-col leading-tight text-left">
+                <span className="text-white/70 text-[10px] uppercase tracking-widest leading-none">Descargar app</span>
+                <span className="text-base leading-tight">Android .apk</span>
+              </span>
+            </a>
+            <Link
+              href="/login/cliente"
+              className="border border-white/15 hover:border-white/30 hover:bg-white/5 text-white font-bold text-sm
+                px-5 py-4 rounded-2xl transition-all flex items-center justify-center gap-2 whitespace-nowrap"
+            >
+              Crear cuenta
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+              </svg>
+            </Link>
+          </div>
+
+          {/* Trust signals */}
+          <div className="flex flex-wrap justify-center lg:justify-start gap-x-5 gap-y-2">
+            {[
+              "Seguro y privado",
+              "Crea tu cuenta en segundos",
+              "100% confidencial",
+              "Diversión garantizada",
+            ].map((t) => (
+              <span key={t} className="flex items-center gap-1.5 text-xs text-white/40">
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-3 h-3 text-[#A11213]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                </svg>
+                {t}
+              </span>
+            ))}
           </div>
         </div>
 
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
-          <p className="text-white/20 text-xs uppercase tracking-widest">Explorar</p>
-          <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-white/20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-          </svg>
+        {/* RIGHT — Phone mockup */}
+        <div className="relative flex-1 flex justify-center lg:justify-end z-10">
+          <div className="relative">
+            {/* Glow */}
+            <div className="absolute inset-0 rounded-[3rem] bg-[#A11213]/20 blur-3xl scale-110 pointer-events-none" />
+
+            {/* Phone frame */}
+            <div
+              className="relative w-56 sm:w-64 bg-[#111] rounded-[3rem] border-[3px] border-white/10 shadow-2xl overflow-hidden"
+              style={{ aspectRatio: "9/19" }}
+            >
+              {/* Status bar */}
+              <div className="bg-[#111] flex items-center justify-between px-5 pt-3 pb-1.5">
+                <span className="text-white text-[9px] font-semibold">9:41</span>
+                <div className="w-14 h-4 bg-black rounded-full border border-white/10" />
+                <div className="flex items-center gap-0.5">
+                  {[6, 10, 14].map((h) => (
+                    <div key={h} className="w-[3px] rounded-sm bg-white/50" style={{ height: `${h}px` }} />
+                  ))}
+                </div>
+              </div>
+
+              {/* App header */}
+              <div className="bg-[#111] px-4 py-2.5 flex items-center justify-between border-b border-white/8">
+                <div>
+                  <p className="text-white font-black text-[13px]">Descubre creadoras</p>
+                  <p className="text-green-400 text-[10px] font-semibold">● En vivo ahora</p>
+                </div>
+                <div className="w-7 h-7 bg-white/8 rounded-full flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Creator grid */}
+              <div className="bg-black grid grid-cols-2 gap-0.5 p-0.5">
+                {[
+                  { name: "Valentina", count: "1.2K", from: "#6b1018", to: "#2d060a" },
+                  { name: "Camila", count: "982", from: "#4a1060", to: "#1e0530" },
+                  { name: "Daniela", count: "753", from: "#8b1a10", to: "#3d0a07" },
+                  { name: "Mariana", count: "680", from: "#0a3060", to: "#051530" },
+                ].map((c) => (
+                  <div
+                    key={c.name}
+                    className="relative overflow-hidden"
+                    style={{
+                      background: `linear-gradient(to bottom, ${c.from}, ${c.to})`,
+                      aspectRatio: "0.75",
+                    }}
+                  >
+                    <div className="absolute top-1.5 left-1.5 flex items-center gap-0.5 bg-[#A11213] rounded-full px-1.5 py-0.5">
+                      <span className="w-1 h-1 rounded-full bg-white animate-pulse" />
+                      <span className="text-white text-[7px] font-bold">En vivo</span>
+                    </div>
+                    <div className="absolute inset-0 flex items-end justify-center pb-7 opacity-15">
+                      <div className="w-8 h-14 bg-white rounded-t-full" />
+                    </div>
+                    <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/90 via-black/40 to-transparent">
+                      <p className="text-white text-[10px] font-black">{c.name}</p>
+                      <div className="flex items-center gap-0.5 mt-0.5">
+                        <svg className="w-2 h-2 text-red-400" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                        </svg>
+                        <span className="text-white/60 text-[8px]">{c.count}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Bottom nav */}
+              <div className="bg-black border-t border-white/8 flex items-center justify-around px-2 py-2">
+                {[
+                  { label: "Inicio", active: true },
+                  { label: "Chat", active: false },
+                  { label: "Llamadas", active: false },
+                  { label: "Perfil", active: false },
+                ].map((tab) => (
+                  <div key={tab.label} className="flex flex-col items-center gap-0.5">
+                    <div className={`w-3 h-3 rounded-sm ${tab.active ? "bg-[#A11213]" : "bg-white/20"}`} />
+                    <span className={`text-[7px] font-semibold ${tab.active ? "text-[#A11213]" : "text-white/30"}`}>{tab.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Online badge */}
+            <div className="absolute -top-3 -right-4 bg-[#1a1a1a] border border-white/10 rounded-2xl px-3 py-2 shadow-xl">
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                <span className="text-white text-[11px] font-black">24 online</span>
+              </div>
+              <p className="text-white/30 text-[8px] mt-0.5">creadoras en vivo</p>
+            </div>
+
+            {/* Download count badge */}
+            <div className="absolute -bottom-3 -left-4 bg-[#A11213] rounded-2xl px-3 py-2 shadow-xl">
+              <p className="text-white text-[10px] font-black leading-none">+500</p>
+              <p className="text-red-200/70 text-[8px]">descargas</p>
+            </div>
+          </div>
         </div>
+
       </section>
 
       {/* ══════════════════════════════════════════════
@@ -230,15 +331,15 @@ export default function LandingPage() {
             <h2 className="text-white text-4xl sm:text-5xl font-black tracking-tight mb-4">
               Todo en un solo lugar
             </h2>
-            <p className="text-white/40 text-lg max-w-lg mx-auto">
+            <p className="text-white/60 text-lg max-w-lg mx-auto">
               Pachamama te ofrece la experiencia más completa de entretenimiento.
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             <FeatureCard
-              title="Creadoras exclusivas"
-              desc="Conecta con nuestras creadoras en tiempo real. Chatea, desbloquea fotos y vive momentos únicos."
+              title="Creadoras en vivo"
+              desc="Conecta con creadoras en tiempo real. Chatea gratis y descubre funciones premium dentro de la app."
               icon={
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-[#A11213]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
@@ -264,8 +365,8 @@ export default function LandingPage() {
               }
             />
             <FeatureCard
-              title="Contenido premium"
-              desc="Accede a fotos e historias exclusivas de tuscreadorasfavoritas desbloqueando contenido con créditos."
+              title="Contenido exclusivo"
+              desc="Accede a publicaciones, historias y experiencias digitales usando créditos dentro de la app."
               icon={
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-[#A11213]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
@@ -273,8 +374,8 @@ export default function LandingPage() {
               }
             />
             <FeatureCard
-              title="Siempre disponible"
-              desc="Plataforma disponible las 24/7. Disfruta desde cualquier dispositivo, web o app móvil."
+              title="Disponible todos los días"
+              desc="Disfruta la plataforma desde tu celular, web o app móvil."
               icon={
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-[#A11213]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -306,57 +407,48 @@ export default function LandingPage() {
             </h2>
           </div>
 
-          <div className="relative">
-            {/* Connecting line */}
-            <div className="absolute left-6 top-10 bottom-10 w-px bg-gradient-to-b from-[#A11213] via-[#A11213]/30 to-transparent hidden sm:block" />
-
-            <div className="flex flex-col gap-10">
-              {[
-                {
-                  step: "01",
-                  title: "Crea tu cuenta",
-                  desc: "Regístrate gratis con tu número de celular en menos de 2 minutos.",
-                  icon: (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-[#A11213]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                    </svg>
-                  ),
-                },
-                {
-                  step: "02",
-                  title: "Recarga créditos",
-                  desc: "Elige un paquete de créditos y paga de forma segura con tu tarjeta.",
-                  icon: (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-[#A11213]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
-                    </svg>
-                  ),
-                },
-                {
-                  step: "03",
-                  title: "Conecta y disfruta",
-                  desc: "Explora perfiles de anfitrionas, chatea y desbloquea contenido exclusivo.",
-                  icon: (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-[#A11213]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                    </svg>
-                  ),
-                },
-              ].map((item) => (
-                <div key={item.step} className="flex items-start gap-6 group">
-                  <div className="relative shrink-0">
-                    <div className="w-12 h-12 rounded-2xl bg-[#A11213]/15 border border-[#A11213]/25 flex items-center justify-center group-hover:bg-[#A11213]/25 transition-colors z-10 relative">
-                      {item.icon}
-                    </div>
-                  </div>
-                  <div className="pt-2">
-                    <p className="text-[#A11213] text-xs font-black uppercase tracking-widest mb-1">Paso {item.step}</p>
-                    <h3 className="text-white text-xl font-black mb-2">{item.title}</h3>
-                    <p className="text-white/45 text-sm leading-relaxed max-w-md">{item.desc}</p>
-                  </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 sm:gap-8">
+            {[
+              {
+                step: "01",
+                title: "Crea tu cuenta gratis",
+                desc: "Regístrate en menos de 2 minutos con tu celular.",
+                icon: (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-7 h-7 text-[#A11213]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                  </svg>
+                ),
+              },
+              {
+                step: "02",
+                title: "Chatea gratis",
+                desc: "Conecta con creadoras y empieza a conversar sin costo inicial.",
+                icon: (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-7 h-7 text-[#A11213]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
+                  </svg>
+                ),
+              },
+              {
+                step: "03",
+                title: "Usa créditos cuando quieras",
+                desc: "Activa llamadas, videollamadas y contenido exclusivo con créditos.",
+                icon: (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-7 h-7 text-[#A11213]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                  </svg>
+                ),
+              },
+            ].map((item) => (
+              <div key={item.step} className="flex flex-col items-center sm:items-start text-center sm:text-left group">
+                <div className="w-14 h-14 rounded-2xl bg-[#A11213]/15 border border-[#A11213]/25 flex items-center justify-center mb-4 group-hover:bg-[#A11213]/25 transition-colors">
+                  {item.icon}
                 </div>
-              ))}
-            </div>
+                <p className="text-[#A11213] text-xs font-black uppercase tracking-widest mb-2">Paso {item.step}</p>
+                <h3 className="text-white text-xl font-black mb-2">{item.title}</h3>
+                <p className="text-white/65 text-sm leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -389,7 +481,7 @@ export default function LandingPage() {
                     en tu bolsillo
                   </span>
                 </h2>
-                <p className="text-white/45 text-base sm:text-lg leading-relaxed mb-8 max-w-md mx-auto lg:mx-0">
+                <p className="text-white/65 text-base sm:text-lg leading-relaxed mb-8 max-w-md mx-auto lg:mx-0">
                   Descarga la app oficial y vive la experiencia completa desde tu celular. Disponible para Android e iOS.
                 </p>
 
@@ -565,7 +657,7 @@ export default function LandingPage() {
       {/* ══════════════════════════════════════════════
           CTA BANNER
       ══════════════════════════════════════════════ */}
-      <section className="py-24 px-5 sm:px-8">
+      <section id="final-cta" className="py-24 px-5 sm:px-8">
         <div className="max-w-4xl mx-auto">
           <div className="relative overflow-hidden bg-gradient-to-br from-[#A11213] via-[#8B0000] to-[#4a0000] rounded-3xl p-10 sm:p-14 text-center">
             {/* Decorative circles */}
@@ -585,7 +677,7 @@ export default function LandingPage() {
                 ¿Listo para vivir<br />la experiencia?
               </h2>
               <p className="text-red-200/70 text-base sm:text-lg mb-8 max-w-lg mx-auto leading-relaxed">
-                Únete a Pachamama y disfruta la mejor noche de karaoke en Tarapoto.
+                Descarga Pachamama App y conecta con creadoras en vivo desde tu celular.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
                 <Link
