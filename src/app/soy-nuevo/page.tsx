@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { MobileMenu } from "@/components/MobileMenu";
-import { ChatAsistente } from "@/components/ChatAsistente";
 
 export default function SoyNuevoPage() {
   return (
@@ -10,7 +9,7 @@ export default function SoyNuevoPage() {
       {/* Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-xl border-b border-white/5">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-3 shrink-0">
             <Image
               src="/logofull.jpeg"
               alt="Pachamama"
@@ -23,6 +22,12 @@ export default function SoyNuevoPage() {
               <p className="text-white/30 text-[9px] uppercase tracking-widest hidden sm:block">Bar · Tarapoto</p>
             </div>
           </Link>
+          <div className="hidden md:flex items-center gap-5 text-sm text-white/50">
+            <Link href="/" className="hover:text-white transition-colors">Inicio</Link>
+            <Link href="/#paquetes" className="hover:text-white transition-colors">Paquetes</Link>
+            <Link href="/#como-funciona" className="hover:text-white transition-colors">Cómo funciona</Link>
+            <Link href="/trabaja-con-nosotros" className="hover:text-white transition-colors">Trabaja con nosotros</Link>
+          </div>
           <div className="hidden md:flex items-center gap-2">
             <Link href="/login" className="text-white/70 hover:text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-white/5 transition-all">
               Iniciar sesión
@@ -258,26 +263,6 @@ export default function SoyNuevoPage() {
         </div>
       </section>
 
-      {/* Asistente IA */}
-      <section className="py-20 px-5 sm:px-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-10">
-            <p className="text-[#A11213] text-xs font-bold uppercase tracking-widest mb-3">Asistente inteligente</p>
-            <h2 className="text-white text-3xl sm:text-4xl font-black tracking-tight mb-3">¿Tienes dudas? Pregúntanos</h2>
-            <p className="text-white/45 text-sm max-w-md mx-auto leading-relaxed">
-              Nuestro asistente con IA está disponible 24/7 para responder todas tus preguntas sobre la plataforma.
-            </p>
-          </div>
-          <ChatAsistente
-            role="usuario"
-            titulo="Asistente Pachamama"
-            subtitulo="Soy nuevo · Te ayudo a empezar"
-            welcomeMessage="¡Hola! 👋 Soy el asistente de Pachamama. Estoy aquí para ayudarte a entender cómo funciona la plataforma. ¿Qué quieres saber?"
-            sugerencias={["¿Cómo me registro?", "¿Cómo compro créditos?", "¿Cómo contacto a una anfitriona?"]}
-            embedded
-          />
-        </div>
-      </section>
 
       {/* CTA final */}
       <section className="py-24 px-5 sm:px-8">
