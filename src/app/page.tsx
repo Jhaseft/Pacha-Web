@@ -105,7 +105,7 @@ export default function LandingPage() {
       {/* ══════════════════════════════════════════════
           HERO
       ══════════════════════════════════════════════ */}
-      <section className="relative min-h-screen flex flex-col lg:flex-row items-center gap-12 lg:gap-0 px-5 sm:px-8 pt-24 pb-20 overflow-hidden">
+      <section className="relative min-h-screen flex flex-col lg:flex-row items-center gap-12 lg:gap-0 px-5 sm:px-8 lg:px-20 xl:px-32 pt-24 pb-20 overflow-hidden">
 
         {/* Background glow */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
