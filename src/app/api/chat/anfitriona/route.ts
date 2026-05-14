@@ -17,20 +17,11 @@ export async function POST(req: NextRequest) {
     }
 
     const data = await res.json();
-    let reply: string;
-    if (typeof data.reply === 'object') {
-      reply = data.reply?.mensaje ?? JSON.stringify(data.reply);
-    } else if (typeof data.reply === 'string') {
-      try {
-        const parsed = JSON.parse(data.reply);
-        reply = parsed?.mensaje ?? data.reply;
-      } catch {
-        reply = data.reply;
-      }
-    } else {
-      reply = String(data.reply);
-    }
-    return NextResponse.json({ reply });
+    return NextResponse.json({
+      reply: data.mensaje ?? '',
+      imagenes: data.imagenes ?? [],
+      videos: data.videos ?? [],
+    });
   } catch {
     return NextResponse.json({ error: "No se pudo conectar con el asistente" }, { status: 502 });
   }
