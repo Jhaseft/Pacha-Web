@@ -5,11 +5,7 @@ import { createPortal } from "react-dom";
 import Link from "next/link";
 
 const NAV_LINKS = [
-  { label: "Paquetes", href: "#paquetes", isRoute: false },
-  { label: "Características", href: "#features", isRoute: false },
-  { label: "Cómo funciona", href: "#como-funciona", isRoute: false },
-  { label: "Descargar app", href: "#descargar", isRoute: false },
-  { label: "Contacto", href: "#contacto", isRoute: false },
+  { label: "Inicio", href: "/", isRoute: true },
   { label: "Soy nuevo", href: "/soy-nuevo", isRoute: true },
   { label: "Trabaja con nosotros", href: "/trabaja-con-nosotros", isRoute: true },
 ];
