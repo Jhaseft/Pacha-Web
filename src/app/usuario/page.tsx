@@ -12,12 +12,7 @@ export default function UsuarioPage() {
       titulo="Asistente Pachamama"
       subtitulo="Soy nuevo · Te ayudo a empezar"
       welcomeMessage="¡Hola! 👋 Soy el asistente de Pachamama. Estoy aquí para ayudarte a entender cómo funciona la plataforma y cómo puedes empezar. ¿Qué quieres saber?"
-      sugerencias={[
-        "¿Qué es Pachamama?",
-        "¿Cómo me registro?",
-        "¿Cómo compro créditos?",
-        "¿Cómo contacto a una anfitriona?",
-      ]}
+      sugerencias={[]}
     />
   );
 }

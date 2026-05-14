@@ -52,7 +52,7 @@ export default function SoyNuevoPage() {
         </h1>
 
         <p className="relative text-white/50 text-lg sm:text-xl max-w-xl mb-10 leading-relaxed">
-          Estás a pocos pasos de vivir la mejor experiencia de entretenimiento en Tarapoto. Te explicamos cómo empezar.
+          Descarga la app, regístrate y conecta con creadoras en vivo desde tu celular.
         </p>
 
         <Link
@@ -146,8 +146,8 @@ export default function SoyNuevoPage() {
                 },
                 {
                   step: "03",
-                  title: "Conecta y disfruta",
-                  desc: "Explora los perfiles de nuestras anfitrionas, chatea, desbloquea fotos y contenido exclusivo, y vive momentos únicos.",
+                  title: "Usa créditos cuando quieras",
+                  desc: "Activa llamadas, videollamadas y contenido exclusivo con créditos.",
                   cta: null,
                   icon: (
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-[#A11213]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -201,8 +201,8 @@ export default function SoyNuevoPage() {
                 ),
               },
               {
-                title: "Anfitrionas exclusivas",
-                desc: "Conecta con nuestras anfitrionas en tiempo real. Chatea y vive momentos únicos.",
+                title: "Creadoras en vivo",
+                desc: "Conecta con creadoras en tiempo real. Chatea y vive momentos únicos.",
                 icon: (
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-[#A11213]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
@@ -237,8 +237,8 @@ export default function SoyNuevoPage() {
                 ),
               },
               {
-                title: "Contenido premium",
-                desc: "Accede a fotos e historias exclusivas usando tus créditos. Todo en un solo lugar.",
+                title: "Contenido exclusivo",
+                desc: "Accede a publicaciones, historias y experiencias digitales usando créditos. Todo en un solo lugar.",
                 icon: (
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-[#A11213]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
@@ -273,11 +273,13 @@ export default function SoyNuevoPage() {
             titulo="Asistente Pachamama"
             subtitulo="Soy nuevo · Te ayudo a empezar"
             welcomeMessage="¡Hola! 👋 Soy el asistente de Pachamama. Estoy aquí para ayudarte a entender cómo funciona la plataforma. ¿Qué quieres saber?"
-            sugerencias={["¿Cómo me registro?", "¿Cómo compro créditos?", "¿Cómo contacto a una anfitriona?"]}
+            sugerencias={[]}
             embedded
           />
         </div>
       </section>
+
+
 
       {/* CTA final */}
       <section className="py-24 px-5 sm:px-8">

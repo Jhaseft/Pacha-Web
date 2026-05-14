@@ -73,7 +73,7 @@ export function ChatWidget() {
                     💃
                   </div>
                   <div className="text-left">
-                    <p className="text-white font-bold text-sm">Soy anfitriona</p>
+                    <p className="text-white font-bold text-sm">Soy creadora</p>
                     <p className="text-white/40 text-xs">Quiero unirme o tengo dudas sobre cómo ganar</p>
                   </div>
                 </button>
@@ -110,12 +110,12 @@ export function ChatWidget() {
                   welcomeMessage={
                     role === "usuario"
                       ? "¡Hola! 👋 Soy el asistente de Pachamama. ¿En qué te puedo ayudar hoy?"
-                      : "¡Hola! 💫 Soy el asistente para anfitrionas. ¿Tienes dudas sobre cómo empezar a ganar?"
+                      : "¡Hola! 💫 Soy el asistente para creadoras. ¿Tienes dudas sobre cómo empezar a ganar?"
                   }
                   sugerencias={
                     role === "usuario"
-                      ? ["¿Cómo me registro?", "¿Cómo compro créditos?"]
-                      : ["¿Cómo me uno?", "¿Cómo gano dinero?"]
+                      ? []
+                      : []
                   }
                   embedded
                   hideHeader

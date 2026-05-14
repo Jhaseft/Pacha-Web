@@ -126,17 +126,15 @@ export default function LandingPage() {
 
         {/* Heading */}
         <h1 className="relative text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-none mb-4">
-          <span className="text-white">La mejor</span>
+          <span className="text-white">Conecta con</span>
           <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A11213] via-[#e03030] to-[#A11213]">
-            experiencia
+            creadoras en vivo
           </span>
-          <br />
-          
         </h1>
 
         <p className="relative text-white/50 text-lg sm:text-xl max-w-xl mb-10 leading-relaxed">
-          Conecta con nuestras anfitrionas, compra créditos y disfruta una noche inolvidable en Pachamama.
+          Conecta con creadoras en tiempo real. Chatea gratis y descubre funciones premium dentro de la app.
         </p>
 
         {/* CTA Buttons */}
@@ -212,8 +210,8 @@ export default function LandingPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             <FeatureCard
-              title="Anfitrionas exclusivas"
-              desc="Conecta con nuestras anfitrionas en tiempo real. Chatea, desbloquea fotos y vive momentos únicos."
+              title="Creadoras en vivo"
+              desc="Conecta con creadoras en tiempo real. Chatea, descubre publicaciones y vive momentos únicos."
               icon={
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-[#A11213]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
@@ -230,8 +228,8 @@ export default function LandingPage() {
               }
             />
             <FeatureCard
-              title="Chat privado"
-              desc="Mensajes privados y exclusivos. Desbloquea conversaciones especiales con tus anfitrionas favoritas."
+              title="Chat gratis"
+              desc="Mensajes gratuitos desde el primer momento. Conecta con creadoras y empieza a conversar sin costo inicial."
               icon={
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-[#A11213]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
@@ -239,8 +237,8 @@ export default function LandingPage() {
               }
             />
             <FeatureCard
-              title="Contenido premium"
-              desc="Accede a fotos e historias exclusivas de tus anfitrionas favoritas desbloqueando contenido con créditos."
+              title="Contenido exclusivo"
+              desc="Accede a publicaciones, historias y experiencias digitales usando créditos dentro de la app."
               icon={
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-[#A11213]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
@@ -248,8 +246,8 @@ export default function LandingPage() {
               }
             />
             <FeatureCard
-              title="Siempre disponible"
-              desc="Plataforma disponible las 24/7. Disfruta desde cualquier dispositivo, web o app móvil."
+              title="Disponible todos los días"
+              desc="Disfruta la plataforma desde tu celular, web o app móvil."
               icon={
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-[#A11213]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -299,8 +297,8 @@ export default function LandingPage() {
                 },
                 {
                   step: "02",
-                  title: "Recarga créditos",
-                  desc: "Elige un paquete de créditos y paga de forma segura con tu tarjeta.",
+                  title: "Chatea gratis",
+                  desc: "Conecta con creadoras y empieza a conversar sin costo inicial.",
                   icon: (
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-[#A11213]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
@@ -309,8 +307,8 @@ export default function LandingPage() {
                 },
                 {
                   step: "03",
-                  title: "Conecta y disfruta",
-                  desc: "Explora perfiles de anfitrionas, chatea y desbloquea contenido exclusivo.",
+                  title: "Usa créditos cuando quieras",
+                  desc: "Activa llamadas, videollamadas y contenido exclusivo con créditos.",
                   icon: (
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-[#A11213]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
@@ -540,7 +538,7 @@ export default function LandingPage() {
       {/* ══════════════════════════════════════════════
           CTA BANNER
       ══════════════════════════════════════════════ */}
-      <section className="py-24 px-5 sm:px-8">
+      <section id="cta-section" className="py-24 px-5 sm:px-8">
         <div className="max-w-4xl mx-auto">
           <div className="relative overflow-hidden bg-gradient-to-br from-[#A11213] via-[#8B0000] to-[#4a0000] rounded-3xl p-10 sm:p-14 text-center">
             {/* Decorative circles */}
@@ -560,7 +558,7 @@ export default function LandingPage() {
                 ¿Listo para vivir<br />la experiencia?
               </h2>
               <p className="text-red-200/70 text-base sm:text-lg mb-8 max-w-lg mx-auto leading-relaxed">
-                Únete a Pachamama y disfruta la mejor noche de karaoke en Tarapoto.
+                Descarga Pachamama App y conecta con creadoras en vivo desde tu celular.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
                 <Link

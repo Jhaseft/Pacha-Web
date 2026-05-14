@@ -32,8 +32,10 @@ export function ChatAsistente({ role, titulo, subtitulo, welcomeMessage, sugeren
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, loading]);
+    if (!embedded) {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages, loading, embedded]);
 
   async function sendMessage(text: string) {
     if (!text.trim() || loading) return;
@@ -74,7 +76,7 @@ export function ChatAsistente({ role, titulo, subtitulo, welcomeMessage, sugeren
   }
 
   return (
-    <div className={`flex flex-col text-white ${embedded ? "h-full rounded-3xl border border-white/8 overflow-hidden bg-white/3" : "h-screen bg-[#0a0a0a]"}`}>
+    <div className={`flex flex-col text-white ${embedded ? "h-full border border-white/8 overflow-hidden bg-white/3" : "h-screen bg-[#0a0a0a]"}`}>
       {/* Header */}
       {!hideHeader && (
         <header className="flex-none flex items-center gap-3 px-4 sm:px-6 py-4 bg-black/80 backdrop-blur-xl border-b border-[#A11213]/30">

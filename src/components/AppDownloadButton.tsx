@@ -1,18 +1,38 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
 const APK_URL = process.env.NEXT_PUBLIC_APK_URL;
 
 export function AppDownloadButton() {
+  const [hidden, setHidden] = useState(false);
+
+  useEffect(() => {
+    const target = document.getElementById("cta-section");
+    if (!target) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setHidden(entry.isIntersecting),
+      { threshold: 0.1 }
+    );
+
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <a
       href={APK_URL}
       download
       title="Descargar aplicación Android"
-      className="group fixed bottom-6 right-[90px] z-50 flex items-center gap-3
+      className={`group fixed bottom-6 right-[90px] z-50 flex items-center gap-3
         bg-[#A11213] hover:bg-[#8a0f10] active:scale-95
         text-white font-black
         pl-4 pr-5 py-3.5 rounded-2xl
         shadow-[0_6px_30px_rgba(161,18,19,0.6)]
         hover:shadow-[0_8px_40px_rgba(161,18,19,0.75)]
-        transition-all duration-200"
+        transition-all duration-300
+        ${hidden ? "opacity-0 pointer-events-none translate-y-2" : "opacity-100 translate-y-0"}`}
     >
       {/* Android icon */}
       <svg
