@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"d:\\\\Pachamama_Project\\\\pacha-web\" -Force)",
+      "Bash(ls -la \"d:\\\\Pachamama_Project\\\\pacha-web\\\\\" | grep -E \"^\\\\.\" )",
+      "Read(//d/Pachamama_Project/**)"
+    ]
+  }
+}

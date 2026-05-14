@@ -1,29 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const APK_URL = process.env.NEXT_PUBLIC_APK_URL;
 
 export function AppDownloadButton() {
-  const [hidden, setHidden] = useState(false);
+  const [visible, setVisible] = useState(true);
+  const lastY = useRef(0);
 
   useEffect(() => {
-    const targets = [
-      document.getElementById("hero-cta"),
-      document.getElementById("final-cta"),
-    ].filter(Boolean) as Element[];
-
-    if (targets.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        setHidden(entries.some((e) => e.isIntersecting));
-      },
-      { threshold: 0.25 }
-    );
-
-    targets.forEach((t) => observer.observe(t));
-    return () => observer.disconnect();
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (y < 50) {
+        setVisible(true);
+      } else {
+        setVisible(y < lastY.current);
+      }
+      lastY.current = y;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
@@ -41,7 +37,7 @@ export function AppDownloadButton() {
         "w-[88%] max-w-sm h-14 rounded-2xl px-4",
         "md:left-auto md:right-6 md:bottom-6 md:translate-x-0",
         "md:w-auto md:max-w-none md:h-auto md:px-6 md:py-3.5 md:rounded-2xl",
-        hidden ? "opacity-0 pointer-events-none translate-y-3" : "opacity-100 translate-y-0",
+        visible ? "opacity-100 translate-y-0" : "opacity-0 pointer-events-none translate-y-3",
       ].join(" ")}
     >
       <svg
