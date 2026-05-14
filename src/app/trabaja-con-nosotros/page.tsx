@@ -3,6 +3,7 @@ import Link from "next/link";
 import { MobileMenu } from "@/components/MobileMenu";
 import { AppDownloadButton } from "@/components/AppDownloadButton";
 import { LandingFooter } from "@/components/LandingFooter";
+import { AutoplayVideo } from "@/components/AutoplayVideo";
 
 // ── Imagen del hero (derecha) — pon el link aquí ─────────────────────────────
 const IMAGEN_TRABAJA = "https://res.cloudinary.com/dnbklbswg/image/upload/v1778740624/chicacd_uzoc0a.jpg"; // Link de la imagen del hero
@@ -159,9 +160,7 @@ function VideoSection({ src, title }: { src?: string; title: string }) {
         <p className="text-white/50 text-center text-sm font-semibold mb-6 uppercase tracking-widest">{title}</p>
         <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-xl shadow-black/40">
           {src ? (
-            <video src={src} controls playsInline className="w-full rounded-2xl">
-              <track kind="captions" />
-            </video>
+            <AutoplayVideo src={src} className="w-full rounded-2xl" />
           ) : (
             <div className="aspect-9/16 bg-black/50 flex flex-col items-center justify-center gap-3 text-white/25">
               <svg xmlns="http://www.w3.org/2000/svg" className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>

@@ -4,6 +4,7 @@ import { LandingContactSection } from "@/components/LandingContactSection";
 import { AppDownloadButton } from "@/components/AppDownloadButton";
 import { MobileMenu } from "@/components/MobileMenu";
 import { LandingFooter } from "@/components/LandingFooter";
+import { AutoplayVideo } from "@/components/AutoplayVideo";
 
 // ── URLs de contenido — pon tus links aquí ───────────────────────────────────
 const IMAGEN_INICIO = "https://res.cloudinary.com/dnbklbswg/image/upload/v1778740935/chicahero_ydkvmr.jpg"; // Link de la imagen del hero (derecha)
@@ -246,9 +247,7 @@ export default function LandingPage() {
 
           <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-xl shadow-black/40 bg-black/50">
             {VIDEO_INICIO ? (
-              <video src={VIDEO_INICIO} controls playsInline className="w-full rounded-2xl">
-                <track kind="captions" />
-              </video>
+              <AutoplayVideo src={VIDEO_INICIO} className="w-full rounded-2xl" />
             ) : (
               <div className="aspect-9/16 flex flex-col items-center justify-center gap-3 text-white/25">
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
