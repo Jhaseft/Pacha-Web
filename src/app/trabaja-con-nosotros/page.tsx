@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { MobileMenu } from "@/components/MobileMenu";
 import { NavExplorar } from "@/components/NavExplorar";
+import { ChatAsistente } from "@/components/ChatAsistente";
 
 export default function TrabajaConNosotrosPage() {
   return (
@@ -329,10 +330,7 @@ export default function TrabajaConNosotrosPage() {
         </div>
       </section>
 
-<<<<<<< HEAD
 
-=======
->>>>>>> c2546e0240eb2e2685675ce8a0cd9fc2b3293c71
 
       {/* CTA final */}
       <section className="py-24 px-5 sm:px-8">
