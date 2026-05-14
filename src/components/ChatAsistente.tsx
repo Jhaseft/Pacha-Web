@@ -1,14 +1,20 @@
 "use client";
 
 import Image from "next/image";
-import { Bot } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 type Role = "usuario" | "anfitriona";
 
+interface ChatVideo {
+  descripcion: string;
+  video: string;
+}
+
 interface Message {
   role: "user" | "assistant";
   content: string;
+  imagenes?: string[];
+  videos?: ChatVideo[];
 }
 
 interface Props {
@@ -28,14 +34,13 @@ export function ChatAsistente({ role, titulo, subtitulo, welcomeMessage, sugeren
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const sessionId = useRef<string>(crypto.randomUUID());
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const messagesRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    if (!embedded) {
-      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages, loading, embedded]);
+    const el = messagesRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [messages, loading]);
 
   async function sendMessage(text: string) {
     if (!text.trim() || loading) return;
@@ -54,9 +59,17 @@ export function ChatAsistente({ role, titulo, subtitulo, welcomeMessage, sugeren
       });
 
       const data = await res.json();
+      console.log("Chat response:", data);
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: data.reply ?? data.error ?? "Sin respuesta" },
+        {
+          role: "assistant",
+          content: data.reply ?? data.error ?? "Sin respuesta",
+          imagenes: (data.imagenes ?? []).map((img: unknown) =>
+            typeof img === "string" ? img : (img as Record<string, string>).imagen ?? (img as Record<string, string>).url ?? ""
+          ).filter(Boolean),
+          videos: data.videos ?? [],
+        },
       ]);
     } catch {
       setMessages((prev) => [
@@ -76,7 +89,7 @@ export function ChatAsistente({ role, titulo, subtitulo, welcomeMessage, sugeren
   }
 
   return (
-    <div className={`flex flex-col text-white ${embedded ? "h-full border border-white/8 overflow-hidden bg-white/3" : "h-screen bg-[#0a0a0a]"}`}>
+    <div className={`flex flex-col text-white ${embedded ? "h-160 border border-white/8 overflow-hidden bg-white/3 rounded-2xl" : "h-screen bg-[#0a0a0a]"}`}>
       {/* Header */}
       {!hideHeader && (
         <header className="flex-none flex items-center gap-3 px-4 sm:px-6 py-4 bg-black/80 backdrop-blur-xl border-b border-[#A11213]/30">
@@ -96,20 +109,45 @@ export function ChatAsistente({ role, titulo, subtitulo, welcomeMessage, sugeren
       )}
 
       {/* Mensajes */}
-      <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-5 space-y-4">
+      <div ref={messagesRef} className="flex-1 min-h-0 overflow-y-auto px-4 sm:px-6 py-5 space-y-4">
         {messages.map((msg, i) => (
           <div
             key={i}
             className={`flex items-end gap-2 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
           >
-            <div
-              className={`max-w-[90%] sm:max-w-[80%] px-4 py-3 rounded-3xl text-sm leading-relaxed whitespace-pre-wrap ${
-                msg.role === "user"
-                  ? "bg-[#A11213] text-white rounded-br-sm"
-                  : "bg-white/5 border border-white/8 text-white/90 rounded-bl-sm"
-              }`}
-            >
-              {msg.content}
+            <div className={`max-w-[90%] sm:max-w-[80%] flex flex-col gap-2`}>
+              <div
+                className={`px-4 py-3 rounded-3xl text-sm leading-relaxed whitespace-pre-wrap ${
+                  msg.role === "user"
+                    ? "bg-[#A11213] text-white rounded-br-sm"
+                    : "bg-white/5 border border-white/8 text-white/90 rounded-bl-sm"
+                }`}
+              >
+                {msg.content}
+              </div>
+              {msg.imagenes && msg.imagenes.length > 0 && (
+                <div className="flex flex-col gap-2">
+                  {msg.imagenes.map((url, ii) => (
+                    <div key={ii} className="rounded-xl overflow-hidden border border-white/10 w-66">
+                      <img src={url} alt="" className="w-full object-cover bg-black" />
+                    </div>
+                  ))}
+                </div>
+              )}
+              {msg.videos && msg.videos.length > 0 && (
+                <div className="flex flex-col gap-2">
+                  {msg.videos.map((v, vi) => (
+                    <div key={vi} className="rounded-xl overflow-hidden border border-white/10 w-66">
+                      {v.descripcion && (
+                        <p className="text-white/50 text-xs px-3 py-1.5 bg-white/5 leading-tight">{v.descripcion}</p>
+                      )}
+                      <video src={v.video} controls playsInline className="w-full max-h-105 object-contain bg-black">
+                        <track kind="captions" />
+                      </video>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         ))}
@@ -140,7 +178,6 @@ export function ChatAsistente({ role, titulo, subtitulo, welcomeMessage, sugeren
           </div>
         )}
 
-        <div ref={bottomRef} />
       </div>
 
       {/* Input */}

@@ -17,8 +17,11 @@ export async function POST(req: NextRequest) {
     }
 
     const data = await res.json();
-    const reply = typeof data.reply === 'object' ? data.reply?.mensaje ?? JSON.stringify(data.reply) : data.reply;
-    return NextResponse.json({ reply });
+    return NextResponse.json({
+      reply: data.mensaje ?? '',
+      imagenes: data.imagenes ?? [],
+      videos: data.videos ?? [],
+    });
   } catch {
     return NextResponse.json({ error: "No se pudo conectar con el asistente" }, { status: 502 });
   }
