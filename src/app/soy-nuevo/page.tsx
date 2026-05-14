@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { MobileMenu } from "@/components/MobileMenu";
+import { NavExplorar } from "@/components/NavExplorar";
 import { ChatAsistente } from "@/components/ChatAsistente";
 
 export default function SoyNuevoPage() {
@@ -10,7 +11,7 @@ export default function SoyNuevoPage() {
       {/* Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-xl border-b border-white/5">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-3 shrink-0">
             <Image
               src="/logofull.jpeg"
               alt="Pachamama"
@@ -23,6 +24,11 @@ export default function SoyNuevoPage() {
               <p className="text-white/30 text-[9px] uppercase tracking-widest hidden sm:block">Bar · Tarapoto</p>
             </div>
           </Link>
+          <div className="hidden md:flex items-center gap-6 text-sm text-white/50">
+            <Link href="/" className="hover:text-white transition-colors">Inicio</Link>
+            <NavExplorar base="/" />
+            <Link href="/trabaja-con-nosotros" className="hover:text-white transition-colors">Trabaja con nosotros</Link>
+          </div>
           <div className="hidden md:flex items-center gap-2">
             <Link href="/login" className="text-white/70 hover:text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-white/5 transition-all">
               Iniciar sesión
@@ -201,8 +207,8 @@ export default function SoyNuevoPage() {
                 ),
               },
               {
-                title: "Creadoras en vivo",
-                desc: "Conecta con creadoras en tiempo real. Chatea y vive momentos únicos.",
+                title: "Creadoras exclusivas",
+                desc: "Conecta con nuestras creadoras en tiempo real. Chatea y vive momentos únicos.",
                 icon: (
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-[#A11213]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
