@@ -5,6 +5,7 @@ import { MobileMenu } from "@/components/MobileMenu";
 import { AppDownloadButton } from "@/components/AppDownloadButton";
 import { LandingFooter } from "@/components/LandingFooter";
 import { AutoplayVideo } from "@/components/AutoplayVideo";
+import { PixelEvent } from "@/components/PixelEvent";
 
 // ── URLs de contenido — pon tus links aquí ───────────────────────────────────
 const IMAGEN_HERO = "https://res.cloudinary.com/dnbklbswg/image/upload/v1778741258/chicasoynuevp_s1pcfi.jpg"; // Link de la imagen del hero (derecha)
@@ -141,7 +142,7 @@ function VideoPlaceholder({ src, title }: { src?: string; title: string }) {
 export default function SoyNuevoPage() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white overflow-x-hidden pb-24 md:pb-0">
-
+      <PixelEvent event="ViewContent" params={{ content_name: "soy-nuevo" }} />
       {/* Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-xl border-b border-white/5">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
