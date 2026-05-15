@@ -1,23 +1,82 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { ChatAsistente } from "./ChatAsistente";
 
 type WidgetState = "closed" | "selector" | "chat";
 type Role = "usuario" | "anfitriona";
 
+const AUTO_MESSAGES = [
+  "Hola 😊 ¿Quieres aprender cómo funciona Pachamama?",
+  "El chat es gratis ✨",
+  "También puedes hacer llamadas y videollamadas en vivo.",
+];
+
 export function ChatWidget() {
   const [state, setState] = useState<WidgetState>("closed");
   const [role, setRole] = useState<Role>("usuario");
+  const [bubbles, setBubbles] = useState<string[]>([]);
+  const [dismissed, setDismissed] = useState(false);
+  const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  useEffect(() => {
+    const delays = [3000, 8000, 14000];
+    delays.forEach((delay, i) => {
+      const t = setTimeout(() => {
+        if (!dismissed) {
+          setBubbles((prev) => [...prev, AUTO_MESSAGES[i]]);
+        }
+      }, delay);
+      timers.current.push(t);
+    });
+    return () => timers.current.forEach(clearTimeout);
+  }, [dismissed]);
+
+  function dismiss() {
+    setDismissed(true);
+    setBubbles([]);
+    timers.current.forEach(clearTimeout);
+  }
 
   function selectRole(r: Role) {
     setRole(r);
     setState("chat");
+    dismiss();
+  }
+
+  function openWidget() {
+    setState("selector");
+    dismiss();
   }
 
   return (
     <div className="fixed bottom-22 right-4 md:bottom-22 md:right-6 z-50 flex flex-col items-end gap-3">
+
+      {/* Auto-message bubbles */}
+      {state === "closed" && bubbles.length > 0 && (
+        <div className="flex flex-col items-end gap-2 mb-1 max-w-60">
+          {bubbles.map((msg, i) => (
+            <div
+              key={i}
+              className="bg-[#111] border border-white/10 rounded-2xl rounded-br-sm px-4 py-2.5 shadow-xl shadow-black/50 animate-in fade-in slide-in-from-bottom-2 duration-300 flex items-start gap-2"
+            >
+              <p className="text-white/90 text-sm leading-snug flex-1">{msg}</p>
+              {i === bubbles.length - 1 && (
+                <button
+                  onClick={dismiss}
+                  className="text-white/30 hover:text-white/60 transition-colors mt-0.5 shrink-0"
+                  aria-label="Cerrar"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Panel */}
       {state !== "closed" && (
@@ -118,10 +177,10 @@ export function ChatWidget() {
         </div>
       )}
 
-      {/* Botón circular con imagen — siempre visible */}
+      {/* Botón circular con imagen — siempre visible cuando cerrado */}
       {state === "closed" && (
         <button
-          onClick={() => setState("selector")}
+          onClick={openWidget}
           className="relative w-14 h-14 rounded-full overflow-hidden border-2 border-[#A11213] shadow-2xl shadow-[#A11213]/40 hover:scale-110 active:scale-95 transition-all"
           title="Habla con nuestro asistente"
         >

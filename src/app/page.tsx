@@ -110,7 +110,7 @@ export default function LandingPage() {
         <div className="relative flex-1 flex flex-col items-center lg:items-start text-center lg:text-left z-10">
 
           {/* Online badge */}
-          <div className="mb-6 inline-flex items-center gap-2.5 bg-white/8 border border-white/12 rounded-full px-4 py-2">
+          <div className="mb-3 inline-flex items-center gap-2.5 bg-white/8 border border-white/12 rounded-full px-4 py-2">
             <div className="flex -space-x-1.5">
               {["V", "C", "D", "M"].map((l) => (
                 <div key={l} className="w-6 h-6 rounded-full bg-linear-to-br from-[#A11213] to-[#5a0000] border-2 border-[#0a0a0a] flex items-center justify-center">
@@ -122,9 +122,22 @@ export default function LandingPage() {
             <span className="text-white/80 text-xs font-semibold uppercase tracking-wider">24 creadoras online ahora</span>
           </div>
 
+          {/* Social proof stats */}
+          <div className="mb-6 flex flex-wrap justify-center lg:justify-start gap-3">
+            {[
+              { value: "+500", label: "usuarios registrados" },
+              { value: "+1,000", label: "descargas" },
+            ].map((s) => (
+              <div key={s.label} className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 rounded-full px-3 py-1.5">
+                <span className="text-[#ff6060] text-xs font-black">{s.value}</span>
+                <span className="text-white/50 text-xs">{s.label}</span>
+              </div>
+            ))}
+          </div>
+
           {/* Heading */}
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.05] mb-5">
-            <span className="text-white">Conecta con</span>
+            <span className="text-white">Chatea gratis con</span>
             <br />
             <span className="text-transparent bg-clip-text bg-linear-to-r from-[#A11213] via-[#e03030] to-[#ff6060]">
               creadoras en vivo
@@ -133,7 +146,7 @@ export default function LandingPage() {
 
           {/* Subtitle */}
           <p className="text-white/65 text-lg sm:text-xl max-w-xl mb-8 leading-relaxed">
-            Chat gratis, llamadas y videollamadas privadas. Disfruta contenido exclusivo desde tu celular.
+            Chat gratis, llamadas y videollamadas en vivo. Disfruta contenido exclusivo desde tu celular.
           </p>
 
           {/* CTA buttons */}
@@ -237,9 +250,9 @@ export default function LandingPage() {
       <section className="py-24 px-5 sm:px-8">
         <div className="max-w-xs mx-auto">
           <div className="text-center mb-10">
-            <p className="text-[#A11213] text-xs font-bold uppercase tracking-widest mb-3">Míralo en acción</p>
+            <p className="text-[#A11213] text-xs font-bold uppercase tracking-widest mb-3">Para nuevos usuarios</p>
             <h2 className="text-white text-3xl sm:text-4xl font-black tracking-tight">
-              Conoce Pachamama
+              Así funciona la app
             </h2>
           </div>
 
