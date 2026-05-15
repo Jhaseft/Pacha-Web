@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { trackPixel } from "@/lib/pixel";
 
 type Role = "usuario" | "anfitriona";
 
@@ -45,6 +46,7 @@ export function ChatAsistente({ role, titulo, subtitulo, welcomeMessage, sugeren
   async function sendMessage(text: string) {
     if (!text.trim() || loading) return;
 
+    if (messages.length === 1) trackPixel("Lead");
     const userMsg: Message = { role: "user", content: text.trim() };
     const newMessages = [...messages, userMsg];
     setMessages(newMessages);

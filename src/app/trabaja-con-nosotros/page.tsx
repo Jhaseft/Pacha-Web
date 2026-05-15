@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { RegisterLink } from "@/components/RegisterLink";
 import { MobileMenu } from "@/components/MobileMenu";
 import { AppDownloadButton } from "@/components/AppDownloadButton";
 import { LandingFooter } from "@/components/LandingFooter";
@@ -205,9 +206,9 @@ export default function TrabajaConNosotrosPage() {
             <Link href="/login" className="text-white/70 hover:text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-white/5 transition-all">
               Iniciar sesión
             </Link>
-            <Link href="/login/cliente" className="bg-[#A11213] hover:bg-[#8a0f10] text-white text-sm font-black px-5 py-2.5 rounded-xl transition-colors shadow-lg shadow-[#A11213]/25">
+            <RegisterLink className="bg-[#A11213] hover:bg-[#8a0f10] text-white text-sm font-black px-5 py-2.5 rounded-xl transition-colors shadow-lg shadow-[#A11213]/25">
               Registrarse
-            </Link>
+            </RegisterLink>
           </div>
           <MobileMenu />
         </div>

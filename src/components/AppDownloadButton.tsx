@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { trackPixel } from "@/lib/pixel";
 
 const APK_URL = process.env.NEXT_PUBLIC_APK_URL;
 
@@ -27,6 +28,7 @@ export function AppDownloadButton() {
       href={APK_URL}
       download
       title="Descargar aplicación Android"
+      onClick={() => trackPixel("InitiateCheckout")}
       className={[
         "fixed z-40 flex items-center gap-3",
         "bg-[#A11213] hover:bg-[#8a0f10] active:scale-[0.98]",

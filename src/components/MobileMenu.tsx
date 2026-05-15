@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
+import { trackPixel } from "@/lib/pixel";
 
 const NAV_LINKS = [
   { label: "Inicio", href: "/", isRoute: true },
@@ -98,7 +99,7 @@ export function MobileMenu() {
         </Link>
         <Link
           href="/login/cliente"
-          onClick={close}
+          onClick={() => { close(); trackPixel("CompleteRegistration"); }}
           style={{
             display: "block",
             textAlign: "center",

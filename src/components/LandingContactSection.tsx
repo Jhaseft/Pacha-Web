@@ -1,3 +1,7 @@
+"use client";
+
+import { trackPixel } from "@/lib/pixel";
+
 const CONTACT = {
   whatsapp: "+51 933 453 022",
   whatsappLink: "https://wa.me/51933453022",
@@ -32,8 +36,10 @@ function ContactCard({
   );
 
   if (href) {
+    const isWhatsApp = href.includes("wa.me");
     return (
-      <a href={href} target="_blank" rel="noopener noreferrer" className="block">
+      <a href={href} target="_blank" rel="noopener noreferrer" className="block"
+        onClick={isWhatsApp ? () => trackPixel("Contact") : undefined}>
         {inner}
       </a>
     );
