@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { trackPixel } from "@/lib/pixel";
 
 const APK_URL = process.env.NEXT_PUBLIC_APK_URL;
 
@@ -10,7 +11,8 @@ const AndroidIcon = () => (
   </svg>
 );
 
-export function AppDownloadButton() {
+export function AppDownloadButton({ variant = "general" }: { variant?: "cliente" | "host" | "general" }) {
+  const eventName = variant === "cliente" ? "APK_Cliente" : variant === "host" ? "APK_Host" : "InitiateCheckout";
   const [visible, setVisible] = useState(true);
   const [compact, setCompact] = useState(false);
   const lastY = useRef(0);
@@ -39,7 +41,6 @@ export function AppDownloadButton() {
     visible ? "opacity-100 translate-y-0" : "opacity-0 pointer-events-none translate-y-3",
   ];
 
-  // Mobile compact: small circle bottom-right
   const mobileCompact = [
     "md:hidden",
     "bottom-4 right-4",
@@ -47,7 +48,6 @@ export function AppDownloadButton() {
     "flex items-center justify-center",
   ];
 
-  // Mobile full: wide bar at bottom center
   const mobileFull = [
     "md:hidden",
     "bottom-3 left-1/2 -translate-x-1/2",
@@ -55,7 +55,6 @@ export function AppDownloadButton() {
     "flex items-center gap-3",
   ];
 
-  // Desktop: always compact pill on right
   const desktop = [
     "hidden md:flex",
     "items-center gap-3",
@@ -70,6 +69,7 @@ export function AppDownloadButton() {
         href={APK_URL}
         download
         title="Descargar app Android"
+        onClick={() => trackPixel(eventName)}
         className={[...baseClasses, ...mobileCompact, compact ? "" : "hidden"].join(" ")}
       >
         <AndroidIcon />
@@ -80,6 +80,7 @@ export function AppDownloadButton() {
         href={APK_URL}
         download
         title="Descargar aplicación Android"
+        onClick={() => trackPixel(eventName)}
         className={[...baseClasses, ...mobileFull, compact ? "hidden" : ""].join(" ")}
       >
         <AndroidIcon />
@@ -100,6 +101,7 @@ export function AppDownloadButton() {
         href={APK_URL}
         download
         title="Descargar aplicación Android"
+        onClick={() => trackPixel(eventName)}
         className={[...baseClasses, ...desktop].join(" ")}
       >
         <AndroidIcon />

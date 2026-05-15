@@ -1,9 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
+import { RegisterLink } from "@/components/RegisterLink";
 import { MobileMenu } from "@/components/MobileMenu";
 import { AppDownloadButton } from "@/components/AppDownloadButton";
 import { LandingFooter } from "@/components/LandingFooter";
 import { AutoplayVideo } from "@/components/AutoplayVideo";
+import { PixelEvent } from "@/components/PixelEvent";
 
 // ── Imagen del hero (derecha) — pon el link aquí ─────────────────────────────
 const IMAGEN_TRABAJA = "https://res.cloudinary.com/dnbklbswg/image/upload/v1778740624/chicacd_uzoc0a.jpg"; // Link de la imagen del hero
@@ -179,7 +181,7 @@ function VideoSection({ src, title }: { src?: string; title: string }) {
 export default function TrabajaConNosotrosPage() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white overflow-x-hidden pb-24 md:pb-0">
-
+      <PixelEvent event="Host_Interes" />
       {/* Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-xl border-b border-white/5">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
@@ -205,9 +207,9 @@ export default function TrabajaConNosotrosPage() {
             <Link href="/login" className="text-white/70 hover:text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-white/5 transition-all">
               Iniciar sesión
             </Link>
-            <Link href="/login/cliente" className="bg-[#A11213] hover:bg-[#8a0f10] text-white text-sm font-black px-5 py-2.5 rounded-xl transition-colors shadow-lg shadow-[#A11213]/25">
+            <RegisterLink className="bg-[#A11213] hover:bg-[#8a0f10] text-white text-sm font-black px-5 py-2.5 rounded-xl transition-colors shadow-lg shadow-[#A11213]/25">
               Registrarse
-            </Link>
+            </RegisterLink>
           </div>
           <MobileMenu />
         </div>
@@ -299,7 +301,7 @@ export default function TrabajaConNosotrosPage() {
       <LandingFooter />
 
       {/* Botón flotante de descarga */}
-      <AppDownloadButton />
+      <AppDownloadButton variant="host" />
     </div>
   );
 }
