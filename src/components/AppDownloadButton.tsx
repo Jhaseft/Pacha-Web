@@ -11,7 +11,8 @@ const AndroidIcon = () => (
   </svg>
 );
 
-export function AppDownloadButton() {
+export function AppDownloadButton({ variant = "general" }: { variant?: "cliente" | "host" | "general" }) {
+  const eventName = variant === "cliente" ? "APK_Cliente" : variant === "host" ? "APK_Host" : "InitiateCheckout";
   const [visible, setVisible] = useState(true);
   const [compact, setCompact] = useState(false);
   const lastY = useRef(0);
@@ -68,7 +69,7 @@ export function AppDownloadButton() {
         href={APK_URL}
         download
         title="Descargar app Android"
-        onClick={() => trackPixel("InitiateCheckout")}
+        onClick={() => trackPixel(eventName)}
         className={[...baseClasses, ...mobileCompact, compact ? "" : "hidden"].join(" ")}
       >
         <AndroidIcon />
@@ -79,7 +80,7 @@ export function AppDownloadButton() {
         href={APK_URL}
         download
         title="Descargar aplicación Android"
-        onClick={() => trackPixel("InitiateCheckout")}
+        onClick={() => trackPixel(eventName)}
         className={[...baseClasses, ...mobileFull, compact ? "hidden" : ""].join(" ")}
       >
         <AndroidIcon />
@@ -100,7 +101,7 @@ export function AppDownloadButton() {
         href={APK_URL}
         download
         title="Descargar aplicación Android"
-        onClick={() => trackPixel("InitiateCheckout")}
+        onClick={() => trackPixel(eventName)}
         className={[...baseClasses, ...desktop].join(" ")}
       >
         <AndroidIcon />

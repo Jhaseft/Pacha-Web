@@ -6,6 +6,7 @@ import { AppDownloadButton } from "@/components/AppDownloadButton";
 import { LandingFooter } from "@/components/LandingFooter";
 import { AutoplayVideo } from "@/components/AutoplayVideo";
 import { PixelEvent } from "@/components/PixelEvent";
+import { ApkLink } from "@/components/ApkLink";
 
 // ── URLs de contenido — pon tus links aquí ───────────────────────────────────
 const IMAGEN_HERO = "https://res.cloudinary.com/dnbklbswg/image/upload/v1778741258/chicasoynuevp_s1pcfi.jpg"; // Link de la imagen del hero (derecha)
@@ -142,7 +143,7 @@ function VideoPlaceholder({ src, title }: { src?: string; title: string }) {
 export default function SoyNuevoPage() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white overflow-x-hidden pb-24 md:pb-0">
-      <PixelEvent event="ViewContent" params={{ content_name: "soy-nuevo" }} />
+      <PixelEvent event="Cliente_Interes" />
       {/* Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-xl border-b border-white/5">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
@@ -203,9 +204,8 @@ export default function SoyNuevoPage() {
             Descarga Pachamama, crea tu cuenta y conéctate con creadoras en vivo desde tu celular.
           </p>
 
-          <a
-            href={process.env.NEXT_PUBLIC_APK_URL}
-            download
+          <ApkLink
+            event="APK_Cliente"
             className="bg-linear-to-r from-[#A11213] to-[#cc2020] hover:from-[#8a0f10] hover:to-[#b01010]
               text-white font-black px-8 py-4 rounded-2xl transition-all
               shadow-2xl shadow-[#A11213]/40 flex items-center gap-3 active:scale-95 w-fit"
@@ -214,7 +214,7 @@ export default function SoyNuevoPage() {
               <path d="M17.523 15.341a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm-11.046 0a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM2.1 8.4h19.8A1.1 1.1 0 0 1 23 9.5v6a1.1 1.1 0 0 1-1.1 1.1H21v2.65a.75.75 0 0 1-1.5 0V16.6H4.5v2.65a.75.75 0 0 1-1.5 0V16.6h-.9A1.1 1.1 0 0 1 1 15.5v-6A1.1 1.1 0 0 1 2.1 8.4Zm.9 1.5v5h18v-5H3ZM8.22 2.47a.75.75 0 0 1 1.02-.28L12 3.8l2.76-1.61a.75.75 0 1 1 .75 1.3L13.5 4.8V7.4h-3V4.8L8.5 3.49a.75.75 0 0 1-.28-1.02Z" />
             </svg>
             Descargar app
-          </a>
+          </ApkLink>
         </div>
 
         {/* Right — imagen hero (pon el link en IMAGEN_HERO arriba) */}
@@ -257,7 +257,7 @@ export default function SoyNuevoPage() {
       <LandingFooter />
 
       {/* Botón flotante de descarga */}
-      <AppDownloadButton />
+      <AppDownloadButton variant="cliente" />
     </div>
   );
 }

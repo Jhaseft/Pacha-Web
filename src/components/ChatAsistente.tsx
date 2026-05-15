@@ -46,7 +46,7 @@ export function ChatAsistente({ role, titulo, subtitulo, welcomeMessage, sugeren
   async function sendMessage(text: string) {
     if (!text.trim() || loading) return;
 
-    if (messages.length === 1) trackPixel("Lead");
+    if (messages.length === 1) trackPixel("Chat_Iniciado");
     const userMsg: Message = { role: "user", content: text.trim() };
     const newMessages = [...messages, userMsg];
     setMessages(newMessages);
