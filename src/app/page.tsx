@@ -5,10 +5,10 @@ import { AppDownloadButton } from "@/components/AppDownloadButton";
 import { MobileMenu } from "@/components/MobileMenu";
 import { LandingFooter } from "@/components/LandingFooter";
 import { AutoplayVideo } from "@/components/AutoplayVideo";
-
+ 
 // ── URLs de contenido — pon tus links aquí ───────────────────────────────────
 const IMAGEN_INICIO = "https://res.cloudinary.com/dnbklbswg/image/upload/v1778740935/chicahero_ydkvmr.jpg"; // Link de la imagen del hero (derecha)
-const VIDEO_INICIO = "https://res.cloudinary.com/dnbklbswg/video/upload/v1778736865/REDUCIDO_qkgwl4.mp4"; // Link del video de inicio
+const VIDEO_INICIO = "/pacha.mp4"; // Link del video de inicio
 
 // ── Pasos de registro — edita este array para actualizar la sección ──────────
 const PASOS_REGISTRO = [

@@ -7,7 +7,7 @@ import { AutoplayVideo } from "@/components/AutoplayVideo";
 
 // ── URLs de contenido — pon tus links aquí ───────────────────────────────────
 const IMAGEN_HERO = "https://res.cloudinary.com/dnbklbswg/image/upload/v1778741258/chicasoynuevp_s1pcfi.jpg"; // Link de la imagen del hero (derecha)
-const VIDEO_DESCARGA = "https://res.cloudinary.com/dnbklbswg/video/upload/v1778736865/REDUCIDO_qkgwl4.mp4"; // Link del video de instalación
+const VIDEO_DESCARGA = "/pacha.mp4"; // Link del video de instalación
 const VIDEO_RECARGA = "https://res.cloudinary.com/dnbklbswg/video/upload/v1778735232/PAYPAL_FINAL__szmq99.mp4"; // Link del video de recarga de créditos
 
 // ── Pasos para descargar la app — edita este array para actualizar ────────────
