@@ -35,6 +35,15 @@ const NAV_ITEMS = [
     ),
   },
   {
+    label: "Referidos",
+    href: "/admin/referrals",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 7.5h3a2.25 2.25 0 0 1 2.25 2.25v8.25a2.25 2.25 0 0 1-2.25 2.25h-13.5A2.25 2.25 0 0 1 3 18V9.75A2.25 2.25 0 0 1 5.25 7.5h3m7.5 0V6a3.75 3.75 0 1 0-7.5 0v1.5m7.5 0h-7.5m0 0v2.25m7.5-2.25v2.25" />
+      </svg>
+    ),
+  },
+  {
     label: "Retiros",
     href: "/admin/withdrawalRequest/list",
     icon: (

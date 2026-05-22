@@ -2,10 +2,12 @@
 
 import { useEffect, useState, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { useAuth } from "../../context/AuthContext";
 import { apiGetAllPackages } from "../../lib/packages";
 import { apiFlowCreatePayment, apiGetMyWallet } from "../../lib/flow";
 import type { PackageData } from "@/types/package";
+import { getMyReferrals, type MyReferralsResponse } from "../../lib/referrals";
 
 function DiamondFilled({ className = "w-8 h-8" }: { className?: string }) {
   return (
@@ -34,11 +36,22 @@ function DashboardContent() {
   const [balanceLoading, setBalanceLoading] = useState(true);
   const [packages, setPackages] = useState<PackageData[]>([]);
   const [pkgLoading, setPkgLoading] = useState(true);
+  const [referrals, setReferrals] = useState<MyReferralsResponse | null>(null);
+  const [referralsLoading, setReferralsLoading] = useState(true);
+  const [referralsError, setReferralsError] = useState("");
+  const [copyLabel, setCopyLabel] = useState("Copiar");
 
   const [paying, setPaying] = useState(false);
   const [payingPkgId, setPayingPkgId] = useState<string | null>(null);
   const [payError, setPayError] = useState("");
   const [paySuccess, setPaySuccess] = useState(false);
+
+  const agreedPercent = (() => {
+    if (!referrals?.referrals?.length) return 0;
+    const activeContracts = referrals.referrals.filter((item) => item.status === "ACTIVE");
+    const source = activeContracts.length > 0 ? activeContracts : referrals.referrals;
+    return Number(source[0]?.percent ?? 0);
+  })();
 
   // ── Auth guard ─────────────────────────────────────────────────────────────
   useEffect(() => {
@@ -59,6 +72,24 @@ function DashboardContent() {
   }, [token]);
 
   useEffect(() => { loadBalance(); }, [loadBalance]);
+
+  useEffect(() => {
+    if (!token || user?.role !== "ANFITRIONA") {
+      setReferralsLoading(false);
+      return;
+    }
+
+    setReferralsLoading(true);
+    setReferralsError("");
+    getMyReferrals(token)
+      .then(setReferrals)
+      .catch((err) => {
+        setReferralsError(
+          err instanceof Error ? err.message : "No se pudo cargar la información de referidos.",
+        );
+      })
+      .finally(() => setReferralsLoading(false));
+  }, [token, user?.role]);
 
   // ── Load packages ──────────────────────────────────────────────────────────
   useEffect(() => {
@@ -100,6 +131,18 @@ function DashboardContent() {
       setPayingPkgId(null);
     }
   };
+
+  async function handleCopyReferralCode() {
+    if (!referrals?.referralCode) return;
+    try {
+      await navigator.clipboard.writeText(referrals.referralCode);
+      setCopyLabel("Copiado");
+      setTimeout(() => setCopyLabel("Copiar"), 1400);
+    } catch {
+      setCopyLabel("No disponible");
+      setTimeout(() => setCopyLabel("Copiar"), 1400);
+    }
+  }
 
   // ── Loading screen ─────────────────────────────────────────────────────────
   if (!isHydrated || !user) {
@@ -147,6 +190,60 @@ function DashboardContent() {
             )}
           </div>
         </div>
+
+        {user.role === "ANFITRIONA" && (
+          <div className="bg-white/5 border border-white/10 rounded-3xl p-5 mb-8">
+            <p className="text-white/40 text-xs uppercase tracking-widest font-semibold mb-2">
+              Codigo de referido
+            </p>
+            {referralsLoading ? (
+              <div className="h-9 w-44 bg-white/10 rounded-xl animate-pulse" />
+            ) : (
+              <>
+                <div className="flex flex-wrap items-center gap-3">
+                  <p className="text-white text-2xl font-black tracking-wide">
+                    {referrals?.referralCode || "—"}
+                  </p>
+                  <button
+                    onClick={handleCopyReferralCode}
+                    disabled={!referrals?.referralCode}
+                    className="bg-white/10 hover:bg-white/15 disabled:opacity-50 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors"
+                  >
+                    {copyLabel}
+                  </button>
+                  <Link
+                    href="/dashboard/referrals"
+                    className="bg-[#A11213] hover:bg-[#8a0f10] text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors"
+                  >
+                    Ver creadores referidos
+                  </Link>
+                </div>
+                <p className="text-white/50 text-xs mt-3">
+                  Comparte tu codigo con otros creadores de contenido. Si el administrador activa el contrato de referido, ganaras un porcentaje sobre sus ganancias reales.
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-3">
+                  <div className="bg-black/30 rounded-xl px-3 py-2">
+                    <p className="text-white/30 text-[11px]">Porcentaje acordado</p>
+                    <p className="text-white font-bold">{agreedPercent}%</p>
+                  </div>
+                  <div className="bg-black/30 rounded-xl px-3 py-2">
+                    <p className="text-white/30 text-[11px]">Creadores referidos</p>
+                    <p className="text-white font-bold">{referrals?.totalReferrals ?? 0}</p>
+                  </div>
+                  <div className="bg-black/30 rounded-xl px-3 py-2">
+                    <p className="text-white/30 text-[11px]">Ganancias por referidos</p>
+                    <p className="text-green-400 font-bold">
+                      Bs {Number(referrals?.totalRewardAmount ?? 0).toFixed(2)}
+                    </p>
+                  </div>
+                </div>
+                {referralsError && (
+                  <p className="text-red-400/80 text-xs mt-3">{referralsError}</p>
+                )}
+              </>
+            )}
+          </div>
+        )}
 
         {/* ── Section heading ── */}
         <div className="text-center mb-6">
@@ -304,3 +401,4 @@ export default function DashboardPage() {
     </Suspense>
   );
 }
+
