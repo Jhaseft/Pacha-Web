@@ -139,7 +139,7 @@ export default function DashboardReferralsPage() {
               </div>
               <div className="bg-[#111] border border-white/5 rounded-2xl p-4">
                 <p className="text-white/40 text-xs uppercase tracking-widest">Ganancias por referidos</p>
-                <p className="text-green-400 text-2xl font-black mt-2">Bs {formatMoney(Number(data?.totalRewardAmount ?? 0))}</p>
+                <p className="text-green-400 text-2xl font-black mt-2">S/ {formatMoney(Number(data?.totalRewardAmount ?? 0))}</p>
               </div>
             </div>
 
@@ -174,7 +174,7 @@ export default function DashboardReferralsPage() {
                             <td className={`px-4 py-3 ${statusClassName(row.status)}`}>
                               {statusLabel(row.status)}
                             </td>
-                            <td className="px-4 py-3 text-white/80">Bs {formatMoney(row.totalGenerated)}</td>
+                            <td className="px-4 py-3 text-white/80">S/ {formatMoney(row.totalGenerated)}</td>
                             <td className="px-4 py-3">
                               {row.status === "PENDING" ? (
                                 <span className="text-amber-300 font-semibold">
@@ -182,7 +182,7 @@ export default function DashboardReferralsPage() {
                                 </span>
                               ) : (
                                 <span className="text-green-400 font-semibold">
-                                  Bs {formatMoney(row.totalRewardAmount)}
+                                  S/ {formatMoney(row.totalRewardAmount)}
                                 </span>
                               )}
                             </td>
