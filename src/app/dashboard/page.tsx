@@ -233,7 +233,7 @@ function DashboardContent() {
                   <div className="bg-black/30 rounded-xl px-3 py-2">
                     <p className="text-white/30 text-[11px]">Ganancias por referidos</p>
                     <p className="text-green-400 font-bold">
-                      Bs {Number(referrals?.totalRewardAmount ?? 0).toFixed(2)}
+                      S/ {Number(referrals?.totalRewardAmount ?? 0).toFixed(2)}
                     </p>
                   </div>
                 </div>

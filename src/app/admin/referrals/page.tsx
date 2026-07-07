@@ -262,11 +262,11 @@ export default function AdminReferralsPage() {
         </div>
         <div className="bg-[#111] border border-white/5 rounded-xl px-4 py-3">
           <p className="text-white/40 text-xs">Total generado por creadoras referidas</p>
-          <p className="text-white text-2xl font-black">Bs {formatMoney(totals.generated)}</p>
+          <p className="text-white text-2xl font-black">S/ {formatMoney(totals.generated)}</p>
         </div>
         <div className="bg-[#111] border border-white/5 rounded-xl px-4 py-3">
           <p className="text-white/40 text-xs">Total comision pagada</p>
-          <p className="text-green-400 text-2xl font-black">Bs {formatMoney(totals.commission)}</p>
+          <p className="text-green-400 text-2xl font-black">S/ {formatMoney(totals.commission)}</p>
         </div>
       </div>
 
@@ -417,8 +417,8 @@ export default function AdminReferralsPage() {
                           {statusLabel(item.status)}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-white">Bs {formatMoney(item.totalGeneratedByReferredCreator)}</td>
-                      <td className="px-4 py-3 text-green-400 font-semibold">Bs {formatMoney(item.totalCommissionPaid)}</td>
+                      <td className="px-4 py-3 text-white">S/ {formatMoney(item.totalGeneratedByReferredCreator)}</td>
+                      <td className="px-4 py-3 text-green-400 font-semibold">S/ {formatMoney(item.totalCommissionPaid)}</td>
                       <td className="px-4 py-3 text-white/80">{item.rewardEventsCount}</td>
                       <td className="px-4 py-3">
                         {!isEditing ? (
