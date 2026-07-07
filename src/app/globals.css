@@ -29,3 +29,28 @@ body {
 * {
   box-sizing: border-box;
 }
+
+/* Hide MonetizaLab logo and watermarks */
+[class*="monetiza"],
+[id*="monetiza"],
+[class*="logo"],
+[id*="logo"],
+[class*="watermark"],
+[id*="watermark"],
+img[src*="monetiza"],
+img[src*="logo"],
+svg[class*="monetiza"],
+svg[id*="monetiza"] {
+  display: none !important;
+}
+
+/* Ensure body background is clean */
+body::before,
+body::after {
+  display: none !important;
+}
+
+html::before,
+html::after {
+  display: none !important;
+}

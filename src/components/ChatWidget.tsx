@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { ChatAsistente } from "./ChatAsistente";
 
 type WidgetState = "closed" | "selector" | "chat";
@@ -14,11 +15,19 @@ const AUTO_MESSAGES = [
 ];
 
 export function ChatWidget() {
+  const pathname = usePathname();
   const [state, setState] = useState<WidgetState>("closed");
   const [role, setRole] = useState<Role>("usuario");
   const [bubbles, setBubbles] = useState<string[]>([]);
   const [dismissed, setDismissed] = useState(false);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  // Ocultar ChatWidget en páginas de perfil de anfitriona
+  const isAnfitrioneProfile = pathname?.includes("/anfitrionas/") || pathname?.startsWith("/@");
+  
+  if (isAnfitrioneProfile) {
+    return null;
+  }
 
   useEffect(() => {
     const delays = [3000, 8000, 14000];
