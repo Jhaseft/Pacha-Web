@@ -14,10 +14,12 @@ import {
   SubscriptionStatus,
 } from '@/lib/hostessService';
 import ProfileHeader from '@/components/hostess/ProfileHeader';
+import SocialNetwork from '@/components/hostess/SocialNetwork';
 import ActionPills from '@/components/hostess/ActionPills';
-import SubscriptionCard from '@/components/hostess/SubscriptionCard';
+import FeaturedContent from '@/components/hostess/FeaturedContent';
 import GallerySection from '@/components/hostess/GallerySection';
-import { AlertCircle, Loader2, ArrowLeft, MessageCircle } from 'lucide-react';
+import { AlertCircle, Loader2, ArrowLeft, Download } from 'lucide-react';
+import Footer from '@/components/hostess/Footer';
 
 interface ProfilePageProps {
   params: Promise<{ username: string }>;
@@ -102,20 +104,20 @@ export default function ProfilePage({ params }: ProfilePageProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-950 to-black flex items-center justify-center">
-        <Loader2 size={40} className="text-red-600 animate-spin" />
+      <div className="min-h-screen bg-linear-to-b from-gray-950 to-black flex items-center justify-center">
+        <Loader2 size={40} className="text-pink-500 animate-spin" />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-950 to-black flex flex-col items-center justify-center px-4">
+      <div className="min-h-screen bg-linear-to-b from-gray-950 to-black flex flex-col items-center justify-center px-4">
         <AlertCircle size={56} className="text-gray-500 mb-4" />
         <p className="text-white text-center mb-8 text-lg">{error}</p>
         <button
           onClick={loadProfile}
-          className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-full font-bold transition"
+          className="bg-linear-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white px-8 py-3 rounded-full font-bold transition"
         >
           Reintentar
         </button>
@@ -125,15 +127,14 @@ export default function ProfilePage({ params }: ProfilePageProps) {
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-950 to-black flex items-center justify-center">
+      <div className="min-h-screen bg-linear-to-b from-gray-950 to-black flex items-center justify-center">
         <p className="text-gray-400 text-lg">Anfitriona no encontrada.</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-950 to-black">
-      {/* Back Button */}
+    <div className="min-h-screen bg-linear-to-b from-gray-950 to-black">
       <button
         onClick={() => router.back()}
         className="fixed top-4 left-4 z-20 bg-black/60 hover:bg-black/80 p-2.5 rounded-full transition backdrop-blur-sm"
@@ -141,52 +142,56 @@ export default function ProfilePage({ params }: ProfilePageProps) {
         <ArrowLeft size={20} className="text-white" />
       </button>
 
-      {/* Profile Header */}
       <ProfileHeader profile={profile} />
 
-      {/* Main Content */}
       <div className="px-4 sm:px-6 lg:px-8 py-6">
         <div className="max-w-4xl mx-auto space-y-6">
-          
-          {/* Action Pills */}
-          <div className="overflow-x-auto">
-            <ActionPills
-              profile={profile}
-              servicePrices={servicePrices}
-              onCall={handleCall}
-              onViewStories={() => {}}
-            />
-          </div>
 
-          {/* Subscription Card */}
-          {subPlan && (
-            <SubscriptionCard
-              profile={profile}
-              plan={subPlan}
-              status={subStatus}
-              onSubscribe={handleSubscribe}
-            />
-          )}
+          <ActionPills
+            profile={profile}
+            servicePrices={servicePrices}
+            subPlan={subPlan}
+            subStatus={subStatus}
+            onChat={handleChat}
+            onCall={handleCall}
+            onSubscribe={handleSubscribe}
+          />
 
-          {/* Message Button */}
           <button
-            onClick={handleChat}
-            className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-xl transition flex items-center justify-center gap-2 text-lg"
-          >
-            <MessageCircle size={20} />
-            Enviar Mensaje
+            onClick={() => router.push('/app')}
+            className="w-full bg-linear-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-4 rounded-xl transition flex items-center justify-center gap-2 text-lg">
+            <Download size={20} />
+            Abrir en la app
           </button>
 
-          {/* Gallery Section */}
-          <div>
+          <p className="text-center text-gray-400 text-sm">
+            ¿No tienes la app? {' '}
+            <a
+              href="https://play.google.com/store/apps/details?id=com.sanamente.appoficial"
+              target='_blank'
+              className="text-pink-500 hover:text-pink-400 cursor-pointer">
+              Descárgala gratis
+            </a>
+          </p>
+
+          {profile.galleryImages.length > 0 && (
+            <FeaturedContent profile={profile} images={profile.galleryImages} username={username} />
+          )}
+
+          {profile.galleryImages.length > 0 && (
             <GallerySection profile={profile} images={profile.galleryImages} username={username} />
-          </div>
+          )}
+
+          
 
         </div>
+              <SocialNetwork profile={profile} />
+
       </div>
 
-      {/* Footer Spacing */}
       <div className="h-8" />
+      <Footer />
+
     </div>
   );
 }
