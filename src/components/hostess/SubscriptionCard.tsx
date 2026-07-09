@@ -46,7 +46,6 @@ export default function SubscriptionCard({
       }`}
     >
       <div className="flex items-center gap-4 p-5">
-        {/* Icon */}
         <div
           className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${
             isSubscribed ? 'bg-green-900' : 'bg-yellow-900'
@@ -59,7 +58,6 @@ export default function SubscriptionCard({
           )}
         </div>
 
-        {/* Content */}
         <div className="flex-1 text-left">
           <p className={`font-bold text-base ${isSubscribed ? 'text-green-500' : 'text-yellow-500'}`}>
             {isSubscribed ? '✦ Suscrito' : 'Suscribirse al plan'}
