@@ -1,4 +1,3 @@
-/* SubscriptionBanner - Animated Border */
 .subscription-banner-animated-border {
   position: relative;
   border-radius: 1rem;
@@ -33,4 +32,13 @@
   position: relative;
   border-radius: 0.875rem;
   z-index: 1;
+}
+
+@keyframes spin-border {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

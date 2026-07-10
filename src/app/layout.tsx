@@ -4,8 +4,9 @@ import Script from "next/script";
 import "./globals.css";
 import { AuthProvider } from "../context/AuthContext";
 import { ChatWidgetLoader } from "../components/ChatWidgetLoader";
-import Sidebar from "../components/navigation/Sidebar";
 import BottomNav from "../components/navigation/BottomNav";
+import SidebarWrapper from "../components/navigation/SidebarWrapper";
+import ContentWrapper from "../components/navigation/ContentWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,10 +28,10 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-black text-white">
         <AuthProvider>
           <div className="flex">
-            <Sidebar />
-            <div className="flex-1 md:ml-64 pb-20 md:pb-0">
+            <SidebarWrapper />
+            <ContentWrapper>
               {children}
-            </div>
+            </ContentWrapper>
           </div>
           <BottomNav />
         </AuthProvider>

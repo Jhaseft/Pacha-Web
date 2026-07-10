@@ -13,7 +13,7 @@ import {
   Video,
   Images,
 } from 'lucide-react';
-import SubscriptionBanner from '@/components/anfitriona/SubscriptionBanner';
+import { SubscriptionBanner } from '@/components/anfitriona/SubscriptionBanner';
 import './anfitriona.css';
 
 function getServiceIcon(service: string) {
