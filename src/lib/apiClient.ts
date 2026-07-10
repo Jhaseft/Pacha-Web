@@ -18,6 +18,20 @@ apiAxios.interceptors.request.use((config) => {
     return config;
 });
 
+apiAxios.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response?.status === 401) {
+            if (typeof window !== "undefined") {
+                localStorage.removeItem("pacha.accessToken");
+                localStorage.removeItem("pacha.user");
+                window.location.href = "/login";
+            }
+        }
+        return Promise.reject(error);
+    }
+);
+
 export async function apiClient<T>(
     path: string,
     options: any = {},

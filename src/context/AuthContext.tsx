@@ -13,6 +13,7 @@ type AuthState = {
   token: string | null;
   user: User | null;
   isHydrated: boolean;
+  isAuthenticated: boolean;
   setSession: (token: string, user: User) => void;
   logout: () => void;
 };
@@ -50,8 +51,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   }
 
+  const isAuthenticated = !!token && !!user;
+
   return (
-    <AuthContext.Provider value={{ token, user, isHydrated, setSession, logout }}>
+    <AuthContext.Provider value={{ token, user, isHydrated, isAuthenticated, setSession, logout }}>
       {children}
     </AuthContext.Provider>
   );

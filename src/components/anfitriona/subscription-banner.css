@@ -1,0 +1,36 @@
+/* SubscriptionBanner - Animated Border */
+.subscription-banner-animated-border {
+  position: relative;
+  border-radius: 1rem;
+  padding: 2px;
+  overflow: hidden;
+}
+
+.subscription-banner-animated-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 1rem;
+  padding: 2px;
+  background: conic-gradient(
+    from 0deg,
+    #F6C16A,
+    #FFE5A0,
+    #F6C16A,
+    #C9933A,
+    #8B5E1A,
+    #C9933A,
+    #FFE5A0,
+    #F6C16A
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: spin-border 3s linear infinite;
+}
+
+.subscription-banner-animated-border-inner {
+  position: relative;
+  border-radius: 0.875rem;
+  z-index: 1;
+}

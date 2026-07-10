@@ -9,7 +9,7 @@ import { loginWithEmail } from "../../lib/auth";
 
 const ROLE_REDIRECTS: Record<string, string> = {
   USER: "/dashboard",
-  ANFITRIONA: "/dashboard",
+  ANFITRIONA: "/dashboard/anfitriona",
   ADMIN: "/admin",
 };
 
