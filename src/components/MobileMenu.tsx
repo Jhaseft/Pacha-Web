@@ -4,12 +4,7 @@ import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { trackPixel } from "@/lib/pixel";
-
-const NAV_LINKS = [
-  { label: "Inicio", href: "/", isRoute: true },
-  { label: "Soy nuevo", href: "/soy-nuevo", isRoute: true },
-  { label: "Trabaja con nosotros", href: "/trabaja-con-nosotros", isRoute: true },
-];
+import { NAV_LINKS } from "@/lib/navLinks";
 
 export function MobileMenu() {
   const [open, setOpen] = useState(false);
@@ -30,7 +25,7 @@ export function MobileMenu() {
         right: 0,
         bottom: 0,
         zIndex: 9999,
-        backgroundColor: "#0a0a0a",
+        backgroundColor: "#ffffff",
         overflowY: "auto",
         display: "flex",
         flexDirection: "column",
@@ -39,43 +34,24 @@ export function MobileMenu() {
     >
       {/* Links de navegación */}
       <div style={{ display: "flex", flexDirection: "column" }}>
-        {NAV_LINKS.map((link) =>
-          link.isRoute ? (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={close}
-              style={{
-                color: "#ffffff",
-                fontSize: "18px",
-                fontWeight: 600,
-                padding: "16px 0",
-                borderBottom: "1px solid rgba(255,255,255,0.08)",
-                textDecoration: "none",
-                display: "block",
-              }}
-            >
-              {link.label}
-            </Link>
-          ) : (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={close}
-              style={{
-                color: "#ffffff",
-                fontSize: "18px",
-                fontWeight: 600,
-                padding: "16px 0",
-                borderBottom: "1px solid rgba(255,255,255,0.08)",
-                textDecoration: "none",
-                display: "block",
-              }}
-            >
-              {link.label}
-            </a>
-          )
-        )}
+        {NAV_LINKS.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            onClick={close}
+            style={{
+              color: "#171226",
+              fontSize: "18px",
+              fontWeight: 600,
+              padding: "16px 0",
+              borderBottom: "1px solid rgba(0,0,0,0.08)",
+              textDecoration: "none",
+              display: "block",
+            }}
+          >
+            {link.label}
+          </Link>
+        ))}
       </div>
 
       {/* Botones auth */}
@@ -86,12 +62,12 @@ export function MobileMenu() {
           style={{
             display: "block",
             textAlign: "center",
-            color: "#ffffff",
+            color: "#171226",
             fontWeight: 700,
             fontSize: "16px",
             padding: "16px",
             borderRadius: "16px",
-            border: "1px solid rgba(255,255,255,0.2)",
+            border: "1px solid rgba(0,0,0,0.12)",
             textDecoration: "none",
           }}
         >
@@ -108,11 +84,11 @@ export function MobileMenu() {
             fontSize: "16px",
             padding: "16px",
             borderRadius: "16px",
-            backgroundColor: "#A11213",
+            backgroundColor: "#6d5efc",
             textDecoration: "none",
           }}
         >
-          Registrarse
+          Quiero ser creador
         </Link>
       </div>
     </div>
@@ -124,11 +100,11 @@ export function MobileMenu() {
       <button
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? "Cerrar menú" : "Abrir menú"}
-        className="md:hidden flex flex-col justify-center items-center w-10 h-10 gap-1.25 rounded-xl hover:bg-white/5 transition-all"
+        className="md:hidden flex flex-col justify-center items-center w-10 h-10 gap-1.25 rounded-xl hover:bg-brand-soft transition-all"
       >
-        <span className={`block w-5 h-0.5 bg-white rounded-full transition-all duration-300 ${open ? "rotate-45 translate-y-1.75" : ""}`} />
-        <span className={`block w-5 h-0.5 bg-white rounded-full transition-all duration-200 ${open ? "opacity-0" : ""}`} />
-        <span className={`block w-5 h-0.5 bg-white rounded-full transition-all duration-300 ${open ? "-rotate-45 -translate-y-1.75" : ""}`} />
+        <span className={`block w-5 h-0.5 bg-ink rounded-full transition-all duration-300 ${open ? "rotate-45 translate-y-1.75" : ""}`} />
+        <span className={`block w-5 h-0.5 bg-ink rounded-full transition-all duration-200 ${open ? "opacity-0" : ""}`} />
+        <span className={`block w-5 h-0.5 bg-ink rounded-full transition-all duration-300 ${open ? "-rotate-45 -translate-y-1.75" : ""}`} />
       </button>
 
       {/* Renderizamos el overlay directamente en <body> para evitar que overflow:hidden del padre lo recorte */}
