@@ -119,29 +119,29 @@ export function WithdrawalModal(
 
       {/* Mobile: Bottom Sheet | Desktop: Centered Dialog */}
       <div className="fixed inset-0 z-50 flex items-end md:items-center md:justify-center pointer-events-none">
-        <div className="w-full md:w-full md:max-w-md bg-[#111] rounded-t-3xl md:rounded-3xl px-6 pt-5 pb-8 md:pb-6 max-h-[85vh] md:max-h-[90vh] overflow-y-auto pointer-events-auto md:mx-4 md:mr-0">
+        <div className="w-full md:w-full md:max-w-md bg-white rounded-t-3xl md:rounded-3xl px-6 pt-5 pb-8 md:pb-6 max-h-[85vh] md:max-h-[90vh] overflow-y-auto pointer-events-auto md:mx-4 md:mr-0">
           <div className="flex items-center justify-between mb-5">
-            <h2 className="text-white text-lg md:text-xl font-bold">Solicitar pago</h2>
-            <button onClick={onClose} className="text-gray-400 hover:text-white transition">
+            <h2 className="text-black text-lg md:text-xl font-bold">Solicitar pago</h2>
+            <button onClick={onClose} className="text-gray-600 hover:text-gray-800 transition">
               <X size={22} />
             </button>
           </div>
 
           {/* Balance */}
-          <div className="bg-[#1a1a1a] rounded-xl px-4 py-3 mb-5 flex justify-between">
-            <span className="text-gray-400 text-sm">Saldo disponible</span>
-            <span className="text-white font-bold text-sm">Cred/ {balance}</span>
+          <div className="bg-gray-100 rounded-xl px-4 py-3 mb-5 flex justify-between">
+            <span className="text-gray-600 text-sm">Saldo disponible</span>
+            <span className="text-black font-bold text-sm">Cred/ {balance}</span>
           </div>
 
           {/* Credits input */}
-          <label className="text-gray-400 text-xs mb-1 block">
+          <label className="text-black text-xs mb-1 block">
             Monto a retirar (créditos)
           </label>
           <p className="text-gray-500 text-xs mb-2">
             Mín. USD {MIN_WITHDRAWAL_USD} · {MIN_WITHDRAWAL_CREDITS} cr.
           </p>
           {isPaypal && (
-            <p className="text-blue-400 text-xs mb-2">
+            <p className="text-blue-600 text-xs mb-2">
               💡 PayPal: 1 crédito = USD {(1 / CREDITS_PER_USD).toFixed(2)}
             </p>
           )}
@@ -150,32 +150,32 @@ export function WithdrawalModal(
             placeholder={`Mín. ${MIN_WITHDRAWAL_CREDITS} créditos`}
             value={credits}
             onChange={(e) => setCredits(e.target.value)}
-            className="w-full bg-[#1a1a1a] text-white rounded-xl px-4 py-3 text-lg font-bold mb-3 border border-[#2a2a2a] focus:border-purple-500 focus:outline-none transition"
+            className="w-full bg-gray-100 text-gray-800 rounded-xl px-4 py-3 text-lg font-bold mb-3 border border-gray-300 focus:border-purple-500 focus:outline-none transition"
           />
 
           {/* Aviso mínimo */}
           {belowMinimum && (
-            <div className="rounded-xl px-4 py-2 mb-3 bg-pink-500/10 border border-pink-500/35">
-              <p className="text-pink-500 text-xs">
+            <div className="rounded-xl px-4 py-2 mb-3 bg-pink-100 border border-pink-300">
+              <p className="text-pink-700 text-xs">
                 El mínimo de retiro es USD {MIN_WITHDRAWAL_USD} ({MIN_WITHDRAWAL_CREDITS} créditos · S/ {minSoles} / USD {minUsd})
               </p>
             </div>
           )}
 
           {/* Payout conversion */}
-          <div className="rounded-xl px-4 py-3 mb-6 bg-purple-500/10 border border-purple-500/30">
-            <p className="text-gray-400 text-xs mb-2">Recibirás</p>
+          <div className="rounded-xl px-4 py-3 mb-6 bg-purple-100 border border-purple-300">
+            <p className="text-gray-700 text-xs mb-2">Recibirás</p>
             <div className="flex items-center justify-between">
               <div className="text-center flex-1">
-                <p className="text-gray-400 text-[10px] uppercase tracking-widest mb-1">Soles</p>
-                <p className={`font-black text-xl ${isUsd ? 'text-gray-400' : 'text-purple-500'}`}>
+                <p className="text-gray-600 text-[10px] uppercase tracking-widest mb-1">Soles</p>
+                <p className={`font-black text-xl ${isUsd ? 'text-gray-600' : 'text-purple-600'}`}>
                   S/ {solesAmount}
                 </p>
               </div>
-              <div className="w-px h-9 bg-purple-500/30 mx-4" />
+              <div className="w-px h-9 bg-purple-300 mx-4" />
               <div className="text-center flex-1">
-                <p className="text-gray-400 text-[10px] uppercase tracking-widest mb-1">USD</p>
-                <p className={`font-black text-xl ${isUsd ? 'text-purple-500' : 'text-gray-400'}`}>
+                <p className="text-gray-600 text-[10px] uppercase tracking-widest mb-1">USD</p>
+                <p className={`font-black text-xl ${isUsd ? 'text-purple-600' : 'text-gray-600'}`}>
                   USD {usdAmount}
                 </p>
               </div>
@@ -184,10 +184,10 @@ export function WithdrawalModal(
 
           {/* Bank accounts */}
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-white font-semibold">Cuenta de destino</h3>
+            <h3 className="text-black font-semibold">Cuenta de destino</h3>
             <button
               onClick={() => setShowAddAccount(true)}
-              className="flex items-center gap-1 text-purple-500 text-xs font-semibold hover:text-purple-400 transition"
+              className="flex items-center gap-1 text-purple-600 text-xs font-semibold hover:text-purple-700 transition"
             >
               <Plus size={14} />
               Agregar
@@ -196,15 +196,15 @@ export function WithdrawalModal(
 
           {loadingAccounts ? (
             <div className="text-center py-4">
-              <div className="inline-block animate-spin rounded-full h-6 w-6 border-t-2 border-purple-500"></div>
+              <div className="inline-block animate-spin rounded-full h-6 w-6 border-t-2 border-purple-600"></div>
             </div>
           ) : accounts.length === 0 ? (
             <button
               onClick={() => setShowAddAccount(true)}
-              className="w-full bg-[#1a1a1a] rounded-xl py-5 text-center mb-6 border border-dashed border-gray-600 hover:border-gray-500 transition"
+              className="w-full bg-gray-100 rounded-xl py-5 text-center mb-6 border border-dashed border-gray-400 hover:border-gray-500 transition"
             >
-              <Plus size={20} className="text-gray-400 mx-auto mb-2" />
-              <p className="text-gray-500 text-sm">Agrega una cuenta bancaria</p>
+              <Plus size={20} className="text-gray-600 mx-auto mb-2" />
+              <p className="text-gray-600 text-sm">Agrega una cuenta bancaria</p>
             </button>
           ) : (
             <div className="mb-6 max-h-48 overflow-y-auto">
@@ -215,24 +215,24 @@ export function WithdrawalModal(
                     key={acc.id}
                     onClick={() => setSelectedAccount(acc)}
                     className={`w-full flex items-center rounded-xl px-4 py-3 mb-2 cursor-pointer transition-all ${selected
-                        ? 'bg-purple-500/10 border border-purple-500'
-                        : 'bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#3a3a3a]'
+                        ? 'bg-purple-100 border border-purple-500'
+                        : 'bg-gray-100 border border-gray-300 hover:border-gray-400'
                       }`}
                   >
                     <div
-                      className={`w-5 h-5 rounded-full border-2 mr-3 flex items-center justify-center flex-shrink-0 ${selected ? 'border-purple-500' : 'border-gray-600'
+                      className={`w-5 h-5 rounded-full border-2 mr-3 flex items-center justify-center flex-shrink-0 ${selected ? 'border-purple-600' : 'border-gray-400'
                         }`}
                     >
                       {selected && (
-                        <div className="w-2.5 h-2.5 rounded-full bg-purple-500" />
+                        <div className="w-2.5 h-2.5 rounded-full bg-purple-600" />
                       )}
                     </div>
 
                     <div className="flex-1 text-left min-w-0">
-                      <p className="text-white font-semibold text-sm truncate">
+                      <p className="text-black font-semibold text-sm truncate">
                         {accountLabel(acc)}
                       </p>
-                      <p className="text-gray-400 text-xs truncate">
+                      <p className="text-gray-600 text-xs truncate">
                         {accountDetail(acc)}
                       </p>
                       {acc.accountHolderName && (
@@ -247,7 +247,7 @@ export function WithdrawalModal(
                         e.stopPropagation();
                         handleDelete(acc.id);
                       }}
-                      className="text-gray-600 hover:text-red-500 transition flex-shrink-0 ml-2"
+                      className="text-gray-500 hover:text-red-600 transition flex-shrink-0 ml-2"
                     >
                       <Trash2 size={16} />
                     </button>
@@ -264,7 +264,7 @@ export function WithdrawalModal(
           <button
             onClick={handleSubmit}
             disabled={loading || belowMinimum}
-            className={`w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-4 rounded-lg transition-all ${belowMinimum || loading ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-90'
+            className={`w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-4 rounded-lg transition-all ${belowMinimum || loading ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-90'
               }`}
           >
             {loading ? 'Procesando...' : `Solicitar S/ ${solesAmount} · USD ${usdAmount}`}

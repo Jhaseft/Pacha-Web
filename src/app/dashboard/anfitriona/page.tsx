@@ -82,19 +82,19 @@ export default function AnfitrianaPage() {
 
   if (loading || !user) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-purple-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-white">
       <div className="w-full px-5 md:px-12 lg:px-16 py-6 md:py-8">
         
         {/* Header con resumen */}
-        <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+        <div className="mb-4">
+          <h1 className="text-2xl md:text-3xl font-bold text-black mb-1">
             👋 Hola {user?.firstName ?? 'Anfitriona'}
           </h1>
           <p className="text-gray-400 text-sm md:text-base">Aquí está tu resumen de hoy</p>
@@ -102,7 +102,7 @@ export default function AnfitrianaPage() {
 
         {/* Earnings Cards */}
         {loading ? (
-          <div className="grid grid-cols-2 md:grid-cols-2 gap-4 md:gap-6 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-2 gap-4 md:gap-6 mb-6">
             {[0, 1].map((i) => (
               <div
                 key={i}
@@ -113,10 +113,10 @@ export default function AnfitrianaPage() {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-2 gap-4 md:gap-6 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-2 gap-2 md:gap-4 mb-4">
             {/* Hoy - AnimatedBorderCard */}
-            <div className="animated-border-card">
-              <div className="animated-border-card-inner bg-gradient-to-br from-pink-500 to-blue-900 rounded-3xl px-5 md:px-6 py-5 md:py-6">
+            <div className="">
+              <div className=" bg-gradient-to-br from-pink-500 to-blue-900 rounded-2xl px-5 md:px-6 py-5 md:py-6">
                 <p className="text-pink-500 text-xs md:text-sm mb-2">Hoy</p>
                 <p className="text-yellow-300 text-2xl md:text-3xl font-black">{earnings?.today ?? 0} cr</p>
                 <p className="text-yellow-300 text-xs md:text-sm font-semibold opacity-70 mt-1">≈ ${earnings?.today ?? 0}</p>
@@ -125,7 +125,7 @@ export default function AnfitrianaPage() {
 
             {/* Esta semana - GlowingCard */}
             <div className="glowing-card">
-              <div className="glowing-card-inner bg-gradient-to-br from-purple-900 to-purple-600 rounded-3xl px-5 md:px-6 py-5 md:py-6">
+              <div className="glowing-card-inner bg-gradient-to-br from-purple-900 to-purple-600 rounded-2xl px-5 md:px-6 py-5 md:py-6">
                 <p className="text-purple-200 text-xs md:text-sm mb-2 opacity-85">Esta semana</p>
                 <p className="text-yellow-300 text-2xl md:text-3xl font-black">{earnings?.thisWeek ?? 0} cr</p>
                 <p className="text-yellow-300 text-xs md:text-sm font-semibold opacity-70 mt-1">≈ ${earnings?.thisWeek ?? 0}</p>
@@ -135,43 +135,41 @@ export default function AnfitrianaPage() {
         )}
 
         {/* Quick Access Buttons */}
-        <h2 className="text-white font-bold text-base md:text-lg mb-4">Accesos rápidos</h2>
-        <div className="grid grid-cols-3 md:grid-cols-3 gap-4 md:gap-8 mb-8">
+        <h2 className="text-black font-bold text-lg md:text-xl mb-2">Accesos rápidos</h2>
+        <div className="grid grid-cols-3 md:grid-cols-3 gap-3 md:gap-6 mb-4">
           {/* Mensajes */}
           <button
             onClick={() => router.push('/dashboard/messages')}
-            className="bg-blue-900 rounded-3xl py-4 md:py-5 flex flex-col items-center hover:bg-blue-800 transition"
+            className="bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl md:rounded-3xl py-4 md:py-5 px-3 md:px-4 flex flex-col items-center justify-center hover:shadow-lg transition-shadow"
           >
-            <MessageCircle size={28} className="text-white mb-2" />
-            <span className="text-white font-semibold text-xs md:text-xs">Mensajes</span>
+            <MessageCircle size={32} className="text-white mb-3" />
+            <span className="text-white font-bold text-xs md:text-sm">Mensajes</span>
             {unreadCount > 0 && (
-              <div className="bg-pink-500 rounded-full px-2 py-0.5 mt-1.5">
+              <div className="bg-pink-500 rounded-full px-2 py-0.5 mt-2">
                 <span className="text-white text-xs font-bold">{unreadCount}</span>
               </div>
             )}
           </button>
 
           {/* Ganancias */}
-          <div className="glowing-card">
-            <button
-              onClick={() => router.push('/dashboard/earnings')}
-              className="glowing-card-inner bg-gradient-to-br from-blue-900 via-purple-600 to-pink-500 rounded-2xl py-4 md:py-5 w-full flex flex-col items-center"
-            >
-              <DollarSign size={28} className="text-white mb-2" />
-              <span className="text-white font-bold text-xs md:text-xs">Ganancias</span>
-              {earnings && (
-                <span className="text-yellow-300 text-xs font-black mt-1">{earnings.today} cr</span>
-              )}
-            </button>
-          </div>
+          <button
+            onClick={() => router.push('/dashboard/earnings')}
+            className="bg-gradient-to-br from-purple-500 via-purple-600 to-pink-600 rounded-2xl md:rounded-3xl py-4 md:py-5 px-3 md:px-4 flex flex-col items-center justify-center hover:shadow-lg transition-shadow"
+          >
+            <DollarSign size={32} className="text-white mb-3" />
+            <span className="text-white font-bold text-xs md:text-sm">Ganancias</span>
+            {earnings && (
+              <span className="text-yellow-300 text-xs font-black mt-2">{earnings.today} cr</span>
+            )}
+          </button>
 
           {/* Mis precios */}
           <button
             onClick={() => router.push('/dashboard/prices')}
-            className="bg-blue-900 rounded-3xl py-4 md:py-5 flex flex-col items-center hover:bg-blue-800 transition"
+            className="bg-gradient-to-br from-indigo-500 to-indigo-700 rounded-2xl md:rounded-3xl py-4 md:py-5 px-3 md:px-4 flex flex-col items-center justify-center hover:shadow-lg transition-shadow"
           >
-            <Settings size={28} className="text-white mb-2" />
-            <span className="text-white font-semibold text-xs md:text-xs">Mis precios</span>
+            <Settings size={32} className="text-white mb-3" />
+            <span className="text-white font-bold text-xs md:text-sm">Mis precios</span>
           </button>
         </div>
 
@@ -179,32 +177,28 @@ export default function AnfitrianaPage() {
         <SubscriptionBanner />
 
         {/* Recent Activity */}
-        <h2 className="text-white font-bold text-base md:text-lg mb-4">Actividad reciente</h2>
+        <h2 className="text-black font-bold text-lg md:text-xl mb-2">Actividad reciente</h2>
 
         {!earnings?.transactions || earnings.transactions.length === 0 ? (
-          <div className="bg-blue-900 rounded-4xl p-8 text-center">
-            <p className="text-gray-500 text-sm md:text-base">Sin actividad reciente</p>
+          <div className="bg-card border border-line rounded-2xl p-8 text-center">
+            <p className="text-ink-faint text-sm md:text-base">Sin actividad reciente</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 gap-2 md:gap-4">
             {earnings.transactions.map((tx) => {
               const IconComponent = getServiceIcon(tx.service);
               return (
-                <div key={tx.id} className="animated-border-card">
-                  <div className="animated-border-card-inner bg-gradient-to-r from-blue-900 via-blue-800 to-blue-700 rounded-4xl p-5 md:p-6">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 md:w-14 md:h-14 rounded-3xl bg-purple-600 flex items-center justify-center flex-shrink-0">
-                        <IconComponent size={24} className="text-white" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-white font-semibold text-sm md:text-base">{tx.service}</p>
-                        <p className="text-gray-400 text-xs md:text-sm mt-1">{formatRelativeTime(tx.createdAt)}</p>
-                      </div>
-                      <div className="text-right flex-shrink-0">
-                        <p className="text-yellow-300 text-sm md:text-base font-black">{tx.amount} cr</p>
-                        <p className="text-yellow-300 text-xs md:text-sm font-semibold opacity-70 mt-1">≈ ${tx.amount}</p>
-                      </div>
-                    </div>
+                <div key={tx.id} className="bg-gradient-to-r from-purple to-secondary rounded-2xl p-3 md:p-4 flex items-center gap-3 hover:shadow-lg transition-shadow">
+                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0">
+                    <IconComponent size={20} className="text-white" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-white font-semibold text-xs md:text-sm">{tx.service}</p>
+                    <p className="text-white/70 text-xs md:text-xs mt-0.5">{formatRelativeTime(tx.createdAt)}</p>
+                  </div>
+                  <div className="text-right flex-shrink-0">
+                    <p className="text-white text-xs md:text-sm font-bold">{tx.amount} cr</p>
+                    <p className="text-white/70 text-xs md:text-xs font-semibold mt-0.5">≈ ${tx.amount}</p>
                   </div>
                 </div>
               );

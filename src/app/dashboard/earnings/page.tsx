@@ -93,17 +93,17 @@ export default function EarningsPage() {
 
   if (loading || !user) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-purple-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-white">
       <div className="w-full px-5 md:px-12 lg:px-16 py-6 md:py-8">
         <div className="mb-4">
-          <h1 className="text-2xl md:text-3xl font-bold text-white mb-1">
+          <h1 className="text-2xl md:text-3xl font-bold text-black mb-1">
             Mis ganancias
           </h1>
           <p className="text-gray-400 text-sm md:text-base">Resumen de tus ingresos</p>
@@ -240,7 +240,7 @@ export default function EarningsPage() {
         </div>
 
         {/* Transaction History */}
-        <h2 className="text-white font-bold text-lg md:text-xl mb-3">
+        <h2 className="text-black font-bold text-lg md:text-xl mb-2">
           Historial de transacciones
         </h2>
 
@@ -254,7 +254,7 @@ export default function EarningsPage() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 gap-2 md:gap-4">
             {earnings.transactions.map((tx) => (
               <TransactionItem key={tx.id} tx={tx} formatUSD={formatUSD} />
             ))}
