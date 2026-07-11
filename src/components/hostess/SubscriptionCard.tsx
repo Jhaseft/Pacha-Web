@@ -41,28 +41,28 @@ export default function SubscriptionCard({
       disabled={isSubscribed || loading}
       className={`w-full rounded-2xl overflow-hidden border transition ${
         isSubscribed
-          ? 'border-green-500/40 bg-gradient-to-r from-green-950 to-green-900 hover:border-green-500/60'
-          : 'border-yellow-600/40 bg-gradient-to-r from-yellow-950 to-yellow-900 hover:border-yellow-500/60'
+          ? 'border-green-200 bg-green-50 hover:border-green-300'
+          : 'border-amber-200 bg-amber-50 hover:border-amber-300'
       }`}
     >
       <div className="flex items-center gap-4 p-5">
         <div
-          className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${
-            isSubscribed ? 'bg-green-900' : 'bg-yellow-900'
+          className={`w-12 h-12 rounded-lg flex items-center justify-center shrink-0 ${
+            isSubscribed ? 'bg-green-100' : 'bg-amber-100'
           }`}
         >
           {isSubscribed ? (
-            <Check size={24} className="text-green-500" />
+            <Check size={24} className="text-green-600" />
           ) : (
-            <Crown size={24} className="text-yellow-500" />
+            <Crown size={24} className="text-amber-500" />
           )}
         </div>
 
         <div className="flex-1 text-left">
-          <p className={`font-bold text-base ${isSubscribed ? 'text-green-500' : 'text-yellow-500'}`}>
+          <p className={`font-bold text-base ${isSubscribed ? 'text-green-700' : 'text-amber-600'}`}>
             {isSubscribed ? '✦ Suscrito' : 'Suscribirse al plan'}
           </p>
-          <p className="text-xs text-gray-400 mt-1">
+          <p className="text-xs text-ink-faint mt-1">
             {isSubscribed
               ? `Acceso activo · ${plan.price} cr/mes`
               : `${plan.price} créditos/mes · Acceso a la galería de la anfitriona`}
@@ -70,7 +70,7 @@ export default function SubscriptionCard({
         </div>
 
         {!isSubscribed && (
-          <div className="bg-yellow-500 text-yellow-950 px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap">
+          <div className="bg-amber-500 text-white px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap">
             Unirse
           </div>
         )}

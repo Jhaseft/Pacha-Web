@@ -19,8 +19,8 @@ export default function CatchAllPage({ params }: CatchAllPageProps) {
   }, [params, router]);
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center">
-      <p className="text-gray-400">Cargando perfil...</p>
+    <div className="min-h-screen bg-canvas flex items-center justify-center">
+      <p className="text-ink-faint">Cargando perfil...</p>
     </div>
   );
 }

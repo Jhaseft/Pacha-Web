@@ -102,82 +102,89 @@ export default function InicioPage() {
 
   if (!isHydrated || !user) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-secondary border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen bg-canvas flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-brand border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
+  // Carga automática al acercarse al final del feed (estilo TikTok).
+  const handleFeedScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const el = e.currentTarget;
+    if (
+      hasMore &&
+      !loadingMore &&
+      el.scrollHeight - el.scrollTop - el.clientHeight < el.clientHeight
+    ) {
+      loadMore();
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-black">
-      <div className="max-w-lg mx-auto px-4">
-        {/* ── Barra superior ── */}
-        <header className="flex items-center justify-between pt-8 pb-4">
-          <div>
-            <p className="text-white/40 text-xs uppercase tracking-widest font-semibold">Hola,</p>
-            <p className="text-white font-black text-xl leading-tight">
-              {user.firstName ?? "Usuario"}
-            </p>
-          </div>
-          <Link
-            href="/dashboard/creditos"
-            className="flex items-center gap-2 bg-surface-card border border-surface-border rounded-full pl-3 pr-4 py-2 hover:border-secondary/50 transition-colors"
-          >
-            <Gem size={18} className="text-secondary" />
-            <span className="text-white font-bold tabular-nums">
-              {balance === null ? "…" : balance.toLocaleString()}
-            </span>
-            <span className="text-secondary text-lg font-black leading-none">+</span>
-          </Link>
-        </header>
+    <div className="flex flex-col h-[calc(100dvh-5rem)] md:h-dvh bg-canvas">
+      {/* ── Barra superior ── */}
+      <header className="shrink-0 w-full max-w-115 md:max-w-2xl mx-auto flex items-center justify-between px-4 pt-5 pb-3">
+        <div>
+          <p className="text-ink-faint text-xs uppercase tracking-widest font-semibold">Hola,</p>
+          <p className="text-ink font-black text-xl leading-tight">
+            {user.firstName ?? "Usuario"}
+          </p>
+        </div>
+        <Link
+          href="/dashboard/creditos"
+          className="flex items-center gap-2 bg-card border border-line rounded-full pl-3 pr-4 py-2 hover:border-brand/50 transition-colors"
+        >
+          <Gem size={18} className="text-brand" />
+          <span className="text-ink font-bold tabular-nums">
+            {balance === null ? "…" : balance.toLocaleString()}
+          </span>
+          <span className="text-brand text-lg font-black leading-none">+</span>
+        </Link>
+      </header>
 
-        {/* ── Historias ── */}
+      {/* ── Historias ── */}
+      <div className="shrink-0 w-full max-w-115 md:max-w-2xl mx-auto px-4">
         <StoriesBar stories={feed} onSelect={handleStorySelect} />
-
-        {/* ── Feed ── */}
-        <section className="pt-4 pb-10">
-          {loading ? (
-            <div className="flex flex-col gap-5">
-              {[1, 2].map((i) => (
-                <div key={i} className="w-full aspect-[3/4] rounded-3xl bg-surface-card animate-pulse" />
-              ))}
-            </div>
-          ) : error ? (
-            <div className="text-center py-16">
-              <p className="text-white/60 mb-4">{error}</p>
-              <button
-                onClick={loadFirst}
-                className="bg-secondary text-white font-semibold px-6 py-3 rounded-full"
-              >
-                Reintentar
-              </button>
-            </div>
-          ) : anfitrionas.length === 0 ? (
-            <div className="text-center py-16">
-              <p className="text-white/40">No hay anfitrionas disponibles por el momento.</p>
-            </div>
-          ) : (
-            <>
-              <div className="flex flex-col gap-5">
-                {anfitrionas.map((a) => (
-                  <PostCard key={a.id} anfitriona={a} />
-                ))}
-              </div>
-              {hasMore && (
-                <div className="flex justify-center mt-8">
-                  <button
-                    onClick={loadMore}
-                    disabled={loadingMore}
-                    className="bg-surface-card border border-surface-border hover:border-secondary/50 text-white font-semibold px-8 py-3 rounded-full transition-colors disabled:opacity-50"
-                  >
-                    {loadingMore ? "Cargando…" : "Ver más"}
-                  </button>
-                </div>
-              )}
-            </>
-          )}
-        </section>
       </div>
+
+      {/* ── Feed uno-por-scroll ── */}
+      {loading ? (
+        <div className="flex-1 min-h-0 flex items-center justify-center">
+          <div className="w-full max-w-115 h-full py-2 px-3">
+            <div className="w-full h-full rounded-3xl bg-canvas-alt animate-pulse" />
+          </div>
+        </div>
+      ) : error ? (
+        <div className="flex-1 flex flex-col items-center justify-center text-center px-6">
+          <p className="text-ink-soft mb-4">{error}</p>
+          <button
+            onClick={loadFirst}
+            className="bg-linear-to-r from-brand to-brand-violet text-white font-semibold px-6 py-3 rounded-full"
+          >
+            Reintentar
+          </button>
+        </div>
+      ) : anfitrionas.length === 0 ? (
+        <div className="flex-1 flex items-center justify-center text-center px-6">
+          <p className="text-ink-faint">No hay anfitrionas disponibles por el momento.</p>
+        </div>
+      ) : (
+        <div
+          onScroll={handleFeedScroll}
+          className="flex-1 min-h-0 overflow-y-auto snap-y snap-mandatory px-3"
+        >
+          {anfitrionas.map((a) => (
+            <div key={a.id} className="h-full snap-start py-2">
+              <PostCard anfitriona={a} />
+            </div>
+          ))}
+          {loadingMore && (
+            <div className="h-16 flex items-center justify-center">
+              <div className="w-6 h-6 border-2 border-brand border-t-transparent rounded-full animate-spin" />
+            </div>
+          )}
+        </div>
+      )}
 
       {activeStory && (
         <StoryViewer item={activeStory} onClose={() => setActiveStory(null)} />
@@ -185,4 +192,3 @@ export default function InicioPage() {
     </div>
   );
 }
-21

@@ -35,7 +35,7 @@ export default function RootLayout({
           </div>
           <BottomNav />
         </AuthProvider>
-        <ChatWidgetLoader />
+        {/* <ChatWidgetLoader /> */}
         <Script id="meta-pixel" strategy="afterInteractive">
           {`
             !function(f,b,e,v,n,t,s)
@@ -50,7 +50,7 @@ export default function RootLayout({
             fbq('track', 'PageView');
           `}
         </Script>
-        <noscript>
+        <noscript>11
           <img height="1" width="1" style={{ display: "none" }}
             src="https://www.facebook.com/tr?id=1744890816508319&ev=PageView&noscript=1"
             alt=""

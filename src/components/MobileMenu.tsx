@@ -5,16 +5,25 @@ import { createPortal } from "react-dom";
 import Link from "next/link";
 import { trackPixel } from "@/lib/pixel";
 import { NAV_LINKS } from "@/lib/navLinks";
+import { useAuth } from "@/context/AuthContext";
+
+const DASHBOARD_BY_ROLE: Record<string, string> = {
+  USER: "/dashboard",
+  ANFITRIONA: "/dashboard/anfitriona",
+  ADMIN: "/admin",
+};
 
 export function MobileMenu() {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const { user, isHydrated } = useAuth();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
   const close = () => setOpen(false);
+  const dashboardHref = user ? DASHBOARD_BY_ROLE[user.role] ?? "/dashboard" : "/dashboard";
 
   const overlay = open ? (
     <div
@@ -56,40 +65,62 @@ export function MobileMenu() {
 
       {/* Botones auth */}
       <div style={{ marginTop: "32px", display: "flex", flexDirection: "column", gap: "12px" }}>
-        <Link
-          href="/login"
-          onClick={close}
-          style={{
-            display: "block",
-            textAlign: "center",
-            color: "#171226",
-            fontWeight: 700,
-            fontSize: "16px",
-            padding: "16px",
-            borderRadius: "16px",
-            border: "1px solid rgba(0,0,0,0.12)",
-            textDecoration: "none",
-          }}
-        >
-          Iniciar sesión
-        </Link>
-        <Link
-          href="/login/cliente"
-          onClick={() => { close(); trackPixel("CompleteRegistration"); }}
-          style={{
-            display: "block",
-            textAlign: "center",
-            color: "#ffffff",
-            fontWeight: 900,
-            fontSize: "16px",
-            padding: "16px",
-            borderRadius: "16px",
-            backgroundColor: "#6d5efc",
-            textDecoration: "none",
-          }}
-        >
-          Quiero ser creador
-        </Link>
+        {isHydrated && user ? (
+          <Link
+            href={dashboardHref}
+            onClick={close}
+            style={{
+              display: "block",
+              textAlign: "center",
+              color: "#ffffff",
+              fontWeight: 900,
+              fontSize: "16px",
+              padding: "16px",
+              borderRadius: "16px",
+              backgroundColor: "#6d5efc",
+              textDecoration: "none",
+            }}
+          >
+            Ir al panel
+          </Link>
+        ) : (
+          <>
+            <Link
+              href="/login"
+              onClick={close}
+              style={{
+                display: "block",
+                textAlign: "center",
+                color: "#171226",
+                fontWeight: 700,
+                fontSize: "16px",
+                padding: "16px",
+                borderRadius: "16px",
+                border: "1px solid rgba(0,0,0,0.12)",
+                textDecoration: "none",
+              }}
+            >
+              Iniciar sesión
+            </Link>
+            <Link
+              href="/login/cliente"
+              onClick={() => { close(); trackPixel("CompleteRegistration"); }}
+              style={{
+                display: "block",
+                textAlign: "center",
+                color: "#ffffff",
+                fontWeight: 900,
+                fontSize: "16px",
+                padding: "16px",
+                borderRadius: "16px",
+                backgroundColor: "#6d5efc",
+                textDecoration: "none",
+              }}
+            >
+              Quiero ser creador
+            </Link>
+          </>
+        )}
       </div>
     </div>
   ) : null;

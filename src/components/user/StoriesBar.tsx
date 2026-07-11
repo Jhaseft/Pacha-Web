@@ -20,9 +20,9 @@ export default function StoriesBar({
           onClick={() => onSelect(item)}
           className="flex flex-col items-center gap-1.5 shrink-0 w-[68px]"
         >
-          <span className="p-[2.5px] rounded-full bg-gradient-to-tr from-secondary via-purple to-primary">
-            <span className="block p-[2px] rounded-full bg-black">
-              <span className="relative block w-14 h-14 rounded-full overflow-hidden bg-surface-card">
+          <span className="p-[2.5px] rounded-full bg-linear-to-tr from-brand via-brand-violet to-brand-strong">
+            <span className="block p-[2px] rounded-full bg-canvas">
+              <span className="relative block w-14 h-14 rounded-full overflow-hidden bg-canvas-alt">
                 {item.avatar && (
                   <Image
                     src={item.avatar}
@@ -35,7 +35,7 @@ export default function StoriesBar({
               </span>
             </span>
           </span>
-          <span className="text-white/70 text-[11px] font-medium truncate max-w-full">
+          <span className="text-ink-soft text-[11px] font-medium truncate max-w-full">
             {item.name}
           </span>
         </button>

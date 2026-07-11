@@ -37,7 +37,7 @@ export default function ActionPills({
       {/* Chat Button */}
       <button
         onClick={onChat}
-        className="flex flex-col items-center justify-center gap-1 bg-gradient-to-br from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white px-3 py-3 rounded-lg font-bold transition text-sm"
+        className="flex flex-col items-center justify-center gap-1 bg-linear-to-br from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white px-3 py-3 rounded-lg font-bold transition text-sm"
       >
         <MessageCircle size={18} />
         <span>Chat</span>
@@ -49,7 +49,7 @@ export default function ActionPills({
         disabled={callPrice === null}
         className={`flex flex-col items-center justify-center gap-1 px-3 py-3 rounded-lg font-bold transition text-sm ${callPrice !== null
           ? 'bg-linear-to-br from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white cursor-pointer'
-          : 'bg-gray-700 text-gray-400 cursor-not-allowed opacity-50'
+          : 'bg-canvas-alt text-ink-faint cursor-not-allowed opacity-60'
           }`}
       >
         <Phone size={18} />
@@ -64,7 +64,7 @@ export default function ActionPills({
         disabled={videoPrice === null}
         className={`flex flex-col items-center justify-center gap-1 px-3 py-3 rounded-lg font-bold transition text-sm ${videoPrice !== null
           ? 'bg-linear-to-br from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white cursor-pointer'
-          : 'bg-gray-700 text-gray-400 cursor-not-allowed opacity-50'
+          : 'bg-canvas-alt text-ink-faint cursor-not-allowed opacity-60'
           }`}
       >
         <Video size={18} />
@@ -82,7 +82,7 @@ export default function ActionPills({
             ? 'bg-linear-to-br from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white cursor-pointer'
             : subStatus?.isSubscribed
               ? 'bg-linear-to-br from-green-600 to-green-700 text-white cursor-default'
-              : 'bg-gray-700 text-gray-400 cursor-not-allowed opacity-50'
+              : 'bg-canvas-alt text-ink-faint cursor-not-allowed opacity-60'
           }`}
       >
         <Crown size={18} />
@@ -100,7 +100,7 @@ export default function ActionPills({
 
 
       {subStatus?.isSubscribed && (
-        <div className="flex flex-col items-center justify-center gap-1 bg-gradient-to-br from-green-600 to-green-700 text-white px-3 py-3 rounded-lg font-bold text-sm">
+        <div className="flex flex-col items-center justify-center gap-1 bg-linear-to-br from-green-600 to-green-700 text-white px-3 py-3 rounded-lg font-bold text-sm">
           <Crown size={18} />
           <span>Suscrito</span>
           <span className="text-xs opacity-90">Acceso completo</span>

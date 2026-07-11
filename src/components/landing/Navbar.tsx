@@ -5,9 +5,18 @@ import { usePathname } from "next/navigation";
 import { RegisterLink } from "@/components/RegisterLink";
 import { MobileMenu } from "@/components/MobileMenu";
 import { NAV_LINKS } from "@/lib/navLinks";
+import { useAuth } from "@/context/AuthContext";
+
+const DASHBOARD_BY_ROLE: Record<string, string> = {
+  USER: "/dashboard",
+  ANFITRIONA: "/dashboard/anfitriona",
+  ADMIN: "/admin",
+};
 
 export function Navbar() {
   const pathname = usePathname();
+  const { user, isHydrated } = useAuth();
+  const dashboardHref = user ? DASHBOARD_BY_ROLE[user.role] ?? "/dashboard" : "/dashboard";
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-line">
@@ -44,15 +53,26 @@ export function Navbar() {
 
         {/* Auth buttons */}
         <div className="hidden md:flex items-center gap-2">
-          <Link
-            href="/login"
-            className="text-ink-soft hover:text-ink text-sm font-semibold px-4 py-2 rounded-xl hover:bg-brand-soft transition-all"
-          >
-            Iniciar sesión
-          </Link>
-          <RegisterLink className="bg-linear-to-r from-brand to-brand-violet hover:from-brand-strong hover:to-brand text-white text-sm font-black px-5 py-2.5 rounded-xl transition-all shadow-lg shadow-brand/25">
-            Quiero ser creador
-          </RegisterLink>
+          {isHydrated && user ? (
+            <Link
+              href={dashboardHref}
+              className="bg-linear-to-r from-brand to-brand-violet hover:from-brand-strong hover:to-brand text-white text-sm font-black px-5 py-2.5 rounded-xl transition-all shadow-lg shadow-brand/25"
+            >
+              Ir al panel
+            </Link>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className="text-ink-soft hover:text-ink text-sm font-semibold px-4 py-2 rounded-xl hover:bg-brand-soft transition-all"
+              >
+                Iniciar sesión
+              </Link>
+              <RegisterLink className="bg-linear-to-r from-brand to-brand-violet hover:from-brand-strong hover:to-brand text-white text-sm font-black px-5 py-2.5 rounded-xl transition-all shadow-lg shadow-brand/25">
+                Quiero ser creador
+              </RegisterLink>
+            </>
+          )}
         </div>
 
         <MobileMenu />

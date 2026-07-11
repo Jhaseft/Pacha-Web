@@ -31,8 +31,8 @@ export default function GallerySection({ profile, images, username }: GallerySec
     <>
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-white font-bold text-xl">Contenido normal</h3>
-          <Link href={`/anfitrionas/${username}/album`} className="text-pink-500 hover:text-pink-400 text-sm font-semibold transition">
+          <h3 className="text-ink font-bold text-xl">Contenido normal</h3>
+          <Link href={`/anfitrionas/${username}/album`} className="text-brand hover:text-brand-strong text-sm font-semibold transition">
             Ver todo
           </Link>
         </div>

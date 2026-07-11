@@ -1,7 +1,7 @@
 'use client';
 
+import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useAuth } from '@/context/AuthContext';
 import {
   Home,
   MessageCircle,
@@ -9,32 +9,32 @@ import {
   Gem,
   CircleDollarSign,
   LogOut,
-  Settings,
 } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
+import { Brand } from '@/components/Brand';
 
 type Role = 'ANFITRIONA' | 'USER' | 'ADMIN';
 
-const menuByRole = {
+type Tab = { href: string; title: string; icon: typeof Home };
+
+const tabsByRole: Record<Role, Tab[]> = {
   ANFITRIONA: [
-    { name: 'dashboard/anfitriona', title: 'Inicio', icon: Home },
-    { name: 'dashboard/earnings', title: 'Ganancias', icon: CircleDollarSign },
-    { name: 'dashboard/messages', title: 'Mensajes', icon: MessageCircle },
-    { name: 'dashboard/profile', title: 'Perfil', icon: User },
-    { name: 'dashboard/settings', title: 'Configuración', icon: Settings },
+    { href: '/dashboard/anfitriona', title: 'Inicio', icon: Home },
+    { href: '/dashboard/earnings', title: 'Ganancias', icon: CircleDollarSign },
+    { href: '/dashboard/chats', title: 'Chats', icon: MessageCircle },
+    { href: '/dashboard/perfil', title: 'Perfil', icon: User },
   ],
   USER: [
-    { name: 'dashboard', title: 'Inicio', icon: Home },
-    { name: 'dashboard/messages', title: 'Mensajes', icon: MessageCircle },
-    { name: 'dashboard/credits', title: 'Créditos', icon: Gem },
-    { name: 'dashboard/profile', title: 'Perfil', icon: User },
-    { name: 'dashboard/settings', title: 'Configuración', icon: Settings },
+    { href: '/dashboard', title: 'Inicio', icon: Home },
+    { href: '/dashboard/chats', title: 'Chats', icon: MessageCircle },
+    { href: '/dashboard/creditos', title: 'Créditos', icon: Gem },
+    { href: '/dashboard/perfil', title: 'Perfil', icon: User },
   ],
   ADMIN: [
-    { name: 'admin', title: 'Dashboard', icon: Home },
-    { name: 'admin/clientes', title: 'Clientes', icon: User },
-    { name: 'admin/anfitrionas', title: 'Anfitrionas', icon: MessageCircle },
-    { name: 'admin/packages', title: 'Paquetes', icon: Gem },
-    { name: 'admin/settings', title: 'Configuración', icon: Settings },
+    { href: '/admin', title: 'Inicio', icon: Home },
+    { href: '/admin/clientes', title: 'Clientes', icon: User },
+    { href: '/admin/anfitrionas', title: 'Anfitrionas', icon: MessageCircle },
+    { href: '/admin/packages', title: 'Paquetes', icon: Gem },
   ],
 };
 
@@ -46,89 +46,72 @@ export default function Sidebar() {
   if (!user) return null;
 
   const role = (user.role as Role) || 'USER';
-  const menu = menuByRole[role];
+  const tabs = tabsByRole[role];
 
-  const isActive = (menuName: string) => {
-    if (menuName === 'dashboard' || menuName === 'admin') {
-      return pathname === `/${menuName}` || (pathname.startsWith(`/${menuName}/`) && !menu.some(m => m.name !== menuName && pathname.includes(m.name)));
-    }
-    return pathname.includes(menuName);
-  };
+  const fullName =
+    [user.firstName, user.lastName].filter(Boolean).join(' ') || 'Usuario';
+  const initials = (user.firstName?.[0] ?? 'U').toUpperCase();
+  const roleLabel =
+    role === 'ANFITRIONA' ? 'Anfitriona' : role === 'ADMIN' ? 'Admin' : 'Cliente';
 
-  const handleLogout = async () => {
+  const isActive = (href: string) =>
+    href === '/dashboard' || href === '/admin'
+      ? pathname === href
+      : pathname.startsWith(href);
+
+  const handleLogout = () => {
     logout();
-    router.push('/login');
+    router.replace('/login');
   };
 
   return (
-    <>
-      <div className="hidden md:flex flex-col w-64 bg-gradient-to-b from-black to-gray-950 border-r border-white/10 h-screen fixed left-0 top-0">
-        {/* Logo/Brand */}
-        <div className="p-6 border-b border-white/10">
-          <h1 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-600">
-            Pachamama
-          </h1>
-        </div>
+    <aside className="hidden md:flex fixed top-0 left-0 z-40 h-screen w-64 flex-col border-r border-line bg-card">
+      {/* Logo */}
+      <div className="h-16 flex items-center px-5 border-b border-line">
+        <Brand />
+      </div>
 
-        {/* User Info */}
-        <div className="px-6 py-4 border-b border-white/10">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center">
-              <span className="text-white font-bold text-sm">
-                {user.firstName?.[0]?.toUpperCase()}
-              </span>
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-white font-semibold text-sm truncate">
-                {user.firstName}
-              </p>
-              <p className="text-gray-400 text-xs truncate">{user.email}</p>
-            </div>
+      {/* Navegación */}
+      <nav className="flex-1 overflow-y-auto px-3 py-4 flex flex-col gap-1">
+        {tabs.map((tab) => {
+          const Icon = tab.icon;
+          const active = isActive(tab.href);
+          return (
+            <Link
+              key={tab.href}
+              href={tab.href}
+              className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-colors ${
+                active
+                  ? 'bg-brand-soft text-brand'
+                  : 'text-ink-soft hover:bg-canvas-alt hover:text-ink'
+              }`}
+            >
+              <Icon size={20} />
+              {tab.title}
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* Usuario + logout */}
+      <div className="border-t border-line p-3">
+        <div className="flex items-center gap-3 rounded-xl px-2 py-2">
+          <div className="w-10 h-10 rounded-full bg-linear-to-tr from-brand to-brand-violet flex items-center justify-center text-white text-sm font-black shrink-0">
+            {initials}
+          </div>
+          <div className="min-w-0">
+            <p className="text-ink text-sm font-bold truncate">{fullName}</p>
+            <p className="text-ink-faint text-xs">{roleLabel}</p>
           </div>
         </div>
-
-        {/* Navigation Menu */}
-        <nav className="flex-1 px-3 py-6 space-y-2 overflow-y-auto">
-          {menu.map((item) => {
-            const Icon = item.icon;
-            const active = isActive(item.name);
-
-            return (
-              <button
-                key={item.name}
-                onClick={() => router.push(`/${item.name}`)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all group ${
-                  active
-                    ? 'bg-gradient-to-r from-pink-500/20 to-purple-600/20 text-pink-500 border border-pink-500/30'
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
-                }`}
-              >
-                <Icon
-                  size={20}
-                  className={`transition-all ${
-                    active ? 'text-pink-500' : 'group-hover:text-pink-500'
-                  }`}
-                />
-                <span className="font-medium text-sm">{item.title}</span>
-                {active && (
-                  <div className="ml-auto w-2 h-2 rounded-full bg-pink-500" />
-                )}
-              </button>
-            );
-          })}
-        </nav>
-
-        {/* Logout Button */}
-        <div className="p-6 border-t border-white/10">
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-500/10 transition-all group"
-          >
-            <LogOut size={20} />
-            <span className="font-medium text-sm">Cerrar sesión</span>
-          </button>
-        </div>
+        <button
+          onClick={handleLogout}
+          className="mt-1 w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-ink-soft hover:bg-red-50 hover:text-red-600 transition-colors"
+        >
+          <LogOut size={20} />
+          Cerrar sesión
+        </button>
       </div>
-    </>
+    </aside>
   );
 }

@@ -22,12 +22,11 @@ export function ChatWidget() {
   const [dismissed, setDismissed] = useState(false);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
 
-  // Ocultar ChatWidget en páginas de perfil de anfitriona
-  const isAnfitrioneProfile = pathname?.includes("/anfitrionas/") || pathname?.startsWith("/@");
-  
-  if (isAnfitrioneProfile) {
-    return null;
-  }
+  // Ocultar ChatWidget en el perfil de anfitriona y en la pantalla de llamada
+  const isAnfitrioneProfile =
+    pathname?.includes("/anfitrionas/") ||
+    pathname?.startsWith("/@") ||
+    pathname === "/call";
 
   useEffect(() => {
     const delays = [3000, 8000, 14000];
@@ -57,6 +56,11 @@ export function ChatWidget() {
   function openWidget() {
     setState("selector");
     dismiss();
+  }
+
+  // Ocultar en páginas de perfil de anfitriona (después de los hooks).
+  if (isAnfitrioneProfile) {
+    return null;
   }
 
   return (

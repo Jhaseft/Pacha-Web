@@ -1,13 +1,10 @@
 'use client';
 
 import type { ReactNode } from "react";
-import BottomNav from "../../components/navigation/BottomNav";
 
+// El chrome de la app (Sidebar en PC, BottomNav en móvil y el margen del
+// contenido) lo monta el layout raíz vía SidebarWrapper/ContentWrapper para
+// las rutas de app. Aquí solo fijamos el fondo claro del área de cliente.
 export default function DashboardLayout({ children }: { children: ReactNode }) {
-  return (
-    <div className="min-h-screen bg-black">
-      <div className="pb-20">{children}</div>
-      <BottomNav />
-    </div>
-  );
+  return <div className="min-h-screen bg-canvas text-ink">{children}</div>;
 }

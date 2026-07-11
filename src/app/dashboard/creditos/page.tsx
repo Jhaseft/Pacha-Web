@@ -12,8 +12,8 @@ import { getMyReferrals, type MyReferralsResponse } from "../../../lib/referrals
 function DiamondFilled({ className = "w-8 h-8" }: { className?: string }) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 64 64" fill="none">
-      <polygon points="32,4 58,24 32,60 6,24" fill="#f03eb3" stroke="#a844f2" strokeWidth="2" strokeLinejoin="round" />
-      <polygon points="32,4 48,24 32,36 16,24" fill="#ffb8ea" strokeLinejoin="round" />
+      <polygon points="32,4 58,24 32,60 6,24" fill="#6d5efc" stroke="#a855f7" strokeWidth="2" strokeLinejoin="round" />
+      <polygon points="32,4 48,24 32,36 16,24" fill="#c4b5fd" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -21,8 +21,8 @@ function DiamondFilled({ className = "w-8 h-8" }: { className?: string }) {
 function DiamondOutline({ className = "w-9 h-9" }: { className?: string }) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 64 64" fill="none">
-      <polygon points="32,4 58,24 32,60 6,24" fill="#f7d9f0" stroke="#f03eb3" strokeWidth="3" strokeLinejoin="round" />
-      <polygon points="32,4 48,24 32,36 16,24" fill="none" stroke="#f03eb3" strokeWidth="2" strokeLinejoin="round" />
+      <polygon points="32,4 58,24 32,60 6,24" fill="#efeaff" stroke="#6d5efc" strokeWidth="3" strokeLinejoin="round" />
+      <polygon points="32,4 48,24 32,36 16,24" fill="none" stroke="#6d5efc" strokeWidth="2" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -133,29 +133,29 @@ function CreditosContent() {
 
   if (!isHydrated || !user) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-secondary border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen bg-canvas flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-brand border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-canvas">
       <div className="max-w-lg mx-auto px-5 flex flex-col min-h-screen">
         {/* Encabezado */}
         <header className="pt-10 pb-6">
-          <h1 className="text-white font-black text-2xl">Créditos</h1>
-          <p className="text-white/40 text-sm">Recarga y gestiona tu saldo</p>
+          <h1 className="text-ink font-black text-2xl">Créditos</h1>
+          <p className="text-ink-faint text-sm">Recarga y gestiona tu saldo</p>
         </header>
 
         {/* Saldo */}
         <div className="flex justify-center mb-8">
-          <div className="flex items-center gap-4 border-2 border-secondary rounded-full px-10 py-4 shadow-[0_0_30px_rgba(240,62,179,0.25)]">
+          <div className="flex items-center gap-4 bg-card border-2 border-brand rounded-full px-10 py-4 shadow-[0_0_30px_rgba(109,94,252,0.2)]">
             <DiamondFilled className="w-10 h-10" />
             {balanceLoading ? (
-              <div className="w-20 h-11 bg-white/10 rounded-xl animate-pulse" />
+              <div className="w-20 h-11 bg-canvas-alt rounded-xl animate-pulse" />
             ) : (
-              <span className="text-white text-5xl font-black tracking-tight tabular-nums">
+              <span className="text-ink text-5xl font-black tracking-tight tabular-nums">
                 {(balance ?? 0).toLocaleString()}
               </span>
             )}
@@ -164,49 +164,49 @@ function CreditosContent() {
 
         {/* Referidos (anfitriona) */}
         {user.role === "ANFITRIONA" && (
-          <div className="bg-white/5 border border-surface-border rounded-3xl p-5 mb-8">
-            <p className="text-white/40 text-xs uppercase tracking-widest font-semibold mb-2">
+          <div className="bg-card border border-line rounded-3xl p-5 mb-8">
+            <p className="text-ink-faint text-xs uppercase tracking-widest font-semibold mb-2">
               Código de referido
             </p>
             {referralsLoading ? (
-              <div className="h-9 w-44 bg-white/10 rounded-xl animate-pulse" />
+              <div className="h-9 w-44 bg-canvas-alt rounded-xl animate-pulse" />
             ) : (
               <>
                 <div className="flex flex-wrap items-center gap-3">
-                  <p className="text-white text-2xl font-black tracking-wide">
+                  <p className="text-ink text-2xl font-black tracking-wide">
                     {referrals?.referralCode || "—"}
                   </p>
                   <button
                     onClick={handleCopyReferralCode}
                     disabled={!referrals?.referralCode}
-                    className="bg-white/10 hover:bg-white/15 disabled:opacity-50 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors"
+                    className="bg-canvas-alt hover:bg-brand-soft disabled:opacity-50 text-ink text-xs font-semibold px-3 py-2 rounded-lg transition-colors"
                   >
                     {copyLabel}
                   </button>
                   <Link
                     href="/dashboard/referrals"
-                    className="bg-secondary hover:bg-secondary/90 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors"
+                    className="bg-linear-to-r from-brand to-brand-violet text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors"
                   >
                     Ver creadores referidos
                   </Link>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-3">
-                  <div className="bg-black/30 rounded-xl px-3 py-2">
-                    <p className="text-white/30 text-[11px]">Porcentaje acordado</p>
-                    <p className="text-white font-bold">{agreedPercent}%</p>
+                  <div className="bg-canvas-alt rounded-xl px-3 py-2">
+                    <p className="text-ink-faint text-[11px]">Porcentaje acordado</p>
+                    <p className="text-ink font-bold">{agreedPercent}%</p>
                   </div>
-                  <div className="bg-black/30 rounded-xl px-3 py-2">
-                    <p className="text-white/30 text-[11px]">Creadores referidos</p>
-                    <p className="text-white font-bold">{referrals?.totalReferrals ?? 0}</p>
+                  <div className="bg-canvas-alt rounded-xl px-3 py-2">
+                    <p className="text-ink-faint text-[11px]">Creadores referidos</p>
+                    <p className="text-ink font-bold">{referrals?.totalReferrals ?? 0}</p>
                   </div>
-                  <div className="bg-black/30 rounded-xl px-3 py-2">
-                    <p className="text-white/30 text-[11px]">Ganancias por referidos</p>
-                    <p className="text-green-400 font-bold">
+                  <div className="bg-canvas-alt rounded-xl px-3 py-2">
+                    <p className="text-ink-faint text-[11px]">Ganancias por referidos</p>
+                    <p className="text-green-600 font-bold">
                       S/ {Number(referrals?.totalRewardAmount ?? 0).toFixed(2)}
                     </p>
                   </div>
                 </div>
-                {referralsError && <p className="text-red-400/80 text-xs mt-3">{referralsError}</p>}
+                {referralsError && <p className="text-red-500 text-xs mt-3">{referralsError}</p>}
               </>
             )}
           </div>
@@ -214,24 +214,24 @@ function CreditosContent() {
 
         {/* Título sección */}
         <div className="text-center mb-6">
-          <h2 className="text-white text-2xl font-black italic">¡Compra Créditos!</h2>
+          <h2 className="text-ink text-2xl font-black italic">¡Compra Créditos!</h2>
           <div className="flex items-center justify-center gap-2 mt-2">
-            <div className="h-0.5 w-10 bg-secondary" />
-            <div className="h-1 w-2 bg-secondary rounded-full" />
-            <div className="h-0.5 w-10 bg-secondary" />
+            <div className="h-0.5 w-10 bg-brand" />
+            <div className="h-1 w-2 bg-brand rounded-full" />
+            <div className="h-0.5 w-10 bg-brand" />
           </div>
         </div>
 
         {/* Banners */}
         {paySuccess && (
-          <div className="bg-green-900/30 border border-green-500/30 rounded-2xl px-4 py-3 mb-4">
-            <p className="text-green-400 text-sm font-bold">¡Pago procesado!</p>
-            <p className="text-green-400/70 text-xs mt-0.5">Tus créditos serán acreditados en breve.</p>
+          <div className="bg-green-50 border border-green-200 rounded-2xl px-4 py-3 mb-4">
+            <p className="text-green-700 text-sm font-bold">¡Pago procesado!</p>
+            <p className="text-green-600 text-xs mt-0.5">Tus créditos serán acreditados en breve.</p>
           </div>
         )}
         {payError && (
-          <div className="bg-red-900/30 border border-red-500/30 rounded-2xl px-4 py-3 mb-4">
-            <p className="text-red-400 text-sm">{payError}</p>
+          <div className="bg-red-50 border border-red-200 rounded-2xl px-4 py-3 mb-4">
+            <p className="text-red-600 text-sm">{payError}</p>
           </div>
         )}
 
@@ -240,21 +240,21 @@ function CreditosContent() {
           {pkgLoading ? (
             <div className="flex flex-col gap-4">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="bg-white/5 rounded-3xl h-[90px] animate-pulse" />
+                <div key={i} className="bg-canvas-alt rounded-3xl h-[90px] animate-pulse" />
               ))}
             </div>
           ) : packages.length === 0 ? (
             <div className="text-center py-16">
-              <p className="text-white/30 text-sm">No hay paquetes disponibles por el momento</p>
+              <p className="text-ink-faint text-sm">No hay paquetes disponibles por el momento</p>
             </div>
           ) : (
             <div className="flex flex-col gap-5">
               {packages.map((pkg) => {
                 const isThisPaying = paying && payingPkgId === pkg.id;
                 return (
-                  <div key={pkg.id} className="relative bg-white rounded-3xl px-5 py-5 shadow-xl">
+                  <div key={pkg.id} className="relative bg-card border border-line rounded-3xl px-5 py-5 shadow-xl">
                     <div className="absolute -top-3 right-5">
-                      <span className="bg-secondary text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-md">
+                      <span className="bg-brand text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-md">
                         BONO +10
                       </span>
                     </div>
@@ -262,11 +262,11 @@ function CreditosContent() {
                       <div className="flex items-center gap-3 flex-1 min-w-0">
                         <DiamondOutline className="w-10 h-10 shrink-0" />
                         <div className="min-w-0">
-                          <p className="text-secondary text-3xl font-black leading-none tracking-tight">
+                          <p className="text-brand text-3xl font-black leading-none tracking-tight">
                             {pkg.credits.toLocaleString()}
                           </p>
-                          <p className="text-secondary text-sm font-bold">créditos</p>
-                          <p className="text-secondary/60 text-sm font-semibold">
+                          <p className="text-brand text-sm font-bold">créditos</p>
+                          <p className="text-ink-soft text-sm font-semibold">
                             Soles / {Number(pkg.price) % 1 === 0
                               ? Number(pkg.price).toFixed(0)
                               : Number(pkg.price).toFixed(2)}
@@ -276,7 +276,7 @@ function CreditosContent() {
                       <button
                         onClick={() => handleBuy(pkg)}
                         disabled={paying}
-                        className="bg-secondary hover:bg-secondary/90 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed text-white font-black text-base px-7 py-3.5 rounded-2xl transition-all shrink-0 min-w-[110px] flex items-center justify-center shadow-md"
+                        className="bg-linear-to-r from-brand to-brand-violet hover:from-brand-strong hover:to-brand active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed text-white font-black text-base px-7 py-3.5 rounded-2xl transition-all shrink-0 min-w-28 flex items-center justify-center shadow-md shadow-brand/30"
                       >
                         {isThisPaying ? (
                           <div className="w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
@@ -290,7 +290,7 @@ function CreditosContent() {
               })}
             </div>
           )}
-          <p className="text-white/15 text-xs text-center mt-8">
+          <p className="text-ink-faint text-xs text-center mt-8">
             Pagos procesados de forma segura por Flow
           </p>
         </div>

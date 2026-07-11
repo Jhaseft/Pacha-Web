@@ -69,6 +69,26 @@ export async function getPublicHostessProfile(id: string): Promise<AnfitrionePro
   return response.data;
 }
 
+export interface UnlockImageResponse {
+  alreadyUnlocked: boolean;
+  creditsSpent: number;
+  imageUrl: string;
+}
+
+/**
+ * Desbloquea una imagen premium de la galería descontando créditos.
+ * POST /anfitrionas/public/:id/gallery/:imageId/unlock (requiere token USER).
+ */
+export async function unlockGalleryImage(
+  anfitrionaId: string,
+  imageId: string,
+): Promise<UnlockImageResponse> {
+  const response = await apiAxios.post<UnlockImageResponse>(
+    `/anfitrionas/public/${anfitrionaId}/gallery/${imageId}/unlock`,
+  );
+  return response.data;
+}
+
 export async function getPublicServicePrices(profileId: string): Promise<ServicePrice[]> {
   try {
     const response = await apiAxios.get<ServicePrice[]>(`/service-prices/public/${profileId}`);

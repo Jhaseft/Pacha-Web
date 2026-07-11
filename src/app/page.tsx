@@ -14,13 +14,12 @@ export default function LandingPage() {
     <div className="min-h-screen bg-canvas text-ink overflow-x-hidden pb-24 md:pb-0">
       <Navbar />
 
-      {/* Orden del mockup: hero → qué es → misión → visión */}
+    
       <HeroSection />
       <WhatIsSection />
       <MissionSection />
       <VisionSection />
 
-      {/* Empujados abajo: registro, video y contacto */}
       <HowToRegisterSection />
       <VideoSection />
       <LandingContactSection />

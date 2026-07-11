@@ -1,13 +1,16 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { isAppRoute } from '@/lib/isAppRoute';
 import Sidebar from './Sidebar';
 
 export default function SidebarWrapper() {
   const { user, isHydrated } = useAuth();
-  const isAuthenticated = isHydrated && user;
+  const pathname = usePathname();
 
-  if (!isAuthenticated) return null;
+  // Solo en rutas de app y con sesión iniciada.
+  if (!(isHydrated && user) || !isAppRoute(pathname)) return null;
 
   return <Sidebar />;
 }

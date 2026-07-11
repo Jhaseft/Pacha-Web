@@ -75,12 +75,24 @@ export default function ProfilePage({ params }: ProfilePageProps) {
     if (!profile) return;
     const price = servicePrices.find((p) => p.serviceType === callType)?.price;
     if (price === undefined) return;
-    router.push(`/call?anfitrionaId=${profile.id}&callType=${callType}&price=${price}`);
+    const params = new URLSearchParams({
+      anfitrionaId: profile.id,
+      anfitrionaName: profile.name,
+      anfitrionaAvatar: profile.avatar ?? '',
+      callType,
+      pricePerMinute: String(price),
+    });
+    router.push(`/call?${params.toString()}`);
   };
 
   const handleChat = () => {
     if (!profile) return;
-    router.push(`/chat?otherUserId=${profile.id}&otherUserName=${profile.name}`);
+    const params = new URLSearchParams({
+      otherUserId: profile.id,
+      name: profile.name,
+      avatar: profile.avatar ?? '',
+    });
+    router.push(`/dashboard/chats/new?${params.toString()}`);
   };
 
   const handleSubscribe = async () => {
@@ -104,20 +116,20 @@ export default function ProfilePage({ params }: ProfilePageProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-linear-to-b from-gray-950 to-black flex items-center justify-center">
-        <Loader2 size={40} className="text-pink-500 animate-spin" />
+      <div className="min-h-screen bg-canvas flex items-center justify-center">
+        <Loader2 size={40} className="text-brand animate-spin" />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-linear-to-b from-gray-950 to-black flex flex-col items-center justify-center px-4">
-        <AlertCircle size={56} className="text-gray-500 mb-4" />
-        <p className="text-white text-center mb-8 text-lg">{error}</p>
+      <div className="min-h-screen bg-canvas flex flex-col items-center justify-center px-4">
+        <AlertCircle size={56} className="text-ink-faint mb-4" />
+        <p className="text-ink text-center mb-8 text-lg">{error}</p>
         <button
           onClick={loadProfile}
-          className="bg-linear-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white px-8 py-3 rounded-full font-bold transition"
+          className="bg-linear-to-r from-brand to-brand-violet hover:from-brand-strong hover:to-brand text-white px-8 py-3 rounded-full font-bold transition"
         >
           Reintentar
         </button>
@@ -127,17 +139,17 @@ export default function ProfilePage({ params }: ProfilePageProps) {
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-linear-to-b from-gray-950 to-black flex items-center justify-center">
-        <p className="text-gray-400 text-lg">Anfitriona no encontrada.</p>
+      <div className="min-h-screen bg-canvas flex items-center justify-center">
+        <p className="text-ink-faint text-lg">Anfitriona no encontrada.</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-gray-950 to-black">
+    <div className="min-h-screen bg-canvas">
       <button
         onClick={() => router.back()}
-        className="fixed top-4 left-4 z-20 bg-black/60 hover:bg-black/80 p-2.5 rounded-full transition backdrop-blur-sm"
+        className="fixed top-4 left-4 z-20 bg-black/50 hover:bg-black/70 p-2.5 rounded-full transition backdrop-blur-sm"
       >
         <ArrowLeft size={20} className="text-white" />
       </button>
@@ -159,17 +171,17 @@ export default function ProfilePage({ params }: ProfilePageProps) {
 
           <button
             onClick={() => router.push('/app')}
-            className="w-full bg-linear-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-4 rounded-xl transition flex items-center justify-center gap-2 text-lg">
+            className="w-full bg-linear-to-r from-brand to-brand-violet hover:from-brand-strong hover:to-brand text-white font-bold py-4 rounded-xl transition flex items-center justify-center gap-2 text-lg shadow-lg shadow-brand/25">
             <Download size={20} />
             Abrir en la app
           </button>
 
-          <p className="text-center text-gray-400 text-sm">
+          <p className="text-center text-ink-faint text-sm">
             ¿No tienes la app? {' '}
             <a
               href="https://play.google.com/store/apps/details?id=com.sanamente.appoficial"
               target='_blank'
-              className="text-pink-500 hover:text-pink-400 cursor-pointer">
+              className="text-brand hover:text-brand-strong font-semibold cursor-pointer">
               Descárgala gratis
             </a>
           </p>
