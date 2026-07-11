@@ -165,7 +165,7 @@ export default function AnfitrianaPage() {
 
           {/* Mis precios */}
           <button
-            onClick={() => router.push('/dashboard/prices')}
+            onClick={() => router.push('/dashboard/anfitriona/precios')}
             className="bg-gradient-to-br from-indigo-500 to-indigo-700 rounded-2xl md:rounded-3xl py-4 md:py-5 px-3 md:px-4 flex flex-col items-center justify-center hover:shadow-lg transition-shadow"
           >
             <Settings size={32} className="text-white mb-3" />
