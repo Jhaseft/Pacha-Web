@@ -22,7 +22,7 @@ const tabsByRole: Record<Role, Tab[]> = {
     { href: '/dashboard/anfitriona', title: 'Inicio', icon: Home },
     { href: '/dashboard/earnings', title: 'Ganancias', icon: CircleDollarSign },
     { href: '/dashboard/chats', title: 'Chats', icon: MessageCircle },
-    { href: '/dashboard/perfil', title: 'Perfil', icon: User },
+    { href: '/dashboard/anfitriona/perfil', title: 'Perfil', icon: User },
   ],
   USER: [
     { href: '/dashboard', title: 'Inicio', icon: Home },
@@ -54,10 +54,17 @@ export default function Sidebar() {
   const roleLabel =
     role === 'ANFITRIONA' ? 'Anfitriona' : role === 'ADMIN' ? 'Admin' : 'Cliente';
 
-  const isActive = (href: string) =>
-    href === '/dashboard' || href === '/admin'
-      ? pathname === href
-      : pathname.startsWith(href);
+  const isActive = (href: string) => {
+    if (href === '/dashboard' || href === '/admin') {
+      return pathname === href;
+    }
+    // For anfitriona routes, check exact match first
+    if (href === '/dashboard/anfitriona') {
+      return pathname === href;
+    }
+    // For other routes, match with trailing slash
+    return pathname === href || pathname.startsWith(href + '/');
+  };
 
   const handleLogout = () => {
     logout();
