@@ -3,4 +3,8 @@ export { EarningsSection } from './EarningsSection';
 export { PricesSection } from './PricesSection';
 export { ActionButtons } from './ActionButtons';
 export { StoriesSection } from './StoriesSection';
+export { CreateHistoryModal } from './CreateHistoryModal';
+export { StoryViewerModal } from './StoryViewerModal';
+export { GalleryItemViewer } from './GalleryItemViewer';
 export { GallerySection } from './GallerySection';
+export { PublishGalleryModal } from './PublishGalleryModal';

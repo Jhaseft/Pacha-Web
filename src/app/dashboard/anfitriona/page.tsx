@@ -90,7 +90,7 @@ export default function AnfitrianaPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="w-full px-5 md:px-12 lg:px-16 py-6 md:py-8">
+      <div className="max-w-lg mx-auto px-5 py-6">
         
         {/* Header con resumen */}
         <div className="mb-4">
@@ -117,7 +117,7 @@ export default function AnfitrianaPage() {
             {/* Hoy - AnimatedBorderCard */}
             <div className="">
               <div className=" bg-gradient-to-br from-pink-500 to-blue-900 rounded-2xl px-5 md:px-6 py-5 md:py-6">
-                <p className="text-pink-500 text-xs md:text-sm mb-2">Hoy</p>
+                <p className="text-white text-xs md:text-sm mb-2">Hoy</p>
                 <p className="text-yellow-300 text-2xl md:text-3xl font-black">{earnings?.today ?? 0} cr</p>
                 <p className="text-yellow-300 text-xs md:text-sm font-semibold opacity-70 mt-1">≈ ${earnings?.today ?? 0}</p>
               </div>
@@ -126,7 +126,7 @@ export default function AnfitrianaPage() {
             {/* Esta semana - GlowingCard */}
             <div className="glowing-card">
               <div className="glowing-card-inner bg-gradient-to-br from-purple-900 to-purple-600 rounded-2xl px-5 md:px-6 py-5 md:py-6">
-                <p className="text-purple-200 text-xs md:text-sm mb-2 opacity-85">Esta semana</p>
+                <p className="text-white text-xs md:text-sm mb-2 opacity-85">Esta semana</p>
                 <p className="text-yellow-300 text-2xl md:text-3xl font-black">{earnings?.thisWeek ?? 0} cr</p>
                 <p className="text-yellow-300 text-xs md:text-sm font-semibold opacity-70 mt-1">≈ ${earnings?.thisWeek ?? 0}</p>
               </div>
@@ -139,7 +139,7 @@ export default function AnfitrianaPage() {
         <div className="grid grid-cols-3 md:grid-cols-3 gap-3 md:gap-6 mb-4">
           {/* Mensajes */}
           <button
-            onClick={() => router.push('/dashboard/messages')}
+            onClick={() => router.push('/dashboard/chats')}
             className="bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl md:rounded-3xl py-4 md:py-5 px-3 md:px-4 flex flex-col items-center justify-center hover:shadow-lg transition-shadow"
           >
             <MessageCircle size={32} className="text-white mb-3" />

@@ -83,15 +83,15 @@ export function AddBankAccountModal({
 
       {/* Mobile: Bottom Sheet | Desktop: Centered Dialog */}
       <div className="fixed inset-0 z-50 flex items-end md:items-center md:justify-center pointer-events-none">
-        <div className="w-full md:w-full md:max-w-md bg-[#111] rounded-t-3xl md:rounded-3xl px-6 pt-5 pb-8 md:pb-6 max-h-[90vh] md:max-h-[95vh] overflow-y-auto pointer-events-auto md:mx-4 md:mr-0">
+        <div className="w-full md:w-full md:max-w-md bg-white rounded-t-3xl md:rounded-3xl px-6 pt-5 pb-8 md:pb-6 max-h-[90vh] md:max-h-[95vh] overflow-y-auto pointer-events-auto md:mx-4 md:mr-0 shadow-2xl">
           <div className="flex items-center justify-between mb-5">
-            <h2 className="text-white text-lg md:text-xl font-bold">Agregar método de pago</h2>
-            <button onClick={onClose} className="text-gray-400 hover:text-white transition">
+            <h2 className="text-black text-lg md:text-xl font-bold">Agregar método de pago</h2>
+            <button onClick={onClose} className="text-gray-500 hover:text-black transition">
               <X size={22} />
             </button>
           </div>
 
-          <p className="text-gray-400 text-xs mb-3 font-medium">Tipo de método</p>
+          <p className="text-gray-600 text-xs mb-3 font-medium">Tipo de método</p>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-6">
             {methodOptions.map((opt) => {
               const active = methodType === opt.key;
@@ -105,14 +105,14 @@ export function AddBankAccountModal({
                   }}
                   className={`rounded-lg p-3 text-center transition-all ${
                     active
-                      ? 'bg-purple-500/15 border border-purple-500/30'
-                      : 'bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#3a3a3a]'
+                      ? 'bg-purple-50 border border-purple-500'
+                      : 'bg-gray-100 border border-gray-300 hover:border-gray-400'
                   }`}
                 >
-                  <p className={`font-bold text-sm ${active ? 'text-white' : 'text-gray-400'}`}>
+                  <p className={`font-bold text-sm ${active ? 'text-purple-700' : 'text-black'}`}>
                     {opt.label}
                   </p>
-                  <p className={`text-xs mt-1 ${active ? 'text-gray-300' : 'text-gray-600'}`}>
+                  <p className={`text-xs mt-1 ${active ? 'text-purple-600' : 'text-gray-500'}`}>
                     {opt.sub}
                   </p>
                 </button>
@@ -122,55 +122,55 @@ export function AddBankAccountModal({
 
           {methodType === 'BCP' && (
             <>
-              <label className="text-gray-400 text-xs mb-1 block font-medium">Número de cuenta BCP</label>
+              <label className="text-gray-600 text-xs mb-1 block font-medium">Número de cuenta BCP</label>
               <input
                 type="text"
                 placeholder="Ej: 1234567890123"
                 value={accountNumber}
                 onChange={(e) => setAccountNumber(e.target.value)}
-                className="w-full bg-[#1a1a1a] text-white rounded-xl px-4 py-3 mb-4 border border-[#2a2a2a] focus:border-purple-500 focus:outline-none transition"
+                className="w-full bg-gray-100 text-black placeholder:text-gray-400 rounded-xl px-4 py-3 mb-4 border border-gray-300 focus:border-purple-500 focus:outline-none transition"
               />
             </>
           )}
 
           {methodType === 'OTHER_BANK' && (
             <>
-              <label className="text-gray-400 text-xs mb-1 block font-medium">Banco</label>
+              <label className="text-gray-600 text-xs mb-1 block font-medium">Banco</label>
               <button
                 onClick={() => setShowBankPicker(true)}
-                className="w-full flex items-center justify-between bg-[#1a1a1a] rounded-xl px-4 py-3 mb-4 text-gray-400 border border-[#2a2a2a] hover:border-[#3a3a3a] transition"
+                className="w-full flex items-center justify-between bg-gray-100 rounded-xl px-4 py-3 mb-4 text-gray-500 border border-gray-300 hover:border-gray-400 transition"
               >
-                <span className={selectedBank ? 'text-white' : ''}>{selectedBank ? selectedBank.name : 'Seleccionar banco'}</span>
+                <span className={selectedBank ? 'text-black' : ''}>{selectedBank ? selectedBank.name : 'Seleccionar banco'}</span>
                 <ChevronDown size={18} />
               </button>
 
-              <label className="text-gray-400 text-xs mb-1 block font-medium">CCI (código interbancario)</label>
+              <label className="text-gray-600 text-xs mb-1 block font-medium">CCI (código interbancario)</label>
               <input
                 type="text"
                 placeholder="Ej: 00212312300012345678"
                 value={accountNumber}
                 onChange={(e) => setAccountNumber(e.target.value)}
-                className="w-full bg-[#1a1a1a] text-white rounded-xl px-4 py-3 mb-4 border border-[#2a2a2a] focus:border-purple-500 focus:outline-none transition"
+                className="w-full bg-gray-100 text-black placeholder:text-gray-400 rounded-xl px-4 py-3 mb-4 border border-gray-300 focus:border-purple-500 focus:outline-none transition"
               />
             </>
           )}
 
           {methodType === 'PAYPAL' && (
             <>
-              <label className="text-gray-400 text-xs mb-1 block font-medium">Email de PayPal</label>
+              <label className="text-gray-600 text-xs mb-1 block font-medium">Email de PayPal</label>
               <input
                 type="email"
                 placeholder="tu@email.com"
                 value={paypalEmail}
                 onChange={(e) => setPaypalEmail(e.target.value)}
-                className="w-full bg-[#1a1a1a] text-white rounded-xl px-4 py-3 mb-4 border border-[#2a2a2a] focus:border-purple-500 focus:outline-none transition"
+                className="w-full bg-gray-100 text-black placeholder:text-gray-400 rounded-xl px-4 py-3 mb-4 border border-gray-300 focus:border-purple-500 focus:outline-none transition"
               />
             </>
           )}
 
           {(methodType === 'BYBIT' || methodType === 'BINANCE') && (
             <>
-              <label className="text-gray-400 text-xs mb-1 block font-medium">
+              <label className="text-gray-600 text-xs mb-1 block font-medium">
                 ID de {methodType === 'BYBIT' ? 'Bybit' : 'Binance'}
               </label>
               <input
@@ -178,18 +178,18 @@ export function AddBankAccountModal({
                 placeholder="Ej: 123456789"
                 value={accountNumber}
                 onChange={(e) => setAccountNumber(e.target.value)}
-                className="w-full bg-[#1a1a1a] text-white rounded-xl px-4 py-3 mb-4 border border-[#2a2a2a] focus:border-purple-500 focus:outline-none transition"
+                className="w-full bg-gray-100 text-black placeholder:text-gray-400 rounded-xl px-4 py-3 mb-4 border border-gray-300 focus:border-purple-500 focus:outline-none transition"
               />
             </>
           )}
 
-          <label className="text-gray-400 text-xs mb-1 block font-medium">Titular (opcional)</label>
+          <label className="text-gray-600 text-xs mb-1 block font-medium">Titular (opcional)</label>
           <input
             type="text"
             placeholder="Nombre del titular"
             value={holderName}
             onChange={(e) => setHolderName(e.target.value)}
-            className="w-full bg-[#1a1a1a] text-white rounded-xl px-4 py-3 mb-6 border border-[#2a2a2a] focus:border-purple-500 focus:outline-none transition"
+            className="w-full bg-gray-100 text-black placeholder:text-gray-400 rounded-xl px-4 py-3 mb-6 border border-gray-300 focus:border-purple-500 focus:outline-none transition"
           />
 
           <button
@@ -206,7 +206,7 @@ export function AddBankAccountModal({
             <>
               <div className="fixed inset-0 bg-black/60 z-40" onClick={() => setShowBankPicker(false)} />
               <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
-                <div className="bg-[#1a1a1a] rounded-2xl w-80 max-h-96 overflow-y-auto pointer-events-auto border border-[#2a2a2a]">
+                <div className="bg-white rounded-2xl w-80 max-h-96 overflow-y-auto pointer-events-auto border border-gray-200 shadow-2xl">
                   {banks.length === 0 ? (
                     <div className="py-8 text-center">
                       <p className="text-gray-500 text-sm">No hay bancos disponibles</p>
@@ -219,7 +219,7 @@ export function AddBankAccountModal({
                           setSelectedBank(bank);
                           setShowBankPicker(false);
                         }}
-                        className="w-full flex items-center justify-between px-5 py-4 border-b border-[#2a2a2a] hover:bg-[#2a2a2a] transition text-white"
+                        className="w-full flex items-center justify-between px-5 py-4 border-b border-gray-200 hover:bg-gray-100 transition text-black"
                       >
                         <span>{bank.name}</span>
                         {selectedBank?.id === bank.id && <CheckCircle size={18} className="text-purple-500" />}

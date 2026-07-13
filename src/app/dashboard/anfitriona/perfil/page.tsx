@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import {
@@ -10,6 +10,10 @@ import {
   ActionButtons,
   StoriesSection,
   GallerySection,
+  CreateHistoryModal,
+  PublishGalleryModal,
+  StoryViewerModal,
+  GalleryItemViewer,
 } from '@/components/anfitriona/perfil';
 import {
   apiGetMyProfile,
@@ -17,12 +21,21 @@ import {
   apiGetMyEarnings,
   apiGetMyServicePrices,
   apiGetMyStories,
+  apiCreateHistory,
   apiDeleteHistory,
   apiGetMyGallery,
+  apiCreateGalleryImage,
   apiDeleteGalleryImage,
   apiSetFeaturedGalleryImage,
 } from '@/lib/perfil';
-import { MyProfileData, EarningsData, ServicePrice, HistoryItem, GalleryItem } from '@/types/perfil';
+import {
+  MyProfileData,
+  EarningsData,
+  ServicePrice,
+  HistoryItem,
+  GalleryItem,
+  PublishGalleryForm,
+} from '@/types/perfil';
 
 export default function PerfilPage() {
   const router = useRouter();
@@ -38,6 +51,31 @@ export default function PerfilPage() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [togglingOnline, setTogglingOnline] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState<boolean | null>(null);
+
+  // Subida de historias: el "+" abre el selector de archivos y, al elegir, el modal.
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [storyFile, setStoryFile] = useState<File | null>(null);
+  const [storyPreviewUrl, setStoryPreviewUrl] = useState<string | null>(null);
+  const [storyModalVisible, setStoryModalVisible] = useState(false);
+  const [storyCredits, setStoryCredits] = useState('0');
+  const [uploadingStory, setUploadingStory] = useState(false);
+  const [storyError, setStoryError] = useState('');
+
+  // Subida a la galería: mismo patrón que las historias, pero solo imágenes.
+  const galleryInputRef = useRef<HTMLInputElement>(null);
+  const [galleryFile, setGalleryFile] = useState<File | null>(null);
+  const [galleryPreviewUrl, setGalleryPreviewUrl] = useState<string | null>(null);
+  const [galleryModalVisible, setGalleryModalVisible] = useState(false);
+  const [galleryForm, setGalleryForm] = useState<PublishGalleryForm>({
+    isPremium: false,
+    unlockCredits: '',
+  });
+  const [uploadingGallery, setUploadingGallery] = useState(false);
+  const [galleryError, setGalleryError] = useState('');
+
+  // Visores a pantalla completa.
+  const [viewingStory, setViewingStory] = useState<HistoryItem | null>(null);
+  const [viewingImage, setViewingImage] = useState<GalleryItem | null>(null);
 
   const loadAll = useCallback(async () => {
     try {
@@ -128,11 +166,49 @@ export default function PerfilPage() {
   };
 
   const handleAddStory = () => {
-    router.push('/dashboard/anfitriona/crear-historia');
+    setStoryError('');
+    fileInputRef.current?.click();
+  };
+
+  const handleStoryFileSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    // Permite volver a elegir el mismo archivo si se cancela y se reintenta.
+    e.target.value = '';
+    if (!file) return;
+
+    setStoryFile(file);
+    setStoryPreviewUrl(URL.createObjectURL(file));
+    setStoryCredits('0');
+    setStoryModalVisible(true);
+  };
+
+  const closeStoryModal = () => {
+    if (storyPreviewUrl) URL.revokeObjectURL(storyPreviewUrl);
+    setStoryModalVisible(false);
+    setStoryFile(null);
+    setStoryPreviewUrl(null);
+    setStoryCredits('0');
+    setStoryError('');
+  };
+
+  const handlePublishStory = async () => {
+    if (!storyFile) return;
+    setUploadingStory(true);
+    setStoryError('');
+    try {
+      await apiCreateHistory({ priceCredits: parseInt(storyCredits, 10) || 0 }, storyFile);
+      closeStoryModal();
+      const fresh = await apiGetMyStories();
+      setStories(fresh);
+    } catch (error) {
+      setStoryError(error instanceof Error ? error.message : 'Error al subir la historia');
+    } finally {
+      setUploadingStory(false);
+    }
   };
 
   const handleViewStory = (story: HistoryItem) => {
-    router.push(`/dashboard/anfitriona/historia/${story.id}`);
+    setViewingStory(story);
   };
 
   const handleDeleteStory = async (storyId: string) => {
@@ -140,7 +216,7 @@ export default function PerfilPage() {
       try {
         await apiDeleteHistory(storyId);
         setStories((prev) => prev.filter((s) => s.id !== storyId));
-        alert('La historia ha sido borrada.');
+        setViewingStory(null);
       } catch (error) {
         alert('Error al eliminar la historia');
         console.error(error);
@@ -149,11 +225,61 @@ export default function PerfilPage() {
   };
 
   const handleAddImage = () => {
-    router.push('/dashboard/anfitriona/agregar-galeria');
+    setGalleryError('');
+    galleryInputRef.current?.click();
+  };
+
+  const handleGalleryFileSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+
+    setGalleryFile(file);
+    setGalleryPreviewUrl(URL.createObjectURL(file));
+    setGalleryForm({ isPremium: false, unlockCredits: '' });
+    setGalleryModalVisible(true);
+  };
+
+  const closeGalleryModal = () => {
+    if (galleryPreviewUrl) URL.revokeObjectURL(galleryPreviewUrl);
+    setGalleryModalVisible(false);
+    setGalleryFile(null);
+    setGalleryPreviewUrl(null);
+    setGalleryForm({ isPremium: false, unlockCredits: '' });
+    setGalleryError('');
+  };
+
+  const handlePublishGallery = async () => {
+    if (!galleryFile) return;
+
+    const credits = parseFloat(galleryForm.unlockCredits);
+    if (galleryForm.isPremium && (!galleryForm.unlockCredits || isNaN(credits) || credits <= 0)) {
+      setGalleryError('Las fotos exclusivas necesitan un precio en créditos mayor a 0.');
+      return;
+    }
+
+    setUploadingGallery(true);
+    setGalleryError('');
+    try {
+      await apiCreateGalleryImage(
+        {
+          isPremium: galleryForm.isPremium,
+          unlockCredits: galleryForm.isPremium ? credits : undefined,
+        },
+        galleryFile
+      );
+      closeGalleryModal();
+      const fresh = await apiGetMyGallery();
+      setGallery(fresh);
+    } catch (error) {
+      setGalleryError(error instanceof Error ? error.message : 'Error al publicar la foto');
+    } finally {
+      setUploadingGallery(false);
+    }
   };
 
   const handleSelectImage = (item: GalleryItem) => {
-    router.push(`/dashboard/anfitriona/galeria/${item.id}`);
+    setViewingImage(item);
   };
 
   const handleDeleteImage = async (imageId: string) => {
@@ -161,7 +287,7 @@ export default function PerfilPage() {
       try {
         await apiDeleteGalleryImage(imageId);
         setGallery((prev) => prev.filter((img) => img.id !== imageId));
-        alert('La foto ha sido borrada.');
+        setViewingImage(null);
       } catch (error) {
         alert('Error al eliminar la foto');
         console.error(error);
@@ -195,7 +321,7 @@ export default function PerfilPage() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      <div className="w-full px-5 md:px-12 lg:px-16 py-6 md:py-8 flex-1 flex flex-col">
+      <div className="w-full max-w-lg mx-auto px-5 py-6 flex-1 flex flex-col">
         <div className="mt-6">
           <ProfileHeader profile={profile} />
         </div>
@@ -228,6 +354,58 @@ export default function PerfilPage() {
           />
         </div>
       </div>
+
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*,video/*"
+        onChange={handleStoryFileSelected}
+        className="hidden"
+      />
+
+      <CreateHistoryModal
+        visible={storyModalVisible}
+        file={storyFile}
+        previewUrl={storyPreviewUrl}
+        credits={storyCredits}
+        uploading={uploadingStory}
+        error={storyError}
+        onChangeCredits={setStoryCredits}
+        onClose={closeStoryModal}
+        onPublish={handlePublishStory}
+      />
+
+      <input
+        ref={galleryInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleGalleryFileSelected}
+        className="hidden"
+      />
+
+      <PublishGalleryModal
+        visible={galleryModalVisible}
+        previewUrl={galleryPreviewUrl}
+        form={galleryForm}
+        uploading={uploadingGallery}
+        error={galleryError}
+        onChangeForm={(patch) => setGalleryForm((prev) => ({ ...prev, ...patch }))}
+        onClose={closeGalleryModal}
+        onPublish={handlePublishGallery}
+      />
+
+      <StoryViewerModal
+        story={viewingStory}
+        onClose={() => setViewingStory(null)}
+        onDelete={handleDeleteStory}
+      />
+
+      <GalleryItemViewer
+        item={viewingImage}
+        onClose={() => setViewingImage(null)}
+        onDelete={handleDeleteImage}
+        onSetFeatured={handleSetFeatured}
+      />
     </div>
   );
 }

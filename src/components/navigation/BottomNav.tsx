@@ -18,7 +18,7 @@ const tabsByRole = {
     { name: 'dashboard/anfitriona', title: 'Inicio', icon: Home },
     { name: 'dashboard/earnings', title: 'Ganancias', icon: CircleDollarSign },
     { name: 'dashboard/chats', title: 'Chats', icon: MessageCircle },
-    { name: 'dashboard/perfil', title: 'Perfil', icon: User },
+    { name: 'dashboard/anfitriona/perfil', title: 'Perfil', icon: User },
   ],
   USER: [
     { name: 'dashboard', title: 'Inicio', icon: Home },

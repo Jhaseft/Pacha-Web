@@ -31,10 +31,23 @@ export function ActionButtons({
           <Settings size={18} />
           Editar perfil
         </Link>
-        <div className="bg-gradient-to-br from-blue-500/20 to-blue-600/20 hover:from-blue-500/30 hover:to-blue-600/30 text-blue-300 border border-blue-500/50 rounded-xl py-3 px-4 font-bold text-sm flex items-center justify-center gap-2 transition shadow-md cursor-pointer backdrop-blur-sm">
-          <Eye size={18} />
-          Ver mi perfil
-        </div>
+        {profile?.username ? (
+          <Link
+            href={`/anfitrionas/${profile.username}`}
+            className="bg-gradient-to-br from-blue-500/20 to-blue-600/20 hover:from-blue-500/30 hover:to-blue-600/30 text-blue-300 border border-blue-500/50 rounded-xl py-3 px-4 font-bold text-sm flex items-center justify-center gap-2 transition shadow-md backdrop-blur-sm"
+          >
+            <Eye size={18} />
+            Ver mi perfil
+          </Link>
+        ) : (
+          <div
+            title="Configura tu nombre de usuario para ver tu perfil público"
+            className="bg-gradient-to-br from-blue-500/10 to-blue-600/10 text-blue-300/50 border border-blue-500/30 rounded-xl py-3 px-4 font-bold text-sm flex items-center justify-center gap-2 shadow-md cursor-not-allowed backdrop-blur-sm"
+          >
+            <Eye size={18} />
+            Ver mi perfil
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-2 gap-3">
@@ -92,7 +105,7 @@ export function ActionButtons({
 
       {/* Subscriptions */}
       <Link
-        href="/dashboard/anfitriona/suscripcion"
+        href="/dashboard/anfitriona/subscription"
         className="w-full relative rounded-xl overflow-hidden p-0.5 bg-gradient-to-r from-purple-500 to-purple-600 hover:shadow-lg hover:shadow-purple-500/50 transition shadow-md block"
       >
         <div className="w-full bg-purple-900/50 hover:bg-purple-900/60 text-purple-200 rounded-lg py-4 px-4 font-bold text-sm flex items-center justify-between transition">

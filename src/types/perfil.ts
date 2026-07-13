@@ -38,13 +38,24 @@ export interface HistoryItem {
   expiresAt: string;
 }
 
+// Campos según GET /anfitrionas/me/gallery. sortOrder/description no vienen
+// del backend hoy; quedan opcionales por el código que aún los referencia.
 export interface GalleryItem {
   id: string;
   imageUrl: string;
-  description: string | null;
-  sortOrder: number;
+  isPremium: boolean;
+  unlockCredits: number | null;
+  isVisible: boolean;
   createdAt: string;
-  updatedAt: string;
+  sortOrder?: number;
+  description?: string | null;
+  updatedAt?: string;
+}
+
+// Estado del formulario de publicación (los créditos van como texto en el input).
+export interface PublishGalleryForm {
+  isPremium: boolean;
+  unlockCredits: string;
 }
 
 export interface ServicePrice {

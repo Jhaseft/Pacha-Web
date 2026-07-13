@@ -7,8 +7,5 @@ export function isAppRoute(pathname: string): boolean {
   return pathname === "/dashboard" ||
     pathname.startsWith("/dashboard/") ||
     pathname === "/admin" ||
-    pathname.startsWith("/admin/") ||
-    // Galerías del perfil de creador ("Ver todo"): muestran el chrome de app.
-    (pathname.startsWith("/anfitrionas/") &&
-      (pathname.endsWith("/album") || pathname.endsWith("/desbloquear")));
+    pathname.startsWith("/admin/");
 }

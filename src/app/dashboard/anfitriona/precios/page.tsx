@@ -131,7 +131,7 @@ export default function PreciosPage() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      <div className="w-full px-5 md:px-12 lg:px-16 py-6 md:py-8 flex-1 flex flex-col">
+      <div className="w-full max-w-lg mx-auto px-5 py-6 flex-1 flex flex-col">
         <PageHeader
           title="Mis Precios"
           description="Configura los precios de tus servicios"

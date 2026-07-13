@@ -5,6 +5,7 @@ import type {
   Bank,
   BankAccount,
   MyReferralsResponse,
+  MyWithdrawalRequest,
 } from '../types/anfitriona';
 
 export const apiGetMyEarnings = async (): Promise<EarningsData> => {
@@ -48,7 +49,14 @@ export const apiCreateWithdrawalRequest = async (data: {
   credits: number;
   bankAccountId: string;
 }): Promise<void> => {
-  await apiAxios.post('/wallet/withdrawal-requests', data);
+  await apiAxios.post('/wallet/me/withdrawal-request', data);
+};
+
+// Solicitudes propias de la anfitriona. Ojo: no confundir con el
+// apiGetWithdrawalRequests de lib/withdrawalRequest.ts, que es el del admin.
+export const apiGetMyWithdrawalRequests = async (): Promise<MyWithdrawalRequest[]> => {
+  const response = await apiAxios.get<MyWithdrawalRequest[]>('/wallet/me/withdrawal-requests');
+  return response.data;
 };
 
 export const apiGetMyReferrals = async (): Promise<MyReferralsResponse> => {

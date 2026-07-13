@@ -11,7 +11,6 @@ import type { EarningsData, MyReferralsResponse } from '@/types/anfitriona';
 import { TrendingUp, Copy, ClipboardList } from 'lucide-react';
 import { AnimatedBorderCard } from '@/components/anfitriona/AnimatedBorderCard';
 import { TransactionItem } from '@/components/anfitriona/TransactionItem';
-import { WithdrawalModal } from '@/components/anfitriona/WithdrawalModal';
 
 function formatUSD(credits: number): string {
   const usd = credits / 10;
@@ -25,7 +24,6 @@ export default function EarningsPage() {
   const [referrals, setReferrals] = useState<MyReferralsResponse | null>(null);
   const [referralsError, setReferralsError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [showWithdrawal, setShowWithdrawal] = useState(false);
 
   useEffect(() => {
     if (!isHydrated) return;
@@ -101,7 +99,7 @@ export default function EarningsPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="w-full px-5 md:px-12 lg:px-16 py-6 md:py-8">
+      <div className="max-w-lg mx-auto px-5 py-6">
         <div className="mb-4">
           <h1 className="text-2xl md:text-3xl font-bold text-black mb-1">
             Mis ganancias
@@ -223,7 +221,7 @@ export default function EarningsPage() {
         <div className="mb-6">
           <AnimatedBorderCard>
             <button
-              onClick={() => setShowWithdrawal(true)}
+              onClick={() => router.push('/dashboard/anfitriona/retiro')}
               className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-4 rounded-2xl hover:opacity-90 transition"
             >
               Retirar dinero
@@ -262,13 +260,6 @@ export default function EarningsPage() {
         )}
       </div>
 
-      <WithdrawalModal
-        visible={showWithdrawal}
-        balance={earnings?.balance ?? 0}
-        creditRate={0.9}
-        onClose={() => setShowWithdrawal(false)}
-        onSuccess={() => loadData()}
-      />
     </div>
   );
 }

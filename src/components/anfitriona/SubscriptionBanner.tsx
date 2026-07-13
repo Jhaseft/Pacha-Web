@@ -33,7 +33,7 @@ export function SubscriptionBanner() {
   return (
     <>
       <button
-        onClick={() => router.push('/dashboard/subscription')}
+        onClick={() => router.push('/dashboard/anfitriona/subscription')}
         style={{
           width: '100%',
           marginBottom: '2rem',

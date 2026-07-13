@@ -88,8 +88,8 @@ export default function EditarPerfilForm() {
   return (
     <div className="min-h-screen bg-white flex flex-col">
       {/* Mobile Header */}
-      <div className="sticky top-0 z-10 bg-white border-b border-purple-200/30 px-5 md:px-12 lg:px-16 py-4 flex items-center justify-between md:hidden">
-        <div className="flex items-center gap-3">
+      <div className="sticky top-0 z-10 bg-white border-b border-purple-200/30 py-4 md:hidden">
+        <div className="max-w-lg mx-auto px-5 flex items-center gap-3">
           <button
             onClick={() => router.back()}
             className="p-2 hover:bg-purple-100/50 rounded-lg transition-colors"
@@ -103,15 +103,15 @@ export default function EditarPerfilForm() {
       </div>
 
       {/* Desktop Header */}
-      <div className="hidden md:block w-full px-5 md:px-12 lg:px-16 py-6 md:py-8">
+      <div className="hidden md:block w-full max-w-lg mx-auto px-5 pt-6 pb-2">
         <PageHeader
           title="Editar perfil"
           description="Actualiza tu información personal"
         />
       </div>
 
-      {/* Cover Image - Full Width */}
-      <div className="w-full px-5 md:px-12 lg:px-16 py-6">
+      {/* Cover Image */}
+      <div className="w-full max-w-lg mx-auto px-5 pt-2 pb-6">
         <ImageUpload
           label="Foto de portada"
           currentImage={coverUri}
@@ -122,7 +122,7 @@ export default function EditarPerfilForm() {
       </div>
 
       {/* Avatar */}
-      <div className="w-full px-5 md:px-12 lg:px-16 flex justify-center mb-8">
+      <div className="w-full max-w-lg mx-auto px-5 flex justify-center mb-8">
         <ImageUpload
           label="Foto de perfil"
           currentImage={avatarUri}
@@ -132,8 +132,8 @@ export default function EditarPerfilForm() {
         />
       </div>
 
-      {/* Form Fields - Full Width */}
-      <div className="w-full px-5 md:px-12 lg:px-16 py-6 md:py-8 flex-1 flex flex-col">
+      {/* Form Fields */}
+      <div className="w-full max-w-lg mx-auto px-5 py-6 flex-1 flex flex-col">
         <div className="space-y-4">
           <FormField
             label="Nombre"
@@ -198,7 +198,7 @@ export default function EditarPerfilForm() {
       </div>
 
       {/* Save Button - Bottom */}
-      <div className="w-full px-5 md:px-12 lg:px-16 py-6 md:py-8 flex justify-center">
+      <div className="w-full max-w-lg mx-auto px-5 py-6 flex justify-center">
         <button
           onClick={handleSave}
           disabled={saving}

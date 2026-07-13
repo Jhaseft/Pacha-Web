@@ -21,13 +21,15 @@ export const apiGetMyStories = async (): Promise<HistoryItem[]> => {
   return response.data;
 };
 
+// multipart es obligatorio: con el Content-Type json por defecto de la
+// instancia, axios serializaría el FormData a JSON y perdería el archivo.
 export const apiCreateHistory = async (
   data: { priceCredits: number },
-  file: { uri: string; type: string; name: string }
+  file: File
 ): Promise<HistoryItem> => {
   const formData = new FormData();
   formData.append('priceCredits', String(data.priceCredits));
-  formData.append('file', file as any);
+  formData.append('file', file);
 
   const response = await apiAxios.post<HistoryItem>('/anfitrionas/history', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
@@ -53,13 +55,17 @@ export const apiSetFeaturedGalleryImage = async (id: string): Promise<GalleryIte
   return response.data;
 };
 
-export const apiUploadGalleryImage = async (
-  file: { uri: string; type: string; name: string },
-  description?: string
+// unlockCredits solo se envía si la imagen es premium; el backend lo exige > 0.
+export const apiCreateGalleryImage = async (
+  payload: { isPremium: boolean; unlockCredits?: number },
+  file: File
 ): Promise<GalleryItem> => {
   const formData = new FormData();
-  formData.append('file', file as any);
-  if (description) formData.append('description', description);
+  formData.append('file', file);
+  formData.append('isPremium', String(payload.isPremium));
+  if (payload.isPremium && payload.unlockCredits !== undefined) {
+    formData.append('unlockCredits', String(payload.unlockCredits));
+  }
 
   const response = await apiAxios.post<GalleryItem>('/anfitrionas/me/gallery', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },

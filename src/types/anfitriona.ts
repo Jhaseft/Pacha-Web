@@ -33,6 +33,24 @@ export interface BankAccount {
   accountHolderName?: string;
 }
 
+// Respuesta de GET /wallet/me/withdrawal-requests (solicitudes propias).
+// Distinta del WithdrawalRequest de types/withdrawalRequest.ts, que es la
+// vista del admin y no trae rejectionReason ni receiptUrl.
+export interface MyWithdrawalRequest {
+  id: string;
+  credits: number;
+  payoutAmount: number;
+  payoutCurrency: string;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  methodType: 'BCP' | 'OTHER_BANK' | 'PAYPAL' | 'BYBIT' | 'BINANCE';
+  bankName: string | null;
+  accountNumber: string | null;
+  paypalEmail: string | null;
+  rejectionReason: string | null;
+  receiptUrl: string | null;
+  createdAt: string;
+}
+
 export interface MyReferralsResponse {
   referralCode: string;
   totalReferrals: number;
