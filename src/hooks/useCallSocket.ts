@@ -1,8 +1,7 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { io, Socket } from 'socket.io-client';
-import { SOCKET_URL } from '@/lib/callsApi';
+import { useMemo } from 'react';
+import { useAppSocket } from '@/context/SocketContext';
 
 export type CallType = 'CALL' | 'VIDEO_CALL';
 
@@ -17,93 +16,59 @@ export interface IncomingCallData {
 }
 
 /**
- * Señalización de llamadas por WebSocket — misma lógica que la app móvil.
- * Se conecta al gateway del backend, se registra con el userId y expone
- * emisores/suscriptores para el ciclo de vida de la llamada.
+ * Señalización de llamadas por WebSocket sobre la conexión compartida
+ * (SocketProvider). Expone emisores/suscriptores del ciclo de vida de la
+ * llamada. `socket` se expone para que los efectos dependan de su disponibilidad.
  */
-export function useCallSocket(userId: string | null | undefined) {
-  const socketRef = useRef<Socket | null>(null);
+export function useCallSocket() {
+  const socket = useAppSocket();
 
-  useEffect(() => {
-    if (!userId) return;
-
-    const socket = io(SOCKET_URL, { transports: ['websocket'] });
-    socketRef.current = socket;
-
-    socket.on('connect', () => {
-      socket.emit('register', userId);
-    });
-
-    return () => {
-      socket.disconnect();
-      socketRef.current = null;
-    };
-  }, [userId]);
-
-  function requestCall(data: IncomingCallData) {
-    socketRef.current?.emit('call_request', data);
-  }
-
-  function acceptCall(callId: string, callerId: string) {
-    socketRef.current?.emit('call_accepted', { callId, callerId });
-  }
-
-  function rejectCall(callId: string, callerId: string) {
-    socketRef.current?.emit('call_rejected', { callId, callerId });
-  }
-
-  function endCall(callId: string, otherUserId: string) {
-    socketRef.current?.emit('call_ended', { callId, otherUserId });
-  }
-
-  function onIncomingCall(cb: (data: IncomingCallData) => void) {
-    socketRef.current?.on('incoming_call', cb);
-    return () => socketRef.current?.off('incoming_call', cb);
-  }
-
-  function onCallRinging(cb: (data: { callId: string }) => void) {
-    socketRef.current?.on('call_ringing', cb);
-    return () => socketRef.current?.off('call_ringing', cb);
-  }
-
-  function onCallAccepted(cb: (data: { callId: string }) => void) {
-    socketRef.current?.on('call_accepted', cb);
-    return () => socketRef.current?.off('call_accepted', cb);
-  }
-
-  function onCallRejected(cb: (data: { callId: string }) => void) {
-    socketRef.current?.on('call_rejected', cb);
-    return () => socketRef.current?.off('call_rejected', cb);
-  }
-
-  function onCallEnded(cb: (data: { callId: string }) => void) {
-    socketRef.current?.on('call_ended', cb);
-    return () => socketRef.current?.off('call_ended', cb);
-  }
-
-  function onCallBilled(
-    cb: (data: { creditsCharged: number; minutesBilled: number; durationSeconds: number }) => void,
-  ) {
-    socketRef.current?.on('call_billed', cb);
-    return () => socketRef.current?.off('call_billed', cb);
-  }
-
-  function onCallWarning(cb: (data: { balance: number }) => void) {
-    socketRef.current?.on('call_warning', cb);
-    return () => socketRef.current?.off('call_warning', cb);
-  }
-
-  return {
-    requestCall,
-    acceptCall,
-    rejectCall,
-    endCall,
-    onIncomingCall,
-    onCallRinging,
-    onCallAccepted,
-    onCallRejected,
-    onCallEnded,
-    onCallBilled,
-    onCallWarning,
-  };
+  return useMemo(
+    () => ({
+      socket,
+      requestCall(data: IncomingCallData) {
+        socket?.emit('call_request', data);
+      },
+      acceptCall(callId: string, callerId: string) {
+        socket?.emit('call_accepted', { callId, callerId });
+      },
+      rejectCall(callId: string, callerId: string) {
+        socket?.emit('call_rejected', { callId, callerId });
+      },
+      endCall(callId: string, otherUserId: string) {
+        socket?.emit('call_ended', { callId, otherUserId });
+      },
+      onIncomingCall(cb: (data: IncomingCallData) => void) {
+        socket?.on('incoming_call', cb);
+        return () => socket?.off('incoming_call', cb);
+      },
+      onCallRinging(cb: (data: { callId: string }) => void) {
+        socket?.on('call_ringing', cb);
+        return () => socket?.off('call_ringing', cb);
+      },
+      onCallAccepted(cb: (data: { callId: string }) => void) {
+        socket?.on('call_accepted', cb);
+        return () => socket?.off('call_accepted', cb);
+      },
+      onCallRejected(cb: (data: { callId: string }) => void) {
+        socket?.on('call_rejected', cb);
+        return () => socket?.off('call_rejected', cb);
+      },
+      onCallEnded(cb: (data: { callId: string }) => void) {
+        socket?.on('call_ended', cb);
+        return () => socket?.off('call_ended', cb);
+      },
+      onCallBilled(
+        cb: (data: { creditsCharged: number; minutesBilled: number; durationSeconds: number }) => void,
+      ) {
+        socket?.on('call_billed', cb);
+        return () => socket?.off('call_billed', cb);
+      },
+      onCallWarning(cb: (data: { balance: number }) => void) {
+        socket?.on('call_warning', cb);
+        return () => socket?.off('call_warning', cb);
+      },
+    }),
+    [socket],
+  );
 }

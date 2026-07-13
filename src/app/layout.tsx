@@ -3,6 +3,8 @@ import { Geist } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { AuthProvider } from "../context/AuthContext";
+import { SocketProvider } from "../context/SocketContext";
+import { IncomingCallProvider } from "../components/IncomingCallProvider";
 import { ChatWidgetLoader } from "../components/ChatWidgetLoader";
 import BottomNav from "../components/navigation/BottomNav";
 import SidebarWrapper from "../components/navigation/SidebarWrapper";
@@ -27,13 +29,16 @@ export default function RootLayout({
     <html lang="es" className={`${geistSans.variable} h-full`}>
       <body className="min-h-full flex flex-col bg-black text-white">
         <AuthProvider>
-          <div className="flex">
-            <SidebarWrapper />
-            <ContentWrapper>
-              {children}
-            </ContentWrapper>
-          </div>
-          <BottomNav />
+          <SocketProvider>
+            <div className="flex">
+              <SidebarWrapper />
+              <ContentWrapper>
+                {children}
+              </ContentWrapper>
+            </div>
+            <BottomNav />
+            <IncomingCallProvider />
+          </SocketProvider>
         </AuthProvider>
         {/* <ChatWidgetLoader /> */}
         <Script id="meta-pixel" strategy="afterInteractive">

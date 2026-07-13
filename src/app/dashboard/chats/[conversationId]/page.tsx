@@ -32,7 +32,7 @@ function ChatThread() {
   const [sendError, setSendError] = useState<{ text: string; recharge: boolean } | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  const { onNewMessage } = useMessageSocket(user?.id);
+  const { socket: msgSocket, onNewMessage } = useMessageSocket();
 
   useEffect(() => {
     if (isHydrated && !user) router.replace("/login");
@@ -71,7 +71,7 @@ function ChatThread() {
 
   // Mensajes entrantes en tiempo real (WebSocket)
   useEffect(() => {
-    if (!user?.id) return;
+    if (!user?.id || !msgSocket) return;
     const unsub = onNewMessage((msg) => {
       if (msg.conversationId !== conversationId) return;
       setMessages((prev) => {
@@ -81,8 +81,9 @@ function ChatThread() {
       scrollToBottom();
       if (token) markAsRead(conversationId, user.id, token).catch(() => {});
     });
-    return unsub;
-  }, [onNewMessage, conversationId, user?.id, token]);
+    return () => { unsub(); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [msgSocket, conversationId, user?.id, token]);
 
   // Anti-spam: nº de mensajes propios consecutivos sin respuesta (backend lo bloquea a los 5)
   const unrespondedCount = useMemo(() => {

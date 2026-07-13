@@ -16,7 +16,11 @@ function CallContent() {
   const router = useRouter();
   const search = useSearchParams();
 
+  // Modo receptor: la anfitriona ya aceptó desde el modal de llamada entrante.
+  const isReceiver = search.get('mode') === 'receive';
+  const callerId = search.get('callerId') ?? '';
   const anfitrionaId = search.get('anfitrionaId') ?? '';
+  const otherUserId = isReceiver ? callerId : anfitrionaId;
   const anfitrionaName = search.get('anfitrionaName') ?? search.get('name') ?? 'Anfitriona';
   const anfitrionaAvatar = search.get('anfitrionaAvatar') ?? search.get('avatar') ?? '';
   const callType = (search.get('callType') ?? 'CALL') as CallType;
@@ -32,7 +36,7 @@ function CallContent() {
   const [billing, setBilling] = useState<{ creditsCharged: number; minutesBilled: number } | null>(null);
   const [toast, setToast] = useState<string | null>(null);
 
-  const callSocket = useCallSocket(user?.id);
+  const callSocket = useCallSocket();
   const agora = useAgoraCall({ channelName: callId, uid, isVideo, enabled: callState === 'connected' });
 
   const endedRef = useRef(false);
@@ -47,14 +51,14 @@ function CallContent() {
 
   // ── Ciclo de vida de la llamada (misma lógica que móvil) ──
   useEffect(() => {
-    if (!user?.id || !anfitrionaId) return;
+    if (!user?.id || !otherUserId || !callSocket.socket) return;
     let active = true;
     const unsubs: Array<() => void> = [];
 
     const endNow = (reason: string) => {
       if (endedRef.current) return;
       endedRef.current = true;
-      callSocket.endCall(callId, anfitrionaId);
+      callSocket.endCall(callId, otherUserId);
       agora.leave();
       if (timerRef.current) clearInterval(timerRef.current);
       setToast(reason);
@@ -62,26 +66,9 @@ function CallContent() {
       setTimeout(() => router.back(), 3500);
     };
 
-    const setupListeners = () => {
-      callSocket.requestCall({
-        callId,
-        callerId: user.id,
-        receiverId: anfitrionaId,
-        callType,
-        callerName: [user.firstName, user.lastName].filter(Boolean).join(' ') || 'Cliente',
-        callerAvatar: null,
-        pricePerMinute: price,
-      });
-
+    // Eventos comunes a ambos lados una vez conectados.
+    const commonListeners = () => {
       unsubs.push(
-        callSocket.onCallAccepted(() => {
-          setCallState('connected');
-          timerRef.current = setInterval(() => setSeconds((s) => s + 1), 1000);
-        }),
-        callSocket.onCallRejected(() => {
-          setCallState('rejected');
-          setTimeout(() => router.back(), 2500);
-        }),
         callSocket.onCallEnded(() => {
           endedRef.current = true;
           setCallState('ended');
@@ -99,6 +86,43 @@ function CallContent() {
       );
     };
 
+    // Lado receptor (anfitriona): ya aceptó en el modal → conecta directo.
+    if (isReceiver) {
+      setCallState('connected');
+      timerRef.current = setInterval(() => setSeconds((s) => s + 1), 1000);
+      commonListeners();
+      return () => {
+        active = false;
+        unsubs.forEach((u) => u());
+        if (timerRef.current) clearInterval(timerRef.current);
+      };
+    }
+
+    // Lado que llama (cliente): solicita la llamada y espera aceptación.
+    const setupCaller = () => {
+      callSocket.requestCall({
+        callId,
+        callerId: user.id,
+        receiverId: otherUserId,
+        callType,
+        callerName: [user.firstName, user.lastName].filter(Boolean).join(' ') || 'Cliente',
+        callerAvatar: null,
+        pricePerMinute: price,
+      });
+
+      unsubs.push(
+        callSocket.onCallAccepted(() => {
+          setCallState('connected');
+          timerRef.current = setInterval(() => setSeconds((s) => s + 1), 1000);
+        }),
+        callSocket.onCallRejected(() => {
+          setCallState('rejected');
+          setTimeout(() => router.back(), 2500);
+        }),
+      );
+      commonListeners();
+    };
+
     const walletPromise = token ? apiGetMyWallet(token) : Promise.reject();
     walletPromise
       .then((w) => {
@@ -108,10 +132,10 @@ function CallContent() {
           setTimeout(() => router.back(), 2600);
           return;
         }
-        setupListeners();
+        setupCaller();
       })
       .catch(() => {
-        if (active) setupListeners();
+        if (active) setupCaller();
       });
 
     return () => {
@@ -120,7 +144,7 @@ function CallContent() {
       if (timerRef.current) clearInterval(timerRef.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.id]);
+  }, [user?.id, otherUserId, callSocket.socket]);
 
   // ── Reproducir video remoto / local en sus contenedores ──
   useEffect(() => {
@@ -138,7 +162,7 @@ function CallContent() {
   function handleHangUp() {
     if (endedRef.current) return;
     endedRef.current = true;
-    callSocket.endCall(callId, anfitrionaId);
+    callSocket.endCall(callId, otherUserId);
     agora.leave();
     if (timerRef.current) clearInterval(timerRef.current);
     setCallState('ended');

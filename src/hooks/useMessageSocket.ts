@@ -1,8 +1,7 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef } from 'react';
-import { io, Socket } from 'socket.io-client';
-import { SOCKET_URL } from '@/lib/callsApi';
+import { useMemo } from 'react';
+import { useAppSocket } from '@/context/SocketContext';
 import type { Message } from '@/lib/messages';
 
 export interface UserPresenceEvent {
@@ -12,51 +11,25 @@ export interface UserPresenceEvent {
 }
 
 /**
- * WebSocket de mensajería para web — misma lógica que `useSocket` del móvil.
- * Se conecta al gateway, se registra con el userId y expone suscriptores
- * para mensajes entrantes y presencia.
+ * Mensajería en tiempo real sobre la conexión compartida (SocketProvider).
+ * Expone suscriptores para mensajes entrantes y presencia. `socket` se expone
+ * para que los efectos dependan de su disponibilidad.
  */
-export function useMessageSocket(userId: string | null | undefined) {
-  const socketRef = useRef<Socket | null>(null);
-  const newMessageListenersRef = useRef(new Set<(msg: Message) => void>());
-  const userPresenceListenersRef = useRef(new Set<(event: UserPresenceEvent) => void>());
+export function useMessageSocket() {
+  const socket = useAppSocket();
 
-  useEffect(() => {
-    if (!userId) return;
-
-    const socket = io(SOCKET_URL, { transports: ['websocket'] });
-    socketRef.current = socket;
-
-    for (const cb of newMessageListenersRef.current) socket.on('new_message', cb);
-    for (const cb of userPresenceListenersRef.current) socket.on('user_presence', cb);
-
-    socket.on('connect', () => {
-      socket.emit('register', userId);
-    });
-
-    return () => {
-      socket.disconnect();
-      socketRef.current = null;
-    };
-  }, [userId]);
-
-  const onNewMessage = useCallback((callback: (msg: Message) => void) => {
-    newMessageListenersRef.current.add(callback);
-    socketRef.current?.on('new_message', callback);
-    return () => {
-      newMessageListenersRef.current.delete(callback);
-      socketRef.current?.off('new_message', callback);
-    };
-  }, []);
-
-  const onUserPresence = useCallback((callback: (event: UserPresenceEvent) => void) => {
-    userPresenceListenersRef.current.add(callback);
-    socketRef.current?.on('user_presence', callback);
-    return () => {
-      userPresenceListenersRef.current.delete(callback);
-      socketRef.current?.off('user_presence', callback);
-    };
-  }, []);
-
-  return useMemo(() => ({ onNewMessage, onUserPresence }), [onNewMessage, onUserPresence]);
+  return useMemo(
+    () => ({
+      socket,
+      onNewMessage(cb: (msg: Message) => void) {
+        socket?.on('new_message', cb);
+        return () => socket?.off('new_message', cb);
+      },
+      onUserPresence(cb: (event: UserPresenceEvent) => void) {
+        socket?.on('user_presence', cb);
+        return () => socket?.off('user_presence', cb);
+      },
+    }),
+    [socket],
+  );
 }
