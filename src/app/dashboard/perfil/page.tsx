@@ -1,14 +1,15 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Gem, Mail, Phone, FileText, HelpCircle, LogOut, ChevronRight } from "lucide-react";
 import { useAuth } from "../../../context/AuthContext";
+import { User as UserIcon, ChevronRight, LogOut } from "lucide-react";
 
 export default function PerfilPage() {
   const { user, isHydrated, logout } = useAuth();
   const router = useRouter();
+  const [confirmLogout, setConfirmLogout] = useState(false);
 
   useEffect(() => {
     if (isHydrated && !user) router.replace("/login");
@@ -22,14 +23,25 @@ export default function PerfilPage() {
     );
   }
 
-  const fullName =
-    [user.firstName, user.lastName].filter(Boolean).join(" ") || "Usuario";
-  const initials = (user.firstName?.[0] ?? "U").toUpperCase();
+  const displayName =
+    [user.firstName, user.lastName].filter(Boolean).join(" ") || null;
 
   const handleLogout = () => {
     logout();
     router.replace("/login");
   };
+
+  const mainItems = [
+    { label: "Mis datos", href: "/dashboard/mis-datos" },
+    { label: "Billetera", href: "/dashboard/creditos" },
+    { label: "Historial", href: "/dashboard/historial" },
+    { label: "Mis suscripciones", href: "/dashboard/mis-suscripciones" },
+  ];
+
+  const secondaryItems = [
+    { label: "Ayuda", href: "/usuario" },
+    { label: "Términos y condiciones", href: "/terminos" },
+  ];
 
   return (
     <div className="min-h-screen bg-canvas">
@@ -38,65 +50,78 @@ export default function PerfilPage() {
           <h1 className="text-ink font-black text-2xl">Perfil</h1>
         </header>
 
-        {/* Tarjeta de usuario */}
-        <div className="flex items-center gap-4 bg-card border border-line rounded-3xl p-5 mb-6">
-          <div className="w-16 h-16 rounded-full bg-linear-to-tr from-brand to-brand-violet flex items-center justify-center text-white text-2xl font-black shrink-0">
-            {initials}
+        {/* Resumen del usuario */}
+        <div className="flex items-center gap-4 bg-card border border-line rounded-3xl px-5 py-4 mb-4">
+          <div className="w-14 h-14 rounded-full border-2 border-brand flex items-center justify-center shrink-0">
+            <UserIcon size={30} className="text-brand" />
           </div>
           <div className="min-w-0">
-            <p className="text-ink font-black text-lg truncate">{fullName}</p>
-            <span className="inline-block mt-1 text-[11px] font-semibold uppercase tracking-wider text-brand bg-brand-soft px-2 py-0.5 rounded-full">
-              {user.role === "ANFITRIONA" ? "Anfitriona" : "Cliente"}
-            </span>
+            <p className="text-ink font-bold text-lg truncate">{user.phoneNumber}</p>
+            {displayName && <p className="text-brand/80 text-sm truncate">{displayName}</p>}
+            {user.email && <p className="text-ink-faint text-xs truncate">{user.email}</p>}
           </div>
         </div>
 
-        {/* Datos */}
-        <div className="bg-card border border-line rounded-3xl divide-y divide-line mb-6">
-          <div className="flex items-center gap-3 px-5 py-4">
-            <Mail size={18} className="text-ink-faint shrink-0" />
-            <span className="text-ink-soft text-sm">Correo</span>
-            <span className="text-ink text-sm ml-auto truncate">{user.email ?? "—"}</span>
-          </div>
-          <div className="flex items-center gap-3 px-5 py-4">
-            <Phone size={18} className="text-ink-faint shrink-0" />
-            <span className="text-ink-soft text-sm">Teléfono</span>
-            <span className="text-ink text-sm ml-auto truncate">{user.phoneNumber ?? "—"}</span>
-          </div>
+        {/* Sección principal */}
+        <div className="bg-card border border-line rounded-3xl divide-y divide-line mb-4">
+          {mainItems.map((item) => (
+            <MenuLink key={item.label} href={item.href} label={item.label} />
+          ))}
         </div>
 
-        {/* Accesos */}
+        {/* Sección secundaria */}
         <div className="bg-card border border-line rounded-3xl divide-y divide-line mb-6">
-          <MenuLink href="/dashboard/creditos" icon={<Gem size={18} className="text-brand" />} label="Mis créditos" />
-          <MenuLink href="/terminos" icon={<FileText size={18} className="text-ink-faint" />} label="Términos y condiciones" />
-          <MenuLink href="/usuario" icon={<HelpCircle size={18} className="text-ink-faint" />} label="Ayuda" />
+          {secondaryItems.map((item) => (
+            <MenuLink key={item.label} href={item.href} label={item.label} />
+          ))}
         </div>
 
         {/* Cerrar sesión */}
         <button
-          onClick={handleLogout}
+          onClick={() => setConfirmLogout(true)}
           className="w-full flex items-center justify-center gap-2 bg-red-50 hover:bg-red-100 text-red-600 font-semibold py-4 rounded-2xl transition-colors mb-10"
         >
           <LogOut size={18} />
           Cerrar sesión
         </button>
       </div>
+
+      {/* Confirmación de cierre de sesión */}
+      {confirmLogout && (
+        <div
+          onClick={() => setConfirmLogout(false)}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-6"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-sm bg-card border border-line rounded-3xl p-6"
+          >
+            <h3 className="text-ink text-lg font-black">Cerrar sesión</h3>
+            <p className="text-ink-soft text-sm mt-2">¿Estás seguro de que quieres salir?</p>
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={() => setConfirmLogout(false)}
+                className="flex-1 bg-canvas-alt text-ink font-semibold py-3 rounded-2xl transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleLogout}
+                className="flex-1 bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-2xl transition-colors"
+              >
+                Salir
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
-function MenuLink({
-  href,
-  icon,
-  label,
-}: {
-  href: string;
-  icon: React.ReactNode;
-  label: string;
-}) {
+function MenuLink({ href, label }: { href: string; label: string }) {
   return (
     <Link href={href} className="flex items-center gap-3 px-5 py-4 hover:bg-canvas-alt transition-colors">
-      {icon}
       <span className="text-ink text-sm">{label}</span>
       <ChevronRight size={18} className="text-ink-faint ml-auto" />
     </Link>

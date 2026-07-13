@@ -8,6 +8,7 @@ import { ArrowLeft, Send, Lock, Phone, Video, AlertCircle, X } from "lucide-reac
 import { useAuth } from "../../../../context/AuthContext";
 import { getMessages, sendMessage, markAsRead, type Message } from "../../../../lib/messages";
 import { getPublicServicePrices, type ServicePrice } from "../../../../lib/hostessService";
+import { useMessageSocket } from "../../../../hooks/useMessageSocket";
 
 const SPAM_LIMIT = 5;
 
@@ -30,6 +31,8 @@ function ChatThread() {
   const [servicePrices, setServicePrices] = useState<ServicePrice[]>([]);
   const [sendError, setSendError] = useState<{ text: string; recharge: boolean } | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+
+  const { onNewMessage } = useMessageSocket(user?.id);
 
   useEffect(() => {
     if (isHydrated && !user) router.replace("/login");
@@ -65,6 +68,21 @@ function ChatThread() {
       .finally(() => setLoading(false));
     if (user) markAsRead(conversationId, user.id, token).catch(() => {});
   }, [conversationId, token, user]);
+
+  // Mensajes entrantes en tiempo real (WebSocket)
+  useEffect(() => {
+    if (!user?.id) return;
+    const unsub = onNewMessage((msg) => {
+      if (msg.conversationId !== conversationId) return;
+      setMessages((prev) => {
+        if (prev.some((m) => m.id === msg.id)) return prev;
+        return [...prev, msg];
+      });
+      scrollToBottom();
+      if (token) markAsRead(conversationId, user.id, token).catch(() => {});
+    });
+    return unsub;
+  }, [onNewMessage, conversationId, user?.id, token]);
 
   // Anti-spam: nº de mensajes propios consecutivos sin respuesta (backend lo bloquea a los 5)
   const unrespondedCount = useMemo(() => {
@@ -150,12 +168,27 @@ function ChatThread() {
           <Link href="/dashboard/chats" className="text-ink-soft hover:text-ink p-1">
             <ArrowLeft size={22} />
           </Link>
-          <div className="flex items-center gap-3 flex-1 min-w-0">
-            <span className="relative w-10 h-10 rounded-full overflow-hidden bg-canvas-alt shrink-0">
-              {avatar && <Image src={avatar} alt={name} fill sizes="40px" className="object-cover" />}
-            </span>
-            <p className="text-ink font-semibold truncate">{name}</p>
-          </div>
+          {otherUserId ? (
+            <Link
+              href={`/anfitrionas/${otherUserId}`}
+              className="flex items-center gap-3 flex-1 min-w-0 group"
+            >
+              <span className="relative w-10 h-10 rounded-full overflow-hidden bg-canvas-alt shrink-0 border border-brand/40">
+                {avatar && <Image src={avatar} alt={name} fill sizes="40px" className="object-cover" />}
+              </span>
+              <div className="min-w-0">
+                <p className="text-ink font-semibold truncate group-hover:underline">{name}</p>
+                <p className="text-brand text-xs">Ver perfil</p>
+              </div>
+            </Link>
+          ) : (
+            <div className="flex items-center gap-3 flex-1 min-w-0">
+              <span className="relative w-10 h-10 rounded-full overflow-hidden bg-canvas-alt shrink-0">
+                {avatar && <Image src={avatar} alt={name} fill sizes="40px" className="object-cover" />}
+              </span>
+              <p className="text-ink font-semibold truncate">{name}</p>
+            </div>
+          )}
 
           {/* Llamada / Videollamada */}
           <div className="flex items-center gap-1.5 shrink-0">
