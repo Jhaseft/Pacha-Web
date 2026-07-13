@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Gem } from "lucide-react";
@@ -26,6 +26,60 @@ export default function InicioPage() {
 
   const [feed, setFeed] = useState<HistoryFeedItem[]>([]);
   const [activeStory, setActiveStory] = useState<HistoryFeedItem | null>(null);
+
+  // ── Persistencia del reel: volver donde lo dejaste al regresar de un perfil ──
+  const REEL_KEY = "pacha.reel";
+  const REEL_TTL = 30 * 60 * 1000; // 30 min
+  const feedRef = useRef<HTMLDivElement>(null);
+  const scrollTopRef = useRef(0);
+  const restoredRef = useRef(false); // se restauró desde caché → no recargar
+  const scrollRestoredRef = useRef(false);
+  const stateRef = useRef({ anfitrionas: [] as Anfitriona[], page: 1, hasMore: true });
+
+  useEffect(() => {
+    stateRef.current = { anfitrionas, page, hasMore };
+  }, [anfitrionas, page, hasMore]);
+
+  const saveSnapshot = useCallback(() => {
+    const s = stateRef.current;
+    if (!s.anfitrionas.length) return;
+    try {
+      sessionStorage.setItem(
+        REEL_KEY,
+        JSON.stringify({ ...s, scrollTop: scrollTopRef.current, ts: Date.now() }),
+      );
+    } catch {}
+  }, []);
+
+  // Restaurar caché al montar (antes de cargar de red)
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem(REEL_KEY);
+      if (!raw) return;
+      const saved = JSON.parse(raw);
+      if (
+        saved?.anfitrionas?.length &&
+        typeof saved.ts === "number" &&
+        Date.now() - saved.ts < REEL_TTL
+      ) {
+        restoredRef.current = true;
+        setAnfitrionas(saved.anfitrionas);
+        setPage(saved.page ?? 1);
+        setHasMore(saved.hasMore ?? true);
+        setLoading(false);
+        scrollTopRef.current = saved.scrollTop ?? 0;
+      }
+    } catch {}
+  }, []);
+
+  // Guardar snapshot al salir (desmontar o cerrar/recargar pestaña)
+  useEffect(() => {
+    window.addEventListener("pagehide", saveSnapshot);
+    return () => {
+      window.removeEventListener("pagehide", saveSnapshot);
+      saveSnapshot();
+    };
+  }, [saveSnapshot]);
 
   // ── Auth guard ──
   useEffect(() => {
@@ -74,8 +128,23 @@ export default function InicioPage() {
   }, [token]);
 
   useEffect(() => {
-    if (isHydrated) loadFirst();
+    if (isHydrated && !restoredRef.current) loadFirst();
   }, [isHydrated, loadFirst]);
+
+  // Restaurar la posición de scroll una sola vez tras restaurar la caché
+  useEffect(() => {
+    if (
+      restoredRef.current &&
+      !scrollRestoredRef.current &&
+      anfitrionas.length &&
+      feedRef.current
+    ) {
+      requestAnimationFrame(() => {
+        if (feedRef.current) feedRef.current.scrollTop = scrollTopRef.current;
+      });
+      scrollRestoredRef.current = true;
+    }
+  }, [anfitrionas]);
 
   const loadMore = async () => {
     if (loadingMore || !hasMore) return;
@@ -111,6 +180,7 @@ export default function InicioPage() {
   // Carga automática al acercarse al final del feed (estilo TikTok).
   const handleFeedScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const el = e.currentTarget;
+    scrollTopRef.current = el.scrollTop;
     if (
       hasMore &&
       !loadingMore &&
@@ -170,6 +240,7 @@ export default function InicioPage() {
         </div>
       ) : (
         <div
+          ref={feedRef}
           onScroll={handleFeedScroll}
           className="flex-1 min-h-0 overflow-y-auto snap-y snap-mandatory px-3"
         >

@@ -69,14 +69,13 @@ export default function PerfilPage() {
           ))}
         </div>
 
-        {/* Sección secundaria */}
+    
         <div className="bg-card border border-line rounded-3xl divide-y divide-line mb-6">
           {secondaryItems.map((item) => (
             <MenuLink key={item.label} href={item.href} label={item.label} />
           ))}
         </div>
 
-        {/* Cerrar sesión */}
         <button
           onClick={() => setConfirmLogout(true)}
           className="w-full flex items-center justify-center gap-2 bg-red-50 hover:bg-red-100 text-red-600 font-semibold py-4 rounded-2xl transition-colors mb-10"

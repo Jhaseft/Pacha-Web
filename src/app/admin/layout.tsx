@@ -153,7 +153,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           })}
           <div className="h-px bg-white/10 my-2" />
           <button
-            onClick={() => { logout(); router.replace("/login"); }}
+            onClick={() => { logout(); router.replace("/"); }}
             className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-red-200/80 hover:bg-white/10 hover:text-white transition-colors w-full"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -212,7 +212,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </div>
           </div>
           <button
-            onClick={() => { logout(); router.replace("/login"); }}
+            onClick={() => { logout(); router.replace("/"); }}
             className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-red-200/70 hover:bg-white/10 hover:text-white transition-all w-full"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

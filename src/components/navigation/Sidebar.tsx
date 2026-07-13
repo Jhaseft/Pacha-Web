@@ -66,10 +66,6 @@ export default function Sidebar() {
     return pathname === href || pathname.startsWith(href + '/');
   };
 
-  const handleLogout = () => {
-    logout();
-    router.replace('/login');
-  };
 
   return (
     <aside className="hidden md:flex fixed top-0 left-0 z-40 h-screen w-64 flex-col border-r border-line bg-card">
@@ -100,24 +96,8 @@ export default function Sidebar() {
         })}
       </nav>
 
-      {/* Usuario + logout */}
       <div className="border-t border-line p-3">
-        <div className="flex items-center gap-3 rounded-xl px-2 py-2">
-          <div className="w-10 h-10 rounded-full bg-linear-to-tr from-brand to-brand-violet flex items-center justify-center text-white text-sm font-black shrink-0">
-            {initials}
-          </div>
-          <div className="min-w-0">
-            <p className="text-ink text-sm font-bold truncate">{fullName}</p>
-            <p className="text-ink-faint text-xs">{roleLabel}</p>
-          </div>
-        </div>
-        <button
-          onClick={handleLogout}
-          className="mt-1 w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-ink-soft hover:bg-red-50 hover:text-red-600 transition-colors"
-        >
-          <LogOut size={20} />
-          Cerrar sesión
-        </button>
+        
       </div>
     </aside>
   );
