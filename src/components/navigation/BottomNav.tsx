@@ -41,6 +41,10 @@ export default function BottomNav() {
 
   if (!user || !isAppRoute(pathname)) return null;
 
+  // En el hilo de chat (/dashboard/chats/<id>) se oculta la barra: tapa el
+  // input de enviar mensaje. La lista de chats (/dashboard/chats) sí la muestra.
+  if (/^\/dashboard\/chats\/[^/]+/.test(pathname)) return null;
+
   const role = (user.role as Role) || 'USER';
   const tabs = tabsByRole[role];
 
