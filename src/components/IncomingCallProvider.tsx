@@ -23,6 +23,17 @@ export function IncomingCallProvider() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [callSocket.socket]);
 
+  // El cliente colgó antes de que aceptáramos: el backend emite `call_ended` al
+  // receptor. Cerramos el modal para que no siga sonando una llamada cancelada.
+  useEffect(() => {
+    if (!callSocket.socket) return;
+    const unsub = callSocket.onCallEnded((data) =>
+      setIncoming((prev) => (prev && prev.callId === data.callId ? null : prev)),
+    );
+    return () => { unsub(); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [callSocket.socket]);
+
   // Segunda vía: la web venía cerrada y se abrió al pulsar la notificación, así
   // que el socket nunca vio la llamada. El service worker deja los datos en la
   // URL y desde aquí reconstruimos el modal.
