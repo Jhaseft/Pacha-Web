@@ -29,7 +29,7 @@ export default function ActionPills({
 
   const callPrice = getPrice('CALL');
   const videoPrice = getPrice('VIDEO_CALL');
-  const chatPrice = getPrice('MESSAGE_SEND') ?? '0.10';
+  const chatPrice = getPrice('MESSAGE_SEND');
   const subPrice = subPlan?.price ?? null;
 
   return (
@@ -41,7 +41,9 @@ export default function ActionPills({
       >
         <MessageCircle size={18} />
         <span>Chat</span>
-        <span className="text-xs opacity-90">Desde ${chatPrice}/min</span>
+        <span className="text-xs opacity-90">
+          {chatPrice !== null ? `Desde ${chatPrice} cred/mensaje` : 'Enviar mensaje'}
+        </span>
       </button>
 
       <button
@@ -55,7 +57,7 @@ export default function ActionPills({
         <Phone size={18} />
         <span>Llamada</span>
         <span className="text-xs opacity-90">
-          {callPrice !== null ? `Desde $${callPrice}/min` : 'No disponible'}
+          {callPrice !== null ? `Desde ${callPrice} cred/min` : 'No disponible'}
         </span>
       </button>
 
@@ -70,7 +72,7 @@ export default function ActionPills({
         <Video size={18} />
         <span>Videollamada</span>
         <span className="text-xs opacity-90">
-          {videoPrice !== null ? `Desde $${videoPrice}/min` : 'No disponible'}
+          {videoPrice !== null ? `Desde ${videoPrice} cred/min` : 'No disponible'}
 
         </span>
       </button>
@@ -93,7 +95,7 @@ export default function ActionPills({
           {subStatus?.isSubscribed
             ? 'Acceso completo'
             : subPlan
-              ? `Desde $${subPrice}/mes`
+              ? `Desde ${subPrice} cred/mes`
               : 'No disponible'}
         </span>
       </button>

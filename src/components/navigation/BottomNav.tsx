@@ -44,19 +44,28 @@ export default function BottomNav() {
   const role = (user.role as Role) || 'USER';
   const tabs = tabsByRole[role];
 
-  const isActive = (tabName: string) => {
-    if (tabName === 'dashboard' || tabName === 'admin') {
-      return pathname === `/${tabName}`;
-    }
-    return pathname.startsWith(`/${tabName}`);
+  // "Inicio" solo se marca en su ruta exacta: es el prefijo de todas las demás
+  // pantallas del rol (subscription, redes sociales…), que no son Inicio.
+  const homeTab = tabs[0].name;
+
+  const matches = (tabName: string) => {
+    const base = `/${tabName}`;
+    if (tabName === homeTab) return pathname === base;
+    return pathname === base || pathname.startsWith(`${base}/`);
   };
+
+  // Solo se marca la pestaña más específica: si no, /dashboard/anfitriona/perfil
+  // encendería a la vez "Inicio" (dashboard/anfitriona) y "Perfil".
+  const activeTab = tabs
+    .filter((tab) => matches(tab.name))
+    .sort((a, b) => b.name.length - a.name.length)[0];
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-card border-t border-line flex md:hidden">
       <div className="w-full flex">
         {tabs.map((tab) => {
           const Icon = tab.icon;
-          const active = isActive(tab.name);
+          const active = activeTab?.name === tab.name;
 
           return (
             <button

@@ -128,10 +128,10 @@ export default function PerfilPage() {
     }
   };
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     if (confirm('¿Estás segura de que quieres salir?')) {
-      await logout();
-      router.replace('/auth/choose-access');
+      logout();
+      router.replace('/');
     }
   };
 
