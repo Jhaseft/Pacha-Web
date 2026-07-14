@@ -47,7 +47,7 @@ function CreditosContent() {
   const { user, token, isHydrated } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { symbol, rate, isPeru } = useCurrency();
+  const { symbol, rate } = useCurrency();
 
   const [balance, setBalance] = useState<number | null>(null);
   const [balanceLoading, setBalanceLoading] = useState(true);
@@ -456,17 +456,15 @@ function CreditosContent() {
               </button>
             </div>
 
-            {isPeru && (
-              <button
-                onClick={() => handlePickMethod("flow")}
-                className="w-full text-left bg-canvas-alt border border-line hover:border-brand rounded-2xl px-4 py-4 mb-3 transition-colors"
-              >
-                <p className="text-ink text-base font-extrabold">Flow</p>
-                <p className="text-ink-faint text-xs mt-1">
-                  Tarjeta, transferencia o billetera (Perú/Chile)
-                </p>
-              </button>
-            )}
+            <button
+              onClick={() => handlePickMethod("flow")}
+              className="w-full text-left bg-canvas-alt border border-line hover:border-brand rounded-2xl px-4 py-4 mb-3 transition-colors"
+            >
+              <p className="text-ink text-base font-extrabold">Flow</p>
+              <p className="text-ink-faint text-xs mt-1">
+                Tarjeta, transferencia o billetera (Perú/Chile)
+              </p>
+            </button>
 
             <button
               onClick={() => handlePickMethod("paypal")}
