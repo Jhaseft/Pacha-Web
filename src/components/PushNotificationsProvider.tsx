@@ -59,10 +59,12 @@ export default function PushNotificationsProvider() {
         if (data.conversationId && pathname === `/dashboard/chats/${data.conversationId}`) return;
         if (data.type === 'INCOMING_CALL' || data.type === 'CALL_WARNING') return;
 
+        // Los push web llegan solo con `data` (ver notifications.service):
+        // el título y el cuerpo vienen dentro.
         const toast: Toast = {
           id: Date.now(),
-          title: payload.notification?.title ?? 'Notificación',
-          body: payload.notification?.body ?? '',
+          title: data.title || payload.notification?.title || 'Notificación',
+          body: data.body || payload.notification?.body || '',
           url,
         };
 

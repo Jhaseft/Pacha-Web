@@ -61,13 +61,16 @@ function targetUrl(data) {
 }
 
 messaging.onBackgroundMessage((payload) => {
+  // El backend manda a la web solo `data` (sin bloque `notification`) para que
+  // el navegador no pinte una notificación además de la nuestra: title y body
+  // vienen aquí dentro.
   const data = payload.data || {};
-  const title = payload.notification?.title || 'MonetizaLab';
+  const title = data.title || payload.notification?.title || 'MonetizaLab';
 
   const isCall = data.type === 'INCOMING_CALL';
 
   self.registration.showNotification(title, {
-    body: payload.notification?.body || '',
+    body: data.body || payload.notification?.body || '',
     icon: '/logo.png',
     badge: '/logo.png',
     tag: data.conversationId || data.type || 'default',
