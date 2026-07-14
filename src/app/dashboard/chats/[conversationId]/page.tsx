@@ -169,7 +169,7 @@ function ChatThread() {
           <Link href="/dashboard/chats" className="text-ink-soft hover:text-ink p-1">
             <ArrowLeft size={22} />
           </Link>
-          {otherUserId ? (
+          {otherUserId && user.role !== "ANFITRIONA" ? (
             <Link
               href={`/anfitrionas/${otherUserId}`}
               className="flex items-center gap-3 flex-1 min-w-0 group"
