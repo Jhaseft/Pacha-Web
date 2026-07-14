@@ -4,8 +4,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "../../context/AuthContext";
-import { loginWithEmail } from "../../lib/auth";
+import { loginWithEmail, googleLogin } from "../../lib/auth";
 import { Brand } from "../../components/Brand";
+import GoogleSignInButton from "../../components/GoogleSignInButton";
 
 const ROLE_REDIRECTS: Record<string, string> = {
   USER: "/dashboard",
@@ -45,6 +46,26 @@ export default function LoginPage() {
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "No se pudo iniciar sesión."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleGoogleCredential(idToken: string) {
+    try {
+      setLoading(true);
+      setError("");
+      const res = await googleLogin(idToken);
+      await setSession(res.access_token, res.user);
+      if (!res.user.isProfileComplete) {
+        router.replace("/login/cliente");
+        return;
+      }
+      router.replace(ROLE_REDIRECTS[res.user.role] ?? "/dashboard");
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "No se pudo continuar con Google."
       );
     } finally {
       setLoading(false);
@@ -144,12 +165,21 @@ export default function LoginPage() {
             <div className="flex-1 h-px bg-line" />
           </div>
 
+          <div className="mt-6">
+            <GoogleSignInButton
+              text="signin_with"
+              disabled={loading}
+              onCredential={handleGoogleCredential}
+              onError={setError}
+            />
+          </div>
+
           <Link
             href="/login/cliente"
             className="block text-center text-ink-soft text-sm mt-6 hover:text-ink transition-colors"
           >
             ¿No tienes cuenta?{" "}
-            <span className="text-brand font-semibold underline">Crear cuenta con celular</span>
+            <span className="text-brand font-semibold underline">Registrate aqui</span>
           </Link>
         </div>
       </div>

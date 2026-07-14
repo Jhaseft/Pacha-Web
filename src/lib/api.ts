@@ -37,3 +37,35 @@ export async function apiFetch<T>(
 
   return data as T;
 }
+
+/**
+ * Igual que apiFetch pero para multipart/form-data (subida de archivos).
+ * No fija Content-Type: el navegador agrega el boundary correcto por sí mismo.
+ */
+export async function apiFetchForm<T>(
+  path: string,
+  body: FormData,
+  token?: string,
+): Promise<T> {
+  const headers: Record<string, string> = {};
+  if (token) headers.Authorization = `Bearer ${token}`;
+
+  const response = await fetch(buildUrl(path), {
+    method: "POST",
+    body,
+    headers,
+  });
+
+  const text = await response.text();
+  const data = text ? JSON.parse(text) : null;
+
+  if (!response.ok) {
+    const raw = data && (data.message || data.error);
+    let message = `Error ${response.status}: solicitud fallida`;
+    if (Array.isArray(raw)) message = raw.join(", ");
+    else if (typeof raw === "string") message = raw;
+    throw new Error(message);
+  }
+
+  return data as T;
+}
