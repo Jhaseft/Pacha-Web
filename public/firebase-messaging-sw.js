@@ -28,7 +28,21 @@ function targetUrl(data) {
     case 'MESSAGE_UNLOCKED':
     case 'IMAGE_UNLOCKED':
       return data.conversationId ? `/dashboard/chats/${data.conversationId}` : '/dashboard/chats';
-    case 'INCOMING_CALL':
+    case 'INCOMING_CALL': {
+      // La web pudo estar cerrada y no recibir el evento del socket: llevamos
+      // los datos de la llamada en la URL para poder mostrar el modal al abrir.
+      const params = new URLSearchParams({
+        incomingCall: '1',
+        callId: data.callId ?? '',
+        callerId: data.callerId ?? '',
+        receiverId: data.receiverId ?? '',
+        callType: data.callType ?? 'CALL',
+        callerName: data.callerName ?? 'Cliente',
+        callerAvatar: data.callerAvatar ?? '',
+        pricePerMinute: data.pricePerMinute ?? '0',
+      });
+      return `/dashboard?${params.toString()}`;
+    }
     case 'CALL_ACCEPTED':
     case 'CALL_REJECTED':
     case 'CALL_BILLED':
@@ -50,11 +64,17 @@ messaging.onBackgroundMessage((payload) => {
   const data = payload.data || {};
   const title = payload.notification?.title || 'MonetizaLab';
 
+  const isCall = data.type === 'INCOMING_CALL';
+
   self.registration.showNotification(title, {
     body: payload.notification?.body || '',
     icon: '/logo.png',
     badge: '/logo.png',
     tag: data.conversationId || data.type || 'default',
+    // Una llamada no puede desvanecerse sola ni pasar desapercibida.
+    requireInteraction: isCall,
+    renotify: isCall,
+    vibrate: isCall ? [300, 150, 300, 150, 300] : undefined,
     data: { url: targetUrl(data), ...data },
   });
 });

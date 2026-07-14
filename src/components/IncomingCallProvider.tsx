@@ -23,6 +23,31 @@ export function IncomingCallProvider() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [callSocket.socket]);
 
+  // Segunda vía: la web venía cerrada y se abrió al pulsar la notificación, así
+  // que el socket nunca vio la llamada. El service worker deja los datos en la
+  // URL y desde aquí reconstruimos el modal.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('incomingCall') !== '1') return;
+
+    const callId = params.get('callId');
+    const callerId = params.get('callerId');
+    if (!callId || !callerId) return;
+
+    setIncoming({
+      callId,
+      callerId,
+      receiverId: params.get('receiverId') ?? '',
+      callType: (params.get('callType') as IncomingCallData['callType']) ?? 'CALL',
+      callerName: params.get('callerName') || 'Cliente',
+      callerAvatar: params.get('callerAvatar') || null,
+      pricePerMinute: Number(params.get('pricePerMinute') ?? 0),
+    });
+
+    // Limpia la URL: al recargar no debe reaparecer una llamada ya terminada.
+    window.history.replaceState({}, '', window.location.pathname);
+  }, []);
+
   if (!incoming) return null;
 
   const isVideo = incoming.callType === 'VIDEO_CALL';
