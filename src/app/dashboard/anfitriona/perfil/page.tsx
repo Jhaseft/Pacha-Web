@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { usePushNotifications } from '@/hooks/usePushNotifications';
 import {
   ProfileHeader,
   EarningsSection,
@@ -50,7 +51,9 @@ export default function PerfilPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [togglingOnline, setTogglingOnline] = useState(false);
-  const [notificationsEnabled, setNotificationsEnabled] = useState<boolean | null>(null);
+
+  // El estado real lo manda el permiso del navegador, no un flag nuestro.
+  const push = usePushNotifications();
 
   // Subida de historias: el "+" abre el selector de archivos y, al elegir, el modal.
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -102,15 +105,6 @@ export default function PerfilPage() {
 
   useEffect(() => {
     loadAll();
-    const checkNotifications = async () => {
-      try {
-        const permission = await Notification.requestPermission();
-        setNotificationsEnabled(permission === 'granted');
-      } catch {
-        setNotificationsEnabled(false);
-      }
-    };
-    checkNotifications();
   }, [loadAll]);
 
   const handleToggleOnline = async () => {
@@ -128,18 +122,29 @@ export default function PerfilPage() {
     }
   };
 
-  const handleLogout = () => {
-    if (confirm('¿Estás segura de que quieres salir?')) {
-      logout();
-      router.replace('/');
-    }
+  const handleLogout = async () => {
+    if (!confirm('¿Estás segura de que quieres salir?')) return;
+
+    // Antes de cerrar sesión: si no, este navegador seguiría recibiendo sus push.
+    await push.disable().catch(() => {});
+    logout();
+    router.replace('/');
   };
 
-  const handleNotifications = () => {
-    if (notificationsEnabled) {
-      alert('¿Quieres desactivar las notificaciones?');
-    } else {
-      alert('Las notificaciones están desactivadas. ¿Quieres activarlas?');
+  const handleNotifications = async () => {
+    if (!push.isSupported) {
+      alert('Este navegador no admite notificaciones. En iPhone, añade la web a tu pantalla de inicio.');
+      return;
+    }
+
+    if (push.isEnabled) {
+      await push.disable();
+      return;
+    }
+
+    const ok = await push.enable();
+    if (!ok && push.permission === 'denied') {
+      alert('Bloqueaste las notificaciones. Habilítalas desde el candado 🔒 de la barra de direcciones.');
     }
   };
 
@@ -334,7 +339,7 @@ export default function PerfilPage() {
           <ActionButtons
             profile={profile}
             isOnline={profile?.isOnline ?? false}
-            notificationsEnabled={notificationsEnabled}
+            notificationsEnabled={push.isEnabled}
             onToggleOnline={handleToggleOnline}
             onLogout={handleLogout}
             onNotifications={handleNotifications}

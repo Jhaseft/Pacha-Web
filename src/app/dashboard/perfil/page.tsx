@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "../../../context/AuthContext";
-import { User as UserIcon, ChevronRight, LogOut } from "lucide-react";
+import { usePushNotifications } from "@/hooks/usePushNotifications";
+import { User as UserIcon, ChevronRight, LogOut, Bell } from "lucide-react";
 
 export default function PerfilPage() {
   const { user, isHydrated, logout } = useAuth();
   const router = useRouter();
   const [confirmLogout, setConfirmLogout] = useState(false);
+  const push = usePushNotifications();
 
   useEffect(() => {
     if (isHydrated && !user) router.replace("/login");
@@ -26,9 +28,27 @@ export default function PerfilPage() {
   const displayName =
     [user.firstName, user.lastName].filter(Boolean).join(" ") || null;
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    // Antes de salir: si no, este navegador seguiría recibiendo sus push.
+    await push.disable().catch(() => {});
     logout();
     router.replace("/login");
+  };
+
+  const handleToggleNotifications = async () => {
+    if (push.busy) return;
+
+    if (push.isEnabled) {
+      await push.disable();
+      return;
+    }
+
+    const ok = await push.enable();
+    if (!ok && push.permission === "denied") {
+      alert(
+        "Bloqueaste las notificaciones. Habilítalas desde el candado 🔒 de la barra de direcciones.",
+      );
+    }
   };
 
   const mainItems = [
@@ -69,7 +89,40 @@ export default function PerfilPage() {
           ))}
         </div>
 
-    
+        {/* Notificaciones: el estado lo manda el permiso del navegador */}
+        {push.isSupported && (
+          <div className="bg-card border border-line rounded-3xl mb-4">
+            <button
+              onClick={handleToggleNotifications}
+              disabled={push.busy}
+              aria-pressed={push.isEnabled}
+              className="w-full flex items-center gap-3 px-5 py-4 disabled:opacity-60"
+            >
+              <Bell size={18} className={push.isEnabled ? "text-brand" : "text-ink-faint"} />
+              <span className="text-ink text-sm text-left flex-1 min-w-0">
+                Notificaciones
+                <span className="block text-ink-faint text-xs mt-0.5">
+                  {push.isEnabled
+                    ? "Recibirás avisos de mensajes y llamadas"
+                    : "Actívalas para no perderte nada"}
+                </span>
+              </span>
+
+              <span
+                className={`relative w-11 h-6 rounded-full shrink-0 transition-colors ${
+                  push.isEnabled ? "bg-brand" : "bg-canvas-alt border border-line"
+                }`}
+              >
+                <span
+                  className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all ${
+                    push.isEnabled ? "left-5.5" : "left-0.5"
+                  }`}
+                />
+              </span>
+            </button>
+          </div>
+        )}
+
         <div className="bg-card border border-line rounded-3xl divide-y divide-line mb-6">
           {secondaryItems.map((item) => (
             <MenuLink key={item.label} href={item.href} label={item.label} />

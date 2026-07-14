@@ -5,6 +5,8 @@ import "./globals.css";
 import { AuthProvider } from "../context/AuthContext";
 import { SocketProvider } from "../context/SocketContext";
 import { IncomingCallProvider } from "../components/IncomingCallProvider";
+import PushNotificationsProvider from "../components/PushNotificationsProvider";
+import PushOptInPrompt from "../components/PushOptInPrompt";
 import { ChatWidgetLoader } from "../components/ChatWidgetLoader";
 import BottomNav from "../components/navigation/BottomNav";
 import SidebarWrapper from "../components/navigation/SidebarWrapper";
@@ -38,6 +40,8 @@ export default function RootLayout({
             </div>
             <BottomNav />
             <IncomingCallProvider />
+            <PushNotificationsProvider />
+            <PushOptInPrompt />
           </SocketProvider>
         </AuthProvider>
         {/* <ChatWidgetLoader /> */}

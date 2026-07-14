@@ -80,15 +80,30 @@ export function ActionButtons({
       {/* Notifications */}
       <button
         onClick={onNotifications}
+        aria-pressed={!!notificationsEnabled}
         className="w-full relative rounded-xl overflow-hidden p-0.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:shadow-lg hover:shadow-blue-500/50 transition shadow-md"
       >
-        <div className={`w-full rounded-lg py-3 px-4 font-bold text-sm flex items-center justify-center gap-2 transition ${
-          notificationsEnabled
-            ? 'bg-blue-900/50 text-blue-200 hover:bg-blue-900/60'
-            : 'bg-blue-900/40 text-blue-300 hover:bg-blue-900/50'
-        }`}>
-          <Bell size={18} />
-          Notificaciones {notificationsEnabled ? '✅' : '❌'}
+        <div className="w-full rounded-lg py-3 px-4 bg-blue-900/50 hover:bg-blue-900/60 flex items-center gap-3 transition">
+          <Bell size={18} className={notificationsEnabled ? 'text-white' : 'text-blue-300'} />
+
+          <span className="flex-1 min-w-0 text-left">
+            <span className="block text-white font-bold text-sm">Notificaciones</span>
+            <span className="block text-white/60 text-xs font-normal mt-0.5">
+              {notificationsEnabled ? 'Activadas en este dispositivo' : 'Actívalas para no perderte nada'}
+            </span>
+          </span>
+
+          <span
+            className={`relative w-11 h-6 rounded-full shrink-0 transition-colors ${
+              notificationsEnabled ? 'bg-blue-400' : 'bg-white/20'
+            }`}
+          >
+            <span
+              className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all ${
+                notificationsEnabled ? 'left-5.5' : 'left-0.5'
+              }`}
+            />
+          </span>
         </div>
       </button>
 
