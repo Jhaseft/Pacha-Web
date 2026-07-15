@@ -1,19 +1,27 @@
 'use client'
 
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 import { ArrowLeft } from 'lucide-react';
 
 export default function BackButton() {
     const router = useRouter();
 
-    useEffect(() => {
-        sessionStorage.setItem('visitedProfile', 'true');
-    }, []);
-
     const handleBack = () => {
-        const wasVisitedBefore = sessionStorage.getItem('visitedProfile');
-        if (wasVisitedBefore && window.history.length > 1) {
+        // Solo volvemos atrás si la pantalla anterior era de nuestro propio
+        // sitio. Si el link se abrió pegándolo (referrer externo o vacío, p. ej.
+        // la "nueva pestaña" del navegador), `history.length` igual es > 1, así
+        // que esa comprobación sacaría al usuario fuera de la app. Con el
+        // referrer distinguimos navegación interna de una llegada directa.
+        let cameFromOurSite = false;
+        try {
+            cameFromOurSite =
+                !!document.referrer &&
+                new URL(document.referrer).origin === window.location.origin;
+        } catch {
+            cameFromOurSite = false;
+        }
+
+        if (cameFromOurSite) {
             router.back();
         } else {
             router.push('/');
