@@ -20,6 +20,7 @@ import FeaturedContent from '@/components/hostess/FeaturedContent';
 import GallerySection from '@/components/hostess/GallerySection';
 import { AlertCircle, Loader2, ArrowLeft, Download } from 'lucide-react';
 import Footer from '@/components/hostess/Footer';
+import BackButton from '@/components/navigation/BackButton';
 
 interface ProfilePageProps {
   params: Promise<{ username: string }>;
@@ -147,12 +148,7 @@ export default function ProfilePage({ params }: ProfilePageProps) {
 
   return (
     <div className="min-h-screen bg-canvas">
-      <button
-        onClick={() => router.back()}
-        className="fixed top-4 left-4 z-20 bg-black/50 hover:bg-black/70 p-2.5 rounded-full transition backdrop-blur-sm"
-      >
-        <ArrowLeft size={20} className="text-white" />
-      </button>
+      <BackButton/>
 
       <ProfileHeader profile={profile} />
 
