@@ -11,6 +11,7 @@ import { ChatWidgetLoader } from "../components/ChatWidgetLoader";
 import BottomNav from "../components/navigation/BottomNav";
 import SidebarWrapper from "../components/navigation/SidebarWrapper";
 import ContentWrapper from "../components/navigation/ContentWrapper";
+import { NavigationTracker } from "../lib/navHistory";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,6 +33,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-black text-white">
         <AuthProvider>
           <SocketProvider>
+            <NavigationTracker />
             <div className="flex">
               <SidebarWrapper />
               <ContentWrapper>
