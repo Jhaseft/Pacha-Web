@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "../../context/AuthContext";
-import { loginWithEmail, googleLogin } from "../../lib/auth";
+import { loginWithEmail, googleLogin, type User } from "../../lib/auth";
 import { Brand } from "../../components/Brand";
 import GoogleSignInButton from "../../components/GoogleSignInButton";
 
@@ -24,6 +24,18 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Destino tras iniciar sesión: perfil de origen (?redirect=/...) para USER.
+  const [redirectTo, setRedirectTo] = useState<string | null>(null);
+  useEffect(() => {
+    const r = new URLSearchParams(window.location.search).get("redirect");
+    if (r && r.startsWith("/")) setRedirectTo(r);
+  }, []);
+
+  function destFor(u: User) {
+    if (redirectTo && u.role === "USER") return redirectTo;
+    return ROLE_REDIRECTS[u.role] ?? "/dashboard";
+  }
+
   async function handleLogin() {
     const trimEmail = email.trim().toLowerCase();
     const trimPass = password.trim();
@@ -42,7 +54,7 @@ export default function LoginPage() {
       setError("");
       const res = await loginWithEmail(trimEmail, trimPass);
       await setSession(res.access_token, res.user);
-      router.replace(ROLE_REDIRECTS[res.user.role] ?? "/dashboard");
+      router.replace(destFor(res.user));
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "No se pudo iniciar sesión."
@@ -59,10 +71,14 @@ export default function LoginPage() {
       const res = await googleLogin(idToken);
       await setSession(res.access_token, res.user);
       if (!res.user.isProfileComplete) {
-        router.replace("/login/cliente");
+        router.replace(
+          redirectTo
+            ? `/login/cliente?redirect=${encodeURIComponent(redirectTo)}`
+            : "/login/cliente",
+        );
         return;
       }
-      router.replace(ROLE_REDIRECTS[res.user.role] ?? "/dashboard");
+      router.replace(destFor(res.user));
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "No se pudo continuar con Google."
@@ -175,7 +191,7 @@ export default function LoginPage() {
           </div>
 
           <Link
-            href="/login/cliente"
+            href={`/login/cliente${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ""}`}
             className="block text-center text-ink-soft text-sm mt-6 hover:text-ink transition-colors"
           >
             ¿No tienes cuenta?{" "}

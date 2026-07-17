@@ -36,6 +36,19 @@ export default function RegisterPage() {
   const router = useRouter();
   const { setSession, token, user, isHydrated } = useAuth();
 
+  // Perfil desde el que llegó el usuario (?redirect=/anfitrionas/xxx). Al
+  // terminar el registro como USER lo devolvemos ahí en vez del dashboard.
+  const [redirectTo, setRedirectTo] = useState<string | null>(null);
+  useEffect(() => {
+    const r = new URLSearchParams(window.location.search).get("redirect");
+    if (r && r.startsWith("/")) setRedirectTo(r);
+  }, []);
+
+  function destFor(u: User) {
+    if (redirectTo && u.role === "USER") return redirectTo;
+    return ROLE_REDIRECTS[u.role] ?? "/dashboard";
+  }
+
   const [role, setRole] = useState<Role | null>(null);
   const [step, setStep] = useState<Step>("role");
   const [authMode, setAuthMode] = useState<AuthMode>("otp");
@@ -88,7 +101,7 @@ export default function RegisterPage() {
   function goToProfileOrRedirect(res: { access_token: string; user: User }) {
     if (res.user.isProfileComplete) {
       setSession(res.access_token, res.user);
-      router.replace(ROLE_REDIRECTS[res.user.role] ?? "/dashboard");
+      router.replace(destFor(res.user));
       return;
     }
     setAuthMode("google");
@@ -149,7 +162,7 @@ export default function RegisterPage() {
       const res = await verifyOtp(email, code);
       if ("access_token" in res) {
         setSession(res.access_token, res.user);
-        router.replace(ROLE_REDIRECTS[res.user.role] ?? "/dashboard");
+        router.replace(destFor(res.user));
         return;
       }
       setAuthMode("otp");
@@ -190,7 +203,7 @@ export default function RegisterPage() {
             completionToken,
           );
       setSession(res.access_token, res.user);
-      router.replace(ROLE_REDIRECTS[res.user.role] ?? "/dashboard");
+      router.replace(destFor(res.user));
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "No se pudo completar el registro.",
@@ -284,6 +297,7 @@ export default function RegisterPage() {
   }
 
   const isCreator = role === "ANFITRIONA";
+  const authQuery = redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : "";
   const primaryBtn =
     "w-full bg-linear-to-r from-brand to-brand-violet hover:from-brand-strong hover:to-brand text-white font-black rounded-full py-4 shadow-lg shadow-brand/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed";
 
@@ -350,7 +364,7 @@ export default function RegisterPage() {
               </button>
 
               <Link
-                href="/login"
+                href={`/login${authQuery}`}
                 className="block text-center text-ink-soft text-sm mt-8 hover:text-ink transition-colors"
               >
                 ¿Ya tienes cuenta?{" "}

@@ -16,6 +16,7 @@ import {
   SubscriptionStatus,
 } from '@/lib/hostessService';
 import { apiGetAllPackages } from '@/lib/packages';
+import { apiGetMyWallet } from '@/lib/flow';
 import type { PackageData } from '@/types/package';
 import { useCurrency } from '@/hooks/useCurrency';
 import { useAuth } from '@/context/AuthContext';
@@ -58,8 +59,9 @@ export default function ProfilePage({ params }: ProfilePageProps) {
   const [viewingImage, setViewingImage] = useState<string | null>(null);
   const [packages, setPackages] = useState<PackageData[]>([]);
   const [showPreviewMsg, setShowPreviewMsg] = useState(false);
+  const [balance, setBalance] = useState<number | null>(null);
   const { symbol, rate } = useCurrency();
-  const { user } = useAuth();
+  const { user, token } = useAuth();
 
   // Vista previa: la creadora/admin ve el perfil; las acciones se bloquean.
   const isPreview = user?.role === 'ANFITRIONA' || user?.role === 'ADMIN';
@@ -73,12 +75,34 @@ export default function ProfilePage({ params }: ProfilePageProps) {
     return () => clearTimeout(t);
   }, [showPreviewMsg]);
 
-  const handleBuyCredits = () => {
+  // Puerta de acceso: si es vista previa avisa; si no hay sesión manda a crear
+  // cuenta guardando el perfil actual para volver aquí tras registrarse.
+  const requireAuth = () => {
     if (isPreview) {
       notifyPreview();
-      return;
+      return false;
     }
-    router.push(user ? '/dashboard/creditos' : '/login');
+    if (!user) {
+      const next = encodeURIComponent(window.location.pathname + window.location.search);
+      router.push(`/login/cliente?redirect=${next}`);
+      return false;
+    }
+    return true;
+  };
+
+  // Verifica que el saldo alcance el mínimo necesario; si no, manda a comprar.
+  // Si el saldo aún no cargó (null) deja pasar: la pantalla destino revalida.
+  const requireCredits = (needed: number) => {
+    if (needed > 0 && balance !== null && balance < needed) {
+      router.push('/dashboard/creditos');
+      return false;
+    }
+    return true;
+  };
+
+  const handleBuyCredits = () => {
+    if (!requireAuth()) return;
+    router.push('/dashboard/creditos');
   };
 
   useEffect(() => {
@@ -95,6 +119,17 @@ export default function ProfilePage({ params }: ProfilePageProps) {
       .then((data) => setPackages(Array.isArray(data) ? data : []))
       .catch(() => setPackages([]));
   }, []);
+
+  // Saldo del usuario autenticado (para saber si le alcanza antes de conectar).
+  useEffect(() => {
+    if (!token || isPreview) {
+      setBalance(null);
+      return;
+    }
+    apiGetMyWallet(token)
+      .then((w) => setBalance(Number(w.balance)))
+      .catch(() => setBalance(null));
+  }, [token, isPreview]);
 
   const loadProfile = async () => {
     setLoading(true);
@@ -133,9 +168,10 @@ export default function ProfilePage({ params }: ProfilePageProps) {
 
   const handleCall = (callType: 'CALL' | 'VIDEO_CALL') => {
     if (!profile) return;
-    if (isPreview) return notifyPreview();
+    if (!requireAuth()) return;
     const price = servicePrices.find((p) => p.serviceType === callType)?.price;
     if (price === undefined) return;
+    if (!requireCredits(price)) return;
     const search = new URLSearchParams({
       anfitrionaId: profile.id,
       anfitrionaName: profile.name,
@@ -148,7 +184,8 @@ export default function ProfilePage({ params }: ProfilePageProps) {
 
   const handleChat = () => {
     if (!profile) return;
-    if (isPreview) return notifyPreview();
+    if (!requireAuth()) return;
+    if (!requireCredits(chatPrice ?? 0)) return;
     const search = new URLSearchParams({
       otherUserId: profile.id,
       name: profile.name,
@@ -159,7 +196,7 @@ export default function ProfilePage({ params }: ProfilePageProps) {
 
   const handleSubscribe = async () => {
     if (!profile || !subPlan) return;
-    if (isPreview) return notifyPreview();
+    if (!requireAuth()) return;
     try {
       const res = await buySubscription(profile.id);
       setSubStatus({ isSubscribed: true, expiresAt: res.expiresAt });

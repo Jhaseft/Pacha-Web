@@ -128,8 +128,8 @@ function CallContent() {
       .then((w) => {
         if (!active) return;
         if (price > 0 && Number(w.balance) < price) {
-          setToast(`Saldo insuficiente · necesitas ${price} crédito${price !== 1 ? 's' : ''}`);
-          setTimeout(() => router.back(), 2600);
+          setToast(`Saldo insuficiente · te llevamos a comprar créditos`);
+          setTimeout(() => router.replace('/dashboard/creditos'), 2000);
           return;
         }
         setupCaller();
