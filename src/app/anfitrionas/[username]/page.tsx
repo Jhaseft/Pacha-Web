@@ -17,6 +17,7 @@ import {
 } from '@/lib/hostessService';
 import { apiGetAllPackages } from '@/lib/packages';
 import { apiGetMyWallet } from '@/lib/flow';
+import { getPublicHostesses, type Anfitriona } from '@/lib/hostesses';
 import type { PackageData } from '@/types/package';
 import { useCurrency } from '@/hooks/useCurrency';
 import { useAuth } from '@/context/AuthContext';
@@ -64,6 +65,7 @@ function ProfilePageContent({ params }: ProfilePageProps) {
   const [error, setError] = useState<string | null>(null);
   const [viewingImage, setViewingImage] = useState<string | null>(null);
   const [packages, setPackages] = useState<PackageData[]>([]);
+  const [otherCreators, setOtherCreators] = useState<Anfitriona[]>([]);
   const [toast, setToast] = useState<string | null>(null);
   const [balance, setBalance] = useState<number | null>(null);
   const { symbol, rate } = useCurrency();
@@ -141,6 +143,13 @@ function ProfilePageContent({ params }: ProfilePageProps) {
     apiGetAllPackages()
       .then((data) => setPackages(Array.isArray(data) ? data : []))
       .catch(() => setPackages([]));
+  }, []);
+
+  // Otras creadoras para los avatares decorativos del hero.
+  useEffect(() => {
+    getPublicHostesses(1, 12)
+      .then((res) => setOtherCreators(res.anfitrionas.filter((a) => a.avatar)))
+      .catch(() => setOtherCreators([]));
   }, []);
 
   // Saldo del usuario autenticado (para saber si le alcanza antes de conectar).
@@ -398,14 +407,12 @@ function ProfilePageContent({ params }: ProfilePageProps) {
 
               {/* Rating con stack de avatares */}
               <div className="flex items-center gap-3">
-                <div className="flex -space-x-2.5">
-                  {[0, 1, 2, 3, 4].map((i) => (
-                    <span
-                      key={i}
-                      className="w-8 h-8 rounded-full border-2 border-surface bg-linear-to-br from-secondary/70 to-purple/70"
-                    />
-                  ))}
-                </div>
+                <AvatarStack
+                  creators={otherCreators.filter((c) => c.id !== profile.id)}
+                  count={5}
+                  sizeClass="w-11 h-11"
+                  overlapClass="-space-x-3"
+                />
                 <div>
                   <div className="flex items-center gap-1">
                     <Star size={15} className="text-amber-400 fill-amber-400" />
@@ -464,19 +471,17 @@ function ProfilePageContent({ params }: ProfilePageProps) {
                   </div>
 
                   <Link
-                    href="/creadores"
+                    href="/explorar"
                     className="group flex items-center gap-2 rounded-2xl border border-purple/50 bg-black/40 backdrop-blur-md px-4 py-3 hover:bg-black/55 transition shadow-lg shadow-purple/20"
                   >
                     <Zap size={16} className="text-secondary shrink-0" />
                     <span className="text-xs font-bold text-white tracking-wide">EXPLORAR OTRAS CREADORAS</span>
-                    <div className="flex -space-x-2 ml-auto">
-                      {[0, 1, 2].map((i) => (
-                        <span
-                          key={i}
-                          className="w-6 h-6 rounded-full border-2 border-surface bg-linear-to-br from-secondary/70 to-purple/70"
-                        />
-                      ))}
-                    </div>
+                    <AvatarStack
+                      creators={otherCreators.filter((c) => c.id !== profile.id)}
+                      count={3}
+                      sizeClass="w-8 h-8"
+                      overlapClass="-space-x-2.5 ml-auto"
+                    />
                     <ChevronRight size={18} className="text-white group-hover:translate-x-0.5 transition" />
                   </Link>
                 </div>
@@ -802,6 +807,44 @@ export default function ProfilePage({ params }: ProfilePageProps) {
 }
 
 /* ───────────────────────── Subcomponentes ───────────────────────── */
+
+function AvatarStack({
+  creators,
+  count,
+  sizeClass,
+  overlapClass,
+}: {
+  creators: Anfitriona[];
+  count: number;
+  sizeClass: string;
+  overlapClass: string;
+}) {
+  const list = creators.slice(0, count);
+  // Si aún no hay creadoras cargadas, mostramos placeholders con degradado.
+  const items: (Anfitriona | null)[] =
+    list.length > 0 ? list : Array.from({ length: count }, () => null);
+
+  return (
+    <div className={`flex ${overlapClass}`}>
+      {items.map((c, i) =>
+        c?.avatar ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            key={c.id}
+            src={c.avatar}
+            alt=""
+            className={`${sizeClass} rounded-full border-2 border-surface object-cover bg-surface-card`}
+          />
+        ) : (
+          <span
+            key={i}
+            className={`${sizeClass} rounded-full border-2 border-surface bg-linear-to-br from-secondary/70 to-purple/70`}
+          />
+        ),
+      )}
+    </div>
+  );
+}
 
 function CoinStack() {
   // Pila de monedas doradas 3D construida con CSS
