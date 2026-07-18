@@ -81,19 +81,29 @@ function ProfilePageContent({ params }: ProfilePageProps) {
     return () => clearTimeout(t);
   }, [toast]);
 
-  // Puerta de acceso a las acciones de cliente.
-  const requireAuth = () => {
+  // Avisa y redirige a login como cliente, recordando el destino al que
+  // continuar automáticamente tras iniciar sesión como usuario.
+  const proceedToLogin = (destination: string, firstMsg: string) => {
+    notify(firstMsg);
+    setTimeout(() => notify('Redirigiendo a inicio de sesión…'), 1300);
+    setTimeout(() => {
+      router.push(`/login/cliente?redirect=${encodeURIComponent(destination)}`);
+    }, 2200);
+  };
+
+  // Puerta de acceso a las acciones de cliente. `destination` es la ruta a la
+  // que se continuará automáticamente tras iniciar sesión como usuario.
+  const gate = (destination: string): boolean => {
     if (isPreview) {
       notify('Vista previa: no puedes usar esta acción');
       return false;
     }
     if (isCreatorOrAdmin) {
-      notify('Para realizar esta acción inicia sesión como usuario');
+      proceedToLogin(destination, 'Para realizar esta acción inicia sesión como usuario');
       return false;
     }
     if (!user) {
-      const next = encodeURIComponent(window.location.pathname + window.location.search);
-      router.push(`/login/cliente?redirect=${next}`);
+      proceedToLogin(destination, 'Inicia sesión para continuar');
       return false;
     }
     return true;
@@ -110,7 +120,7 @@ function ProfilePageContent({ params }: ProfilePageProps) {
   };
 
   const handleBuyCredits = () => {
-    if (!requireAuth()) return;
+    if (!gate('/dashboard/creditos')) return;
     router.push('/dashboard/creditos');
   };
 
@@ -184,10 +194,8 @@ function ProfilePageContent({ params }: ProfilePageProps) {
 
   const handleCall = (callType: 'CALL' | 'VIDEO_CALL') => {
     if (!profile) return;
-    if (!requireAuth()) return;
     const price = servicePrices.find((p) => p.serviceType === callType)?.price;
     if (price === undefined) return;
-    if (!requireCredits(price)) return;
     const search = new URLSearchParams({
       anfitrionaId: profile.id,
       anfitrionaName: profile.name,
@@ -195,24 +203,28 @@ function ProfilePageContent({ params }: ProfilePageProps) {
       callType,
       pricePerMinute: String(price),
     });
-    router.push(`/call?${search.toString()}`);
+    const destination = `/call?${search.toString()}`;
+    if (!gate(destination)) return;
+    if (!requireCredits(price)) return;
+    router.push(destination);
   };
 
   const handleChat = () => {
     if (!profile) return;
-    if (!requireAuth()) return;
-    if (!requireCredits(chatPrice ?? 0)) return;
     const search = new URLSearchParams({
       otherUserId: profile.id,
       name: profile.name,
       avatar: profile.avatar ?? '',
     });
-    router.push(`/dashboard/chats/new?${search.toString()}`);
+    const destination = `/dashboard/chats/new?${search.toString()}`;
+    if (!gate(destination)) return;
+    if (!requireCredits(chatPrice ?? 0)) return;
+    router.push(destination);
   };
 
   const handleSubscribe = async () => {
     if (!profile || !subPlan) return;
-    if (!requireAuth()) return;
+    if (!gate(`/anfitrionas/${username}`)) return;
     try {
       const res = await buySubscription(profile.id);
       setSubStatus({ isSubscribed: true, expiresAt: res.expiresAt });
