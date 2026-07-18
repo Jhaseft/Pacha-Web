@@ -70,14 +70,8 @@ export default function LoginPage() {
       setError("");
       const res = await googleLogin(idToken);
       await setSession(res.access_token, res.user);
-      if (!res.user.isProfileComplete) {
-        router.replace(
-          redirectTo
-            ? `/login/cliente?redirect=${encodeURIComponent(redirectTo)}`
-            : "/login/cliente",
-        );
-        return;
-      }
+      // Con Google la cuenta queda lista: el nombre viene de Google y no se
+      // pide contraseña. Entramos directo al destino.
       router.replace(destFor(res.user));
     } catch (err) {
       setError(
