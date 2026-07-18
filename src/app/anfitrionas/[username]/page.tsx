@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -49,7 +49,7 @@ interface ProfilePageProps {
 
 const EXCLUSIVE_LABELS = ['Fotos privadas', 'Videos exclusivos', 'Contenido VIP', 'Backstage', 'Y mucho más'];
 
-export default function ProfilePage({ params }: ProfilePageProps) {
+function ProfilePageContent({ params }: ProfilePageProps) {
   const router = useRouter();
   const [username, setUsername] = useState<string>('');
   const [profile, setProfile] = useState<AnfitrioneProfileDetail | null>(null);
@@ -60,28 +60,35 @@ export default function ProfilePage({ params }: ProfilePageProps) {
   const [error, setError] = useState<string | null>(null);
   const [viewingImage, setViewingImage] = useState<string | null>(null);
   const [packages, setPackages] = useState<PackageData[]>([]);
-  const [showPreviewMsg, setShowPreviewMsg] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
   const [balance, setBalance] = useState<number | null>(null);
   const { symbol, rate } = useCurrency();
   const { user, token } = useAuth();
+  const searchParams = useSearchParams();
 
-  // Vista previa: la creadora/admin ve el perfil; las acciones se bloquean.
-  const isPreview = user?.role === 'ANFITRIONA' || user?.role === 'ADMIN';
+  // Vista previa: se activa SOLO cuando se entra con ?preview=1 (botón
+  // "Ver mi perfil" de la anfitriona).
+  const isPreview = searchParams.get('preview') === '1';
+  // Las acciones de usuario (chat, llamada, etc.) son solo para clientes.
+  const isCreatorOrAdmin = user?.role === 'ANFITRIONA' || user?.role === 'ADMIN';
 
-  // Muestra el aviso flotante de "vista previa" (se oculta solo).
-  const notifyPreview = () => setShowPreviewMsg(true);
+  // Muestra un aviso flotante que se oculta solo.
+  const notify = (msg: string) => setToast(msg);
 
   useEffect(() => {
-    if (!showPreviewMsg) return;
-    const t = setTimeout(() => setShowPreviewMsg(false), 2800);
+    if (!toast) return;
+    const t = setTimeout(() => setToast(null), 3000);
     return () => clearTimeout(t);
-  }, [showPreviewMsg]);
+  }, [toast]);
 
-  // Puerta de acceso: si es vista previa avisa; si no hay sesión manda a crear
-  // cuenta guardando el perfil actual para volver aquí tras registrarse.
+  // Puerta de acceso a las acciones de cliente.
   const requireAuth = () => {
     if (isPreview) {
-      notifyPreview();
+      notify('Vista previa: no puedes usar esta acción');
+      return false;
+    }
+    if (isCreatorOrAdmin) {
+      notify('Para realizar esta acción inicia sesión como usuario');
       return false;
     }
     if (!user) {
@@ -741,16 +748,30 @@ export default function ProfilePage({ params }: ProfilePageProps) {
         Chatea ahora
       </button>
 
-      {/* Toast: aviso de vista previa */}
-      {showPreviewMsg && (
-        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 rounded-full bg-black/85 backdrop-blur border border-white/15 px-4 py-2.5 text-sm font-semibold text-white shadow-xl">
-          <Lock size={15} className="text-secondary" />
-          Vista previa: no puedes usar esta acción
+      {/* Toast: avisos flotantes */}
+      {toast && (
+        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 rounded-full bg-black/85 backdrop-blur border border-white/15 px-4 py-2.5 text-sm font-semibold text-white shadow-xl max-w-[90vw] text-center">
+          <Lock size={15} className="text-secondary shrink-0" />
+          {toast}
         </div>
       )}
 
       {viewingImage && <ImageViewer uri={viewingImage} onClose={() => setViewingImage(null)} />}
     </div>
+  );
+}
+
+export default function ProfilePage({ params }: ProfilePageProps) {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-surface flex items-center justify-center">
+          <Loader2 size={40} className="text-secondary animate-spin" />
+        </div>
+      }
+    >
+      <ProfilePageContent params={params} />
+    </Suspense>
   );
 }
 

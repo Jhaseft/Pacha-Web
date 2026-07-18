@@ -33,7 +33,7 @@ export function ActionButtons({
         </Link>
         {profile?.username ? (
           <Link
-            href={`/anfitrionas/${profile.username}`}
+            href={`/anfitrionas/${profile.username}?preview=1`}
             className="bg-gradient-to-br from-blue-500/20 to-blue-600/20 hover:from-blue-500/30 hover:to-blue-600/30 text-blue-300 border border-blue-500/50 rounded-xl py-3 px-4 font-bold text-sm flex items-center justify-center gap-2 transition shadow-md backdrop-blur-sm"
           >
             <Eye size={18} />
