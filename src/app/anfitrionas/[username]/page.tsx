@@ -49,6 +49,10 @@ interface ProfilePageProps {
 
 const EXCLUSIVE_LABELS = ['Fotos privadas', 'Videos exclusivos', 'Contenido VIP', 'Backstage', 'Y mucho más'];
 
+// Logo MonetizaLab (misma fuente que el componente Brand).
+const LOGO_SRC =
+  'https://res.cloudinary.com/dnbklbswg/image/upload/v1783607654/1000040485-removebg-preview_glnmou.png';
+
 function ProfilePageContent({ params }: ProfilePageProps) {
   const router = useRouter();
   const [username, setUsername] = useState<string>('');
@@ -309,6 +313,15 @@ function ProfilePageContent({ params }: ProfilePageProps) {
 
             {/* ── IZQUIERDA: contenido ── */}
             <div className="order-2 lg:order-1 space-y-5 lg:pt-8">
+              {/* Logo MonetizaLab */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <div className="flex items-center gap-2.5">
+                <img src={LOGO_SRC} alt="MonetizaLab" className="w-9 h-9 object-contain" />
+                <span className="text-xl font-black tracking-tight text-white">
+                  Monetiza<span className="text-secondary">Lab</span>
+                </span>
+              </div>
+
               <span
                 className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold ${
                   profile.isOnline
