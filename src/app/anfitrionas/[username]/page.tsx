@@ -93,7 +93,7 @@ function ProfilePageContent({ params }: ProfilePageProps) {
     notify(firstMsg);
     setTimeout(() => notify('Redirigiendo a inicio de sesión…'), 1300);
     setTimeout(() => {
-      router.push(`/login/cliente?redirect=${encodeURIComponent(destination)}`);
+      router.push(`/login?redirect=${encodeURIComponent(destination)}`);
     }, 2200);
   };
 
