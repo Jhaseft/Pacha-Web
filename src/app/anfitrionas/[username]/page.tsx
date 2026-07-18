@@ -23,6 +23,7 @@ import { useAuth } from '@/context/AuthContext';
 import SocialNetwork from '@/components/hostess/SocialNetwork';
 import ImageViewer from '@/components/hostess/ImageViewer';
 import BackButton from '@/components/navigation/BackButton';
+import { ApkLink } from '@/components/ApkLink';
 import {
   AlertCircle,
   Loader2,
@@ -39,6 +40,7 @@ import {
   ChevronRight,
   Zap,
   CreditCard,
+  Search,
 } from 'lucide-react';
 
 interface ProfilePageProps {
@@ -151,8 +153,15 @@ export default function ProfilePage({ params }: ProfilePageProps) {
 
       if (plan.status === 'fulfilled') setSubPlan(plan.value);
       if (status.status === 'fulfilled') setSubStatus(status.value);
-    } catch {
-      setError('No se pudo cargar el perfil. Verifica tu conexión.');
+    } catch (e: any) {
+      // 404 = el username no existe → dejamos error en null para mostrar
+      // la vista "no encontrada". Cualquier otro fallo = problema de conexión.
+      if (e?.response?.status === 404) {
+        setError(null);
+        setProfile(null);
+      } else {
+        setError('No se pudo cargar el perfil. Verifica tu conexión.');
+      }
     } finally {
       setLoading(false);
     }
@@ -239,8 +248,20 @@ export default function ProfilePage({ params }: ProfilePageProps) {
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-surface flex items-center justify-center">
-        <p className="text-white/60 text-lg">Anfitriona no encontrada.</p>
+      <div className="min-h-screen bg-surface flex flex-col items-center justify-center px-4 text-center">
+        <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4">
+          <Search size={30} className="text-white/40" />
+        </div>
+        <h1 className="text-white text-xl font-bold mb-1">Perfil no encontrado</h1>
+        <p className="text-white/50 mb-8 max-w-xs">
+          No existe ninguna anfitriona con el usuario <span className="text-white/80 font-semibold">@{username}</span>.
+        </p>
+        <button
+          onClick={() => router.push('/creadores')}
+          className="bg-linear-to-r from-secondary to-purple hover:opacity-90 text-white px-8 py-3 rounded-full font-bold transition"
+        >
+          Ver otras creadoras
+        </button>
       </div>
     );
   }
@@ -688,13 +709,12 @@ export default function ProfilePage({ params }: ProfilePageProps) {
           <section className="text-center">
             <p className="text-white/50 text-sm">
               ¿No tienes la app?{' '}
-              <a
-                href="https://play.google.com/store/apps/details?id=com.sanamente.appoficial"
-                target="_blank"
+              <ApkLink
+                event="APK_Cliente"
                 className="text-secondary hover:text-purple font-semibold"
               >
                 Descárgala gratis
-              </a>
+              </ApkLink>
             </p>
           </section>
         </div>
