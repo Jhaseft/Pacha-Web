@@ -202,6 +202,7 @@ function ProfilePageContent({ params }: ProfilePageProps) {
       anfitrionaAvatar: profile.avatar ?? '',
       callType,
       pricePerMinute: String(price),
+      returnTo: `/anfitrionas/${username}`,
     });
     const destination = `/call?${search.toString()}`;
     if (!gate(destination)) return;

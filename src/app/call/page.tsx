@@ -27,6 +27,14 @@ function CallContent() {
   const price = Number(search.get('pricePerMinute') ?? search.get('price') ?? 0);
   const isVideo = callType === 'VIDEO_CALL';
 
+  // A dónde volver al terminar la llamada. Si el perfil lo indicó (returnTo)
+  // vamos ahí explícitamente; si no, retrocedemos en el historial.
+  const returnTo = search.get('returnTo');
+  const goBack = () => {
+    if (returnTo && returnTo.startsWith('/')) router.replace(returnTo);
+    else router.back();
+  };
+
   const callIdRef = useRef(search.get('callId') || `${user?.id ?? 'anon'}_${Date.now()}`);
   const callId = callIdRef.current;
   const uid = user?.id ? uidFromUserId(user.id) : 0;
@@ -63,7 +71,7 @@ function CallContent() {
       if (timerRef.current) clearInterval(timerRef.current);
       setToast(reason);
       setCallState('ended');
-      setTimeout(() => router.back(), 3500);
+      setTimeout(goBack, 3500);
     };
 
     // Eventos comunes a ambos lados una vez conectados.
@@ -74,7 +82,7 @@ function CallContent() {
           setCallState('ended');
           if (timerRef.current) clearInterval(timerRef.current);
           agora.leave();
-          setTimeout(() => router.back(), 3500);
+          setTimeout(goBack, 3500);
         }),
         callSocket.onCallBilled((d) =>
           setBilling({ creditsCharged: d.creditsCharged, minutesBilled: d.minutesBilled }),
@@ -117,7 +125,7 @@ function CallContent() {
         }),
         callSocket.onCallRejected(() => {
           setCallState('rejected');
-          setTimeout(() => router.back(), 2500);
+          setTimeout(goBack, 2500);
         }),
       );
       commonListeners();
@@ -166,7 +174,7 @@ function CallContent() {
     agora.leave();
     if (timerRef.current) clearInterval(timerRef.current);
     setCallState('ended');
-    setTimeout(() => router.back(), 3000);
+    setTimeout(goBack, 3000);
   }
 
   function fmt(s: number) {
