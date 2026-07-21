@@ -39,9 +39,19 @@ export default function RegisterPage() {
   // Perfil desde el que llegó el usuario (?redirect=/anfitrionas/xxx). Al
   // terminar el registro como USER lo devolvemos ahí en vez del dashboard.
   const [redirectTo, setRedirectTo] = useState<string | null>(null);
+  // Cuando la persona llega desde el perfil de una creadora o un anuncio
+  // (?ctx=creator) omitimos la elección Usuario/Creador y la registramos
+  // directamente como Usuario.
+  const [isCreatorCtx, setIsCreatorCtx] = useState(false);
   useEffect(() => {
-    const r = new URLSearchParams(window.location.search).get("redirect");
+    const q = new URLSearchParams(window.location.search);
+    const r = q.get("redirect");
     if (r && r.startsWith("/")) setRedirectTo(r);
+    if (q.get("ctx") === "creator") {
+      setIsCreatorCtx(true);
+      setRole("USER");
+      setStep("method");
+    }
   }, []);
 
   function destFor(u: User) {
@@ -286,6 +296,11 @@ export default function RegisterPage() {
   function back() {
     setError("");
     if (step === "method") {
+      // Sin paso de rol en contexto creador: volvemos a la pantalla de Google.
+      if (isCreatorCtx) {
+        router.push(`/login${authQuery}`);
+        return;
+      }
       setStep("role");
       setRole(null);
     } else if (step === "otp") {
@@ -297,7 +312,10 @@ export default function RegisterPage() {
   }
 
   const isCreator = role === "ANFITRIONA";
-  const authQuery = redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : "";
+  const authParams = new URLSearchParams();
+  if (redirectTo) authParams.set("redirect", redirectTo);
+  if (isCreatorCtx) authParams.set("ctx", "creator");
+  const authQuery = authParams.toString() ? `?${authParams.toString()}` : "";
   const primaryBtn =
     "w-full bg-linear-to-r from-brand to-brand-violet hover:from-brand-strong hover:to-brand text-white font-black rounded-full py-4 shadow-lg shadow-brand/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed";
 

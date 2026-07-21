@@ -93,7 +93,11 @@ function ProfilePageContent({ params }: ProfilePageProps) {
     notify(firstMsg);
     setTimeout(() => notify('Redirigiendo a inicio de sesión…'), 1300);
     setTimeout(() => {
-      router.push(`/login?redirect=${encodeURIComponent(destination)}`);
+      // Contexto "creador": el login muestra la pantalla directa de Google
+      // (sin elegir Usuario/Creador) y vuelve aquí tras iniciar sesión.
+      const params = new URLSearchParams({ redirect: destination, ctx: 'creator' });
+      if (profile?.name) params.set('name', profile.name);
+      router.push(`/login?${params.toString()}`);
     }, 2200);
   };
 
