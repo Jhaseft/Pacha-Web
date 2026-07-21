@@ -62,7 +62,9 @@ export default function GoogleSignInButton({
   text = "continue_with",
   disabled = false,
 }: Props) {
+  const wrapRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const lastWidth = useRef(0);
   const [ready, setReady] = useState(false);
   // Mantiene la referencia más reciente del callback sin re-inicializar GIS.
   const onCredentialRef = useRef(onCredential);
@@ -76,9 +78,32 @@ export default function GoogleSignInButton({
       return;
     }
 
+    // (Re)dibuja el botón al ancho actual. GIS exige un ancho fijo (200–400),
+    // así que lo re-renderizamos cuando cambia el tamaño para que sea responsive.
+    const renderButton = () => {
+      if (!containerRef.current || !wrapRef.current || !window.google) return;
+      const measured = wrapRef.current.offsetWidth || 340;
+      const width = Math.max(200, Math.min(400, Math.round(measured)));
+      if (Math.abs(width - lastWidth.current) < 4 && ready) return;
+      lastWidth.current = width;
+      containerRef.current.innerHTML = "";
+      window.google.accounts.id.renderButton(containerRef.current, {
+        type: "standard",
+        theme: "outline",
+        size: "large",
+        text,
+        shape: "pill",
+        logo_alignment: "center",
+        width,
+      });
+      setReady(true);
+    };
+
+    let ro: ResizeObserver | null = null;
+
     loadGsiScript()
       .then(() => {
-        if (cancelled || !containerRef.current || !window.google) return;
+        if (cancelled || !window.google) return;
         window.google.accounts.id.initialize({
           client_id: CLIENT_ID,
           callback: (response) => {
@@ -89,30 +114,26 @@ export default function GoogleSignInButton({
             }
           },
         });
-        window.google.accounts.id.renderButton(containerRef.current, {
-          type: "standard",
-          theme: "outline",
-          size: "large",
-          text,
-          shape: "pill",
-          logo_alignment: "center",
-          width: containerRef.current.offsetWidth || 340,
-        });
-        setReady(true);
+        renderButton();
+        if (wrapRef.current) {
+          ro = new ResizeObserver(() => renderButton());
+          ro.observe(wrapRef.current);
+        }
       })
       .catch(() => onError?.("No se pudo cargar Google Sign-In."));
 
     return () => {
       cancelled = true;
+      ro?.disconnect();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [text]);
 
   return (
-    <div className={disabled ? "pointer-events-none opacity-50" : undefined}>
+    <div ref={wrapRef} className={`w-full ${disabled ? "pointer-events-none opacity-50" : ""}`}>
       <div
         ref={containerRef}
-        className="flex justify-center [color-scheme:light]"
+        className="flex justify-center scheme-light"
       />
       {!ready && (
         <div className="h-11 w-full rounded-full border border-line bg-card animate-pulse" />

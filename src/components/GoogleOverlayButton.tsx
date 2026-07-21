@@ -53,17 +53,16 @@ interface Props {
   onCredential: (idToken: string) => void;
   onError?: (message: string) => void;
   disabled?: boolean;
-  /** Contenido visible del botón (el diseño personalizado). */
+  /** Contenido visible del botón (el diseño rosado personalizado). */
   children: ReactNode;
-  /** Clases del contenedor visible (el botón que ve el usuario). */
   className?: string;
 }
 
 /**
- * Botón de Google con diseño 100% personalizado. Renderiza el botón real de
- * Google (que abre el selector de cuentas) transparente y estirado por CSS
- * para cubrir todo el botón bonito, de modo que al pulsar cualquier parte se
- * dispara el flujo oficial de Google Identity Services.
+ * Botón de Google totalmente personalizado (fondo rosado con degradado).
+ * Dibuja el botón REAL de Google al ancho exacto del botón visible, lo centra
+ * y lo deja transparente encima; así cualquier clic abre el selector oficial
+ * de cuentas de Google. Es responsive: se redibuja al cambiar el ancho.
  */
 export default function GoogleOverlayButton({
   onCredential,
@@ -72,57 +71,66 @@ export default function GoogleOverlayButton({
   children,
   className = "",
 }: Props) {
-  const gisRef = useRef<HTMLDivElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
-  const rendered = useRef(false);
+  const gisRef = useRef<HTMLDivElement>(null);
+  const lastWidth = useRef(0);
+  const initialized = useRef(false);
   const [ready, setReady] = useState(false);
-  // Mantiene la referencia más reciente del callback sin re-inicializar GIS.
   const onCredentialRef = useRef(onCredential);
   onCredentialRef.current = onCredential;
 
   useEffect(() => {
     let cancelled = false;
-
     if (!CLIENT_ID) {
       onError?.("Falta configurar el Client ID de Google.");
       return;
     }
 
+    const renderButton = () => {
+      if (!gisRef.current || !wrapRef.current || !window.google) return;
+      const measured = wrapRef.current.offsetWidth || 320;
+      const width = Math.max(200, Math.min(400, Math.round(measured)));
+      if (Math.abs(width - lastWidth.current) < 4 && ready) return;
+      lastWidth.current = width;
+      gisRef.current.innerHTML = "";
+      window.google.accounts.id.renderButton(gisRef.current, {
+        type: "standard",
+        theme: "outline",
+        size: "large",
+        text: "continue_with",
+        shape: "pill",
+        logo_alignment: "center",
+        width,
+      });
+      setReady(true);
+    };
+
+    let ro: ResizeObserver | null = null;
+
     loadGsiScript()
       .then(() => {
-        if (cancelled || !gisRef.current || !window.google || rendered.current)
-          return;
-        rendered.current = true;
-
-        // El ancho debe estar entre 200 y 400; si no, Google no dibuja el botón.
-        const measured = wrapRef.current?.offsetWidth ?? 360;
-        const width = Math.max(200, Math.min(400, Math.round(measured)));
-
-        window.google.accounts.id.initialize({
-          client_id: CLIENT_ID,
-          callback: (response) => {
-            if (response.credential) {
-              onCredentialRef.current(response.credential);
-            } else {
-              onError?.("No se pudo obtener el token de Google.");
-            }
-          },
-        });
-        window.google.accounts.id.renderButton(gisRef.current, {
-          type: "standard",
-          theme: "outline",
-          size: "large",
-          text: "continue_with",
-          shape: "rectangular",
-          logo_alignment: "center",
-          width,
-        });
-        setReady(true);
+        if (cancelled || !window.google) return;
+        if (!initialized.current) {
+          initialized.current = true;
+          window.google.accounts.id.initialize({
+            client_id: CLIENT_ID,
+            callback: (response) => {
+              if (response.credential) onCredentialRef.current(response.credential);
+              else onError?.("No se pudo obtener el token de Google.");
+            },
+          });
+        }
+        renderButton();
+        if (wrapRef.current) {
+          ro = new ResizeObserver(() => renderButton());
+          ro.observe(wrapRef.current);
+        }
       })
       .catch(() => onError?.("No se pudo cargar Google Sign-In."));
 
     return () => {
       cancelled = true;
+      ro?.disconnect();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -130,19 +138,19 @@ export default function GoogleOverlayButton({
   return (
     <div
       ref={wrapRef}
-      className={`relative overflow-hidden ${disabled ? "pointer-events-none opacity-60" : ""} ${className}`}
+      className={`relative ${disabled ? "pointer-events-none opacity-60" : ""} ${className}`}
     >
-      {/* Diseño visible del botón */}
+      {/* Diseño visible (botón rosado) */}
       {children}
 
-      {/* Botón real de Google, transparente y estirado para cubrir todo el
-          área. Forzamos el iframe interno a ocupar el 100% para que cualquier
-          clic sobre el botón bonito dispare el flujo de Google. */}
+      {/* Botón real de Google: transparente, centrado y del ancho exacto,
+          encima de todo para capturar el clic. */}
       <div
-        ref={gisRef}
         aria-hidden={!ready}
-        className="absolute inset-0 z-10 cursor-pointer opacity-0 scheme-light [&>div]:h-full! [&>div]:w-full! [&_iframe]:h-full! [&_iframe]:w-full!"
-      />
+        className="absolute inset-0 z-10 flex items-center justify-center opacity-0 scheme-light"
+      >
+        <div ref={gisRef} />
+      </div>
     </div>
   );
 }
