@@ -1,20 +1,13 @@
 "use client";
 
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "../../context/AuthContext";
-import { googleLogin, loginWithEmail, type User } from "../../lib/auth";
-import GoogleOverlayButton from "../../components/GoogleOverlayButton";
-import {
-  ShieldCheck,
-  Zap,
-  Lock,
-  ChevronRight,
-  Mail,
-  Headphones,
-  Sparkles,
-} from "lucide-react";
+import { loginWithEmail, googleLogin, type User } from "../../lib/auth";
+import { Brand } from "../../components/Brand";
+import GoogleSignInButton from "../../components/GoogleSignInButton";
+import CreatorLoginScreen from "./CreatorLoginScreen";
 
 const ROLE_REDIRECTS: Record<string, string> = {
   USER: "/dashboard",
@@ -22,39 +15,47 @@ const ROLE_REDIRECTS: Record<string, string> = {
   ADMIN: "/admin",
 };
 
-const LOGO_SRC =
-  "https://res.cloudinary.com/dnbklbswg/image/upload/v1783607654/1000040485-removebg-preview_glnmou.png";
+/**
+ * Login principal. Por defecto muestra el acceso con correo y contraseña
+ * (más Google) de siempre. Solo cuando la persona llega desde el perfil de
+ * una creadora o un anuncio (?ctx=creator) mostramos la pantalla dedicada
+ * centrada en Google.
+ */
+export default function LoginPage() {
+  const [mode, setMode] = useState<"loading" | "creator" | "email">("loading");
 
-// Número de WhatsApp de soporte (formato internacional sin signos).
-const WHATSAPP_SUPPORT = "51999999999";
+  useEffect(() => {
+    const ctx = new URLSearchParams(window.location.search).get("ctx");
+    setMode(ctx === "creator" ? "creator" : "email");
+  }, []);
 
-function LoginContent() {
+  if (mode === "loading") {
+    return (
+      <div className="min-h-screen bg-canvas flex items-center justify-center">
+        <p className="text-ink-faint">Cargando…</p>
+      </div>
+    );
+  }
+
+  if (mode === "creator") return <CreatorLoginScreen />;
+  return <EmailLogin />;
+}
+
+function EmailLogin() {
   const router = useRouter();
   const { setSession } = useAuth();
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Acceso con correo y contraseña (administradores y creadoras que ya tienen
-  // cuenta). Oculto por defecto para no restar protagonismo a Google.
-  const [showEmailForm, setShowEmailForm] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  // Contexto de origen (?redirect=/..., ?name=Luisa, ?ctx=creator). Cuando la
-  // persona llega desde el perfil de una creadora mostramos su nombre y la
-  // llevamos de vuelta ahí tras iniciar sesión.
+  // Destino tras iniciar sesión: perfil de origen (?redirect=/...) para USER.
   const [redirectTo, setRedirectTo] = useState<string | null>(null);
-  const [creatorName, setCreatorName] = useState<string | null>(null);
-  const [isCreatorCtx, setIsCreatorCtx] = useState(false);
-
   useEffect(() => {
-    const q = new URLSearchParams(window.location.search);
-    const r = q.get("redirect");
+    const r = new URLSearchParams(window.location.search).get("redirect");
     if (r && r.startsWith("/")) setRedirectTo(r);
-    const name = q.get("name");
-    if (name) setCreatorName(name);
-    setIsCreatorCtx(q.get("ctx") === "creator");
   }, []);
 
   function destFor(u: User) {
@@ -62,31 +63,19 @@ function LoginContent() {
     return ROLE_REDIRECTS[u.role] ?? "/dashboard";
   }
 
-  // Google crea automáticamente la cuenta con rol Usuario (sin pedir
-  // contraseña) e inicia sesión. Entramos directo al destino de origen.
-  async function handleGoogleCredential(idToken: string) {
-    try {
-      setLoading(true);
-      setError("");
-      const res = await googleLogin(idToken);
-      await setSession(res.access_token, res.user);
-      router.replace(destFor(res.user));
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "No se pudo continuar con Google.",
-      );
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function handleEmailLogin() {
+  async function handleLogin() {
     const trimEmail = email.trim().toLowerCase();
     const trimPass = password.trim();
+
     if (!trimEmail || !trimPass) {
       setError("Ingresa tu correo y contraseña.");
       return;
     }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimEmail)) {
+      setError("Ingresa un correo válido.");
+      return;
+    }
+
     try {
       setLoading(true);
       setError("");
@@ -95,269 +84,142 @@ function LoginContent() {
       router.replace(destFor(res.user));
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "No se pudo iniciar sesión.",
+        err instanceof Error ? err.message : "No se pudo iniciar sesión."
       );
     } finally {
       setLoading(false);
     }
   }
 
-  const authQuery = new URLSearchParams();
-  if (redirectTo) authQuery.set("redirect", redirectTo);
-  if (creatorName) authQuery.set("name", creatorName);
-  if (isCreatorCtx) authQuery.set("ctx", "creator");
-  const qs = authQuery.toString();
+  async function handleGoogleCredential(idToken: string) {
+    try {
+      setLoading(true);
+      setError("");
+      const res = await googleLogin(idToken);
+      await setSession(res.access_token, res.user);
+      // Con Google la cuenta queda lista: el nombre viene de Google y no se
+      // pide contraseña. Entramos directo al destino.
+      router.replace(destFor(res.user));
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "No se pudo continuar con Google."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
 
-  const heading = creatorName ? (
-    <>
-      Estás a un paso de{" "}
-      <br className="hidden sm:block" />
-      hablar con{" "}
-      <span className="bg-linear-to-r from-brand-violet to-secondary bg-clip-text text-transparent">
-        {creatorName}
-      </span>{" "}
-      <span className="text-secondary">💜</span>
-    </>
-  ) : (
-    <>
-      Inicia sesión para{" "}
-      <span className="bg-linear-to-r from-brand-violet to-secondary bg-clip-text text-transparent">
-        continuar
-      </span>
-    </>
-  );
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === "Enter") handleLogin();
+  }
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-canvas via-brand-soft/40 to-canvas flex items-center justify-center px-4 py-6">
-      <div className="w-full max-w-md lg:max-w-4xl rounded-[28px] bg-card shadow-2xl shadow-brand/10 ring-1 ring-line px-6 sm:px-8 py-8 relative overflow-hidden">
-        {/* Destellos decorativos suaves */}
-        <Sparkles className="absolute top-6 left-5 w-4 h-4 text-brand-violet/40" />
-        <Sparkles className="absolute top-24 right-6 w-3 h-3 text-secondary/40" />
+    <div className="min-h-screen bg-canvas text-ink flex flex-col">
+      {/* Logo arriba a la izquierda */}
+      <header className="h-16 flex items-center px-5 sm:px-8 border-b border-line">
+        <Brand />
+      </header>
 
-        <div className="lg:grid lg:grid-cols-2 lg:gap-10 lg:items-center">
-          {/* ── Columna izquierda: marca + mensaje + beneficios ── */}
-          <div>
-            {/* Logo */}
-            <div className="flex items-center justify-center lg:justify-start gap-2.5 mb-6">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={LOGO_SRC} alt="MonetizaLab" className="w-8 h-8 object-contain" />
-              <span className="text-ink font-black text-2xl tracking-tight">
-                Monetiza<span className="text-brand-violet">Lab</span>
-              </span>
+      <div className="flex-1 flex items-center justify-center px-6 py-12">
+        <div className="w-full max-w-sm">
+          <h1 className="text-ink text-3xl font-black mb-1">Iniciar sesión</h1>
+          <p className="text-ink-soft text-base mb-8">
+            Accede con tu correo y contraseña.
+          </p>
+
+          <div className="mb-4">
+            <label className="text-ink text-sm font-semibold block mb-2">
+              Email
+            </label>
+            <input
+              type="email"
+              placeholder="correo@ejemplo.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              onKeyDown={handleKeyDown}
+              autoComplete="email"
+              className="w-full bg-card border border-line rounded-xl px-4 py-3 text-ink placeholder-ink-faint outline-none focus:border-brand transition-colors"
+            />
+          </div>
+
+          <div className="mb-2">
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-ink text-sm font-semibold">
+                Contraseña
+              </label>
+              <Link
+                href="/login/forgot-password"
+                className="text-ink-faint text-sm hover:text-brand transition-colors"
+              >
+                ¿Olvidaste tu contraseña?
+              </Link>
             </div>
-
-            {/* Título */}
-            <h1 className="text-center lg:text-left text-ink text-[26px] sm:text-3xl font-black leading-tight mb-3">
-              {heading}
-            </h1>
-            <p className="text-center lg:text-left text-ink-soft text-sm sm:text-base mb-6 max-w-xs mx-auto lg:mx-0">
-              Continúa con Google para acceder al chat de forma rápida y segura.
-            </p>
-
-            {/* Beneficios */}
-            <div className="grid grid-cols-3 gap-2 rounded-2xl border border-line bg-canvas/60 p-3 mb-6 lg:mb-0">
-              <Benefit
-                icon={<ShieldCheck className="w-4 h-4" />}
-                title="100% privado"
-                text="Tus conversaciones están protegidas"
+            <div className="relative">
+              <input
+                type={showPass ? "text" : "password"}
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={handleKeyDown}
+                autoComplete="current-password"
+                className="w-full bg-card border border-line rounded-xl px-4 py-3 text-ink placeholder-ink-faint outline-none focus:border-brand transition-colors pr-12"
               />
-              <Benefit
-                icon={<Zap className="w-4 h-4" />}
-                title="Rápido y fácil"
-                text="Entra en segundos sin complicaciones"
-              />
-              <Benefit
-                icon={<Lock className="w-4 h-4" />}
-                title="Seguro"
-                text="Tu información está en buenas manos"
-              />
+              <button
+                type="button"
+                onClick={() => setShowPass((v) => !v)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-faint hover:text-brand transition-colors"
+                aria-label={showPass ? "Ocultar contraseña" : "Mostrar contraseña"}
+              >
+                {showPass ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+                  </svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                  </svg>
+                )}
+              </button>
             </div>
           </div>
 
-          {/* ── Columna derecha: acciones ── */}
-          <div>
-            {error && (
-              <p className="text-red-500 text-sm text-center mb-3">{error}</p>
-            )}
+          {error && (
+            <p className="text-red-500 text-sm mt-3 mb-1">{error}</p>
+          )}
 
-            {/* Botón principal: Continuar con Google (gradiente como el mockup) */}
-            <GoogleOverlayButton
+          <button
+            onClick={handleLogin}
+            disabled={loading}
+            className="w-full bg-linear-to-r from-brand to-brand-violet hover:from-brand-strong hover:to-brand text-white font-black rounded-full py-4 mt-6 shadow-lg shadow-brand/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? "Ingresando..." : "Iniciar sesión"}
+          </button>
+
+          <div className="mt-6 flex items-center gap-3">
+            <div className="flex-1 h-px bg-line" />
+            <span className="text-ink-faint text-sm">o</span>
+            <div className="flex-1 h-px bg-line" />
+          </div>
+
+          <div className="mt-6">
+            <GoogleSignInButton
+              text="signin_with"
+              disabled={loading}
               onCredential={handleGoogleCredential}
               onError={setError}
-              disabled={loading}
-            >
-              <div className="flex items-center gap-4 rounded-2xl bg-linear-to-r from-secondary to-brand-violet px-4 py-4 shadow-lg shadow-brand-violet/30 transition-transform hover:scale-[1.01]">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white">
-                  <GoogleG />
-                </span>
-                <span className="text-white font-black text-lg">
-                  {loading ? "Conectando…" : "Continuar con Google"}
-                </span>
-              </div>
-            </GoogleOverlayButton>
-
-            {/* Separador */}
-            <div className="my-5 flex items-center gap-3">
-              <div className="flex-1 h-px bg-line" />
-              <span className="text-ink-faint text-sm">o</span>
-              <div className="flex-1 h-px bg-line" />
-            </div>
-
-            {/* Continuar con correo electrónico → flujo de OTP (registro/login por
-                correo). Al venir de una creadora se registra directo como Usuario. */}
-            <Link
-              href={`/login/cliente${qs ? `?${qs}` : ""}`}
-              className="flex items-center gap-3 rounded-2xl border border-line bg-card px-4 py-3.5 shadow-sm transition-colors hover:border-brand-violet/50"
-            >
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-soft text-brand-violet">
-                <Mail className="w-5 h-5" />
-              </span>
-              <span className="text-ink font-semibold flex-1">
-                Continuar con correo electrónico
-              </span>
-              <ChevronRight className="w-5 h-5 text-ink-faint" />
-            </Link>
-
-            {/* Privacidad */}
-            <div className="mt-5 flex items-start gap-3 rounded-2xl bg-brand-soft/60 border border-brand-soft px-4 py-3.5">
-              <ShieldCheck className="w-6 h-6 shrink-0 text-brand-violet" />
-              <div>
-                <p className="text-ink font-bold text-sm">
-                  Tu privacidad es nuestra prioridad
-                </p>
-                <p className="text-ink-soft text-xs leading-snug">
-                  No compartimos tu información. Chats, llamadas y videollamadas
-                  100% confidenciales.
-                </p>
-              </div>
-            </div>
-
-            {/* Soporte */}
-            <p className="mt-4 flex flex-wrap items-center justify-center gap-1.5 text-ink-soft text-sm">
-              <Headphones className="w-4 h-4 text-brand-violet" />
-              ¿Necesitas ayuda? Contáctanos por{" "}
-              <a
-                href={`https://wa.me/${WHATSAPP_SUPPORT}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-brand-violet font-semibold underline"
-              >
-                WhatsApp
-              </a>
-            </p>
-
-            {/* Acceso con correo y contraseña (admin / creadoras con cuenta) */}
-            <div className="mt-4 border-t border-line pt-3">
-              {!showEmailForm ? (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setError("");
-                    setShowEmailForm(true);
-                  }}
-                  className="block w-full text-center text-ink-faint text-xs hover:text-ink-soft transition-colors"
-                >
-                  ¿Administrador o creadora? Inicia sesión con correo y contraseña
-                </button>
-              ) : (
-                <div className="space-y-3">
-                  <input
-                    type="email"
-                    placeholder="correo@ejemplo.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    autoComplete="email"
-                    className="w-full bg-card border border-line rounded-xl px-4 py-2.5 text-ink placeholder-ink-faint outline-none focus:border-brand-violet transition-colors text-sm"
-                  />
-                  <input
-                    type="password"
-                    placeholder="Contraseña"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleEmailLogin()}
-                    autoComplete="current-password"
-                    className="w-full bg-card border border-line rounded-xl px-4 py-2.5 text-ink placeholder-ink-faint outline-none focus:border-brand-violet transition-colors text-sm"
-                  />
-                  <div className="flex items-center justify-between">
-                    <Link
-                      href="/login/forgot-password"
-                      className="text-ink-faint text-xs hover:text-brand-violet transition-colors"
-                    >
-                      ¿Olvidaste tu contraseña?
-                    </Link>
-                    <button
-                      type="button"
-                      onClick={handleEmailLogin}
-                      disabled={loading}
-                      className="rounded-full bg-linear-to-r from-secondary to-brand-violet px-5 py-2 text-sm font-bold text-white shadow-md shadow-brand-violet/25 transition-all disabled:opacity-50"
-                    >
-                      {loading ? "Ingresando…" : "Iniciar sesión"}
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
+            />
           </div>
+
+          <Link
+            href={`/login/cliente${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ""}`}
+            className="block text-center text-ink-soft text-sm mt-6 hover:text-ink transition-colors"
+          >
+            ¿No tienes cuenta?{" "}
+            <span className="text-brand font-semibold underline">Registrate aqui</span>
+          </Link>
         </div>
       </div>
     </div>
-  );
-}
-
-function Benefit({
-  icon,
-  title,
-  text,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  text: string;
-}) {
-  return (
-    <div className="flex flex-col items-center text-center gap-1 px-1">
-      <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-soft text-brand-violet">
-        {icon}
-      </span>
-      <p className="text-ink font-bold text-[11px] leading-tight">{title}</p>
-      <p className="text-ink-faint text-[10px] leading-tight">{text}</p>
-    </div>
-  );
-}
-
-// Logo "G" de Google en color.
-function GoogleG() {
-  return (
-    <svg className="w-6 h-6" viewBox="0 0 48 48" aria-hidden>
-      <path
-        fill="#EA4335"
-        d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"
-      />
-      <path
-        fill="#4285F4"
-        d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"
-      />
-      <path
-        fill="#FBBC05"
-        d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"
-      />
-      <path
-        fill="#34A853"
-        d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"
-      />
-    </svg>
-  );
-}
-
-export default function LoginPage() {
-  return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen bg-canvas flex items-center justify-center">
-          <p className="text-ink-faint">Cargando…</p>
-        </div>
-      }
-    >
-      <LoginContent />
-    </Suspense>
   );
 }

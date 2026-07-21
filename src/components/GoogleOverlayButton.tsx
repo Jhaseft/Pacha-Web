@@ -61,9 +61,9 @@ interface Props {
 
 /**
  * Botón de Google con diseño 100% personalizado. Renderiza el botón real de
- * Google (que abre el selector de cuentas) de forma transparente encima del
- * diseño propio, de modo que al pulsar el botón bonito se dispara el flujo
- * oficial de Google Identity Services (muestra los correos y deja elegir uno).
+ * Google (que abre el selector de cuentas) transparente y estirado por CSS
+ * para cubrir todo el botón bonito, de modo que al pulsar cualquier parte se
+ * dispara el flujo oficial de Google Identity Services.
  */
 export default function GoogleOverlayButton({
   onCredential,
@@ -74,6 +74,7 @@ export default function GoogleOverlayButton({
 }: Props) {
   const gisRef = useRef<HTMLDivElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
+  const rendered = useRef(false);
   const [ready, setReady] = useState(false);
   // Mantiene la referencia más reciente del callback sin re-inicializar GIS.
   const onCredentialRef = useRef(onCredential);
@@ -89,7 +90,14 @@ export default function GoogleOverlayButton({
 
     loadGsiScript()
       .then(() => {
-        if (cancelled || !gisRef.current || !window.google) return;
+        if (cancelled || !gisRef.current || !window.google || rendered.current)
+          return;
+        rendered.current = true;
+
+        // El ancho debe estar entre 200 y 400; si no, Google no dibuja el botón.
+        const measured = wrapRef.current?.offsetWidth ?? 360;
+        const width = Math.max(200, Math.min(400, Math.round(measured)));
+
         window.google.accounts.id.initialize({
           client_id: CLIENT_ID,
           callback: (response) => {
@@ -107,7 +115,7 @@ export default function GoogleOverlayButton({
           text: "continue_with",
           shape: "rectangular",
           logo_alignment: "center",
-          width: wrapRef.current?.offsetWidth || 360,
+          width,
         });
         setReady(true);
       })
@@ -122,17 +130,18 @@ export default function GoogleOverlayButton({
   return (
     <div
       ref={wrapRef}
-      className={`relative ${disabled ? "pointer-events-none opacity-60" : ""} ${className}`}
+      className={`relative overflow-hidden ${disabled ? "pointer-events-none opacity-60" : ""} ${className}`}
     >
       {/* Diseño visible del botón */}
       {children}
 
       {/* Botón real de Google, transparente y estirado para cubrir todo el
-          área clicable. `color-scheme:light` evita que el tema oscuro lo pinte. */}
+          área. Forzamos el iframe interno a ocupar el 100% para que cualquier
+          clic sobre el botón bonito dispare el flujo de Google. */}
       <div
         ref={gisRef}
         aria-hidden={!ready}
-        className="absolute inset-0 z-10 overflow-hidden opacity-0 [color-scheme:light] [&_iframe]:!h-full [&_iframe]:!w-full [&>div]:!h-full [&>div]:!w-full"
+        className="absolute inset-0 z-10 cursor-pointer opacity-0 scheme-light [&>div]:h-full! [&>div]:w-full! [&_iframe]:h-full! [&_iframe]:w-full!"
       />
     </div>
   );

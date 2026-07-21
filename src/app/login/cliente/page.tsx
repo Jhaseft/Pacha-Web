@@ -264,7 +264,8 @@ export default function RegisterPage() {
           )
           : await completeGoogleAnfitrionaProfile(base, idDoc, completionToken);
       setSession(res.access_token, res.user);
-      router.replace(ROLE_REDIRECTS[res.user.role] ?? "/dashboard/anfitriona");
+      // Las creadoras recién registradas van al onboarding guiado.
+      router.replace("/dashboard/anfitriona/onboarding");
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "No se pudo completar el registro.",

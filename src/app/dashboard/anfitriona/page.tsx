@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { apiGetMyEarnings, getChats } from '@/lib/anfitriona';
+import { loadOnboardingData, computeCompletion } from '@/lib/onboarding';
 import type { EarningsData, ChatData } from '@/types/anfitriona';
 import {
   MessageCircle,
@@ -42,6 +43,9 @@ export default function AnfitrianaPage() {
   const [chats, setChats] = useState<ChatData[]>([]);
   const [loading, setLoading] = useState(true);
   const [unreadCount, setUnreadCount] = useState(0);
+  // Puerta de onboarding: hasta confirmar que el perfil está completo no
+  // mostramos el panel (evita parpadeo antes de redirigir al onboarding).
+  const [gateChecked, setGateChecked] = useState(false);
 
   useEffect(() => {
     if (!isHydrated) return;
@@ -53,6 +57,27 @@ export default function AnfitrianaPage() {
       router.push('/dashboard');
       return;
     }
+  }, [isHydrated, isAuthenticated, user?.role, router]);
+
+  // Si el perfil aún no está listo, la creadora va al onboarding guiado.
+  useEffect(() => {
+    if (!isHydrated || !isAuthenticated || user?.role !== 'ANFITRIONA') return;
+    let active = true;
+    (async () => {
+      try {
+        const data = await loadOnboardingData();
+        if (active && !computeCompletion(data).complete) {
+          router.replace('/dashboard/anfitriona/onboarding');
+          return;
+        }
+      } catch {
+        /* Si falla la comprobación no bloqueamos el panel. */
+      }
+      if (active) setGateChecked(true);
+    })();
+    return () => {
+      active = false;
+    };
   }, [isHydrated, isAuthenticated, user?.role, router]);
 
   const loadData = useCallback(async () => {
@@ -80,7 +105,7 @@ export default function AnfitrianaPage() {
     loadData();
   }, [loadData]);
 
-  if (loading || !user) {
+  if (loading || !user || !gateChecked) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-purple-500"></div>
