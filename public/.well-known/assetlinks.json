@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.pachamama.app",
+      "sha256_cert_fingerprints": [
+        "0A:91:7E:74:E0:1D:0F:04:41:01:98:00:A6:DE:3A:DD:39:F3:28:64:F7:99:E5:DC:F0:1D:5E:57:62:DA:3F:1C"
+      ]
+    }
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "REEMPLAZA_TEAM_ID.com.pachamama.app",
+        "paths": ["/@*"]
+      }
+    ]
+  }
+}
