@@ -35,6 +35,16 @@ const NAV_ITEMS = [
     ),
   },
   {
+    label: "Categorías",
+    href: "/admin/categorias",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M6 6h.008v.008H6V6Z" />
+      </svg>
+    ),
+  },
+  {
     label: "Referidos",
     href: "/admin/referrals",
     icon: (
@@ -113,7 +123,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const initials = `${user.firstName?.[0] ?? ""}${user.lastName?.[0] ?? ""}`.toUpperCase() || "AD";
 
   return (
-    <div className="flex min-h-screen bg-[#0d0d0d]">
+    <div className="flex h-screen overflow-hidden bg-[#0d0d0d]">
 
       {/* ── Mobile topbar ── */}
       <header className="md:hidden fixed top-0 left-0 right-0 z-40 bg-[#A11213] flex items-center justify-between px-4 py-3 shadow-lg">
@@ -179,7 +189,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <p className="text-red-200/50 text-[10px] font-bold uppercase tracking-widest px-5 mb-2">Menú</p>
 
         {/* Nav */}
-        <nav className="flex-1 px-3 flex flex-col gap-1">
+        <nav className="flex-1 overflow-y-auto px-3 flex flex-col gap-1">
           {NAV_ITEMS.map((item) => {
             const isActive = pathname === item.href;
             return (
