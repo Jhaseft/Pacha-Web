@@ -19,8 +19,8 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "Pachamama",
-  description: "Pachamama Web",
+  title: "MonetizaLab",
+  description: "MonetizaLab Web",
 };
 
 export default function RootLayout({

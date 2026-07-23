@@ -13,18 +13,18 @@ export function LandingFooter() {
             <div className="flex items-center gap-3 mb-4">
               <Image
                 src="/logofull.jpeg"
-                alt="Pachamama"
+                alt="MonetizaLab"
                 width={44}
                 height={44}
                 className="rounded-xl object-cover ring-2 ring-brand/30"
               />
               <div>
-                <p className="text-ink font-black text-lg leading-tight">Pachamama</p>
-                <p className="text-ink-faint text-xs">Karaoke Bar · Tarapoto</p>
+                <p className="text-ink font-black text-lg leading-tight">MonetizaLab</p>
+                <p className="text-ink-faint text-xs">Plataforma de creadores</p>
               </div>
             </div>
             <p className="text-ink-soft text-sm leading-relaxed max-w-xs">
-              La mejor experiencia de karaoke y entretenimiento en Tarapoto, Perú. Conéctate con nuestras creadoras y vive momentos únicos.
+              La plataforma donde los creadores de contenido monetizan su comunidad. Conéctate con nuestros creadores y vive experiencias únicas.
             </p>
             <div className="flex items-center gap-3 mt-5">
               <a href="https://www.facebook.com/share/1CXaS1fbq3/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="w-9 h-9 rounded-xl bg-card hover:bg-[#1877F2]/15 border border-line hover:border-[#1877F2]/40 flex items-center justify-center transition-all">
@@ -111,7 +111,7 @@ export function LandingFooter() {
         {/* Bottom bar */}
         <div className="border-t border-line py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-ink-faint text-xs">
-            © {new Date().getFullYear()} Pachamama Karaoke Bar. Todos los derechos reservados.
+            © {new Date().getFullYear()} MonetizaLab. Todos los derechos reservados.
           </p>
           <div className="flex items-center gap-4 flex-wrap justify-center sm:justify-end">
             <Link href="/terminos" className="text-ink-faint hover:text-ink-soft text-xs transition-colors">Términos y Condiciones</Link>

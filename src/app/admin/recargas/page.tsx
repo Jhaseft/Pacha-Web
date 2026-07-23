@@ -229,7 +229,7 @@ export default function RecargasPage() {
 
     window.Culqi.publicKey = process.env.NEXT_PUBLIC_CULQI_PUBLIC_KEY ?? "";
     window.Culqi.settings({
-      title: "Pachamama",
+      title: "MonetizaLab",
       currency: "PEN",
       description: `${selectedPkg.credits.toLocaleString()} créditos`,
       amount: amountInCents,

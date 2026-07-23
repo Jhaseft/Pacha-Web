@@ -128,8 +128,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* ── Mobile topbar ── */}
       <header className="md:hidden fixed top-0 left-0 right-0 z-40 bg-[#A11213] flex items-center justify-between px-4 py-3 shadow-lg">
         <div className="flex items-center gap-2">
-          <Image src="/logofull.jpeg" alt="Pachamama" width={32} height={32} className="rounded-lg object-cover ring-2 ring-white/20" />
-          <span className="text-white font-black text-base tracking-tight">Pachamama</span>
+          <Image src="/logofull.jpeg" alt="MonetizaLab" width={32} height={32} className="rounded-lg object-cover ring-2 ring-white/20" />
+          <span className="text-white font-black text-base tracking-tight">MonetizaLab</span>
         </div>
         <button onClick={() => setMenuOpen((v) => !v)} className="text-white p-1.5 rounded-lg hover:bg-white/10 transition-colors">
           {menuOpen ? (
@@ -178,9 +178,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <aside className="hidden md:flex w-60 shrink-0 flex-col bg-linear-to-b from-[#A11213] to-[#7a0d0e] shadow-2xl">
         {/* Logo */}
         <div className="flex items-center gap-3 px-5 py-6">
-          <Image src="/logofull.jpeg" alt="Pachamama" width={40} height={40} className="rounded-xl object-cover shadow-lg ring-2 ring-white/20" />
+          <Image src="/logofull.jpeg" alt="MonetizaLab" width={40} height={40} className="rounded-xl object-cover shadow-lg ring-2 ring-white/20" />
           <div>
-            <p className="text-white font-black text-base tracking-tight leading-tight">Pachamama</p>
+            <p className="text-white font-black text-base tracking-tight leading-tight">MonetizaLab</p>
             <p className="text-red-200/70 text-[10px] font-medium uppercase tracking-widest">Admin Panel</p>
           </div>
         </div>

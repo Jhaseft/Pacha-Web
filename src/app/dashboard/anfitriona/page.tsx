@@ -120,7 +120,7 @@ export default function AnfitrianaPage() {
         {/* Header con resumen */}
         <div className="mb-4">
           <h1 className="text-2xl md:text-3xl font-bold text-black mb-1">
-            👋 Hola {user?.firstName ?? 'Anfitriona'}
+            👋 Hola {user?.firstName ?? 'Creador'}
           </h1>
           <p className="text-gray-400 text-sm md:text-base">Aquí está tu resumen de hoy</p>
         </div>

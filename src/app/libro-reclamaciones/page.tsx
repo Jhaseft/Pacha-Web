@@ -74,14 +74,14 @@ export default function LibroReclamacionesPage() {
           <Link href="/" className="flex items-center gap-3">
             <Image
               src="/logofull.jpeg"
-              alt="Pachamama"
+              alt="MonetizaLab"
               width={36}
               height={36}
               className="rounded-xl object-cover ring-2 ring-[#A11213]/40"
             />
             <div className="leading-tight hidden sm:block">
-              <p className="text-white font-black text-base tracking-tight">Pachamama</p>
-              <p className="text-white/30 text-[9px] uppercase tracking-widest">Karaoke Bar · Tarapoto</p>
+              <p className="text-white font-black text-base tracking-tight">MonetizaLab</p>
+              <p className="text-white/30 text-[9px] uppercase tracking-widest">Plataforma de creadores</p>
             </div>
           </Link>
           <Link
@@ -257,7 +257,7 @@ export default function LibroReclamacionesPage() {
                   onChange={handleChange}
                   required
                   rows={3}
-                  placeholder="¿Qué solución esperas de parte de Pachamama?"
+                  placeholder="¿Qué solución esperas de parte de MonetizaLab?"
                   className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm
                     placeholder-white/25 focus:outline-none focus:border-[#A11213]/50 transition-colors resize-none"
                 />
@@ -273,7 +273,7 @@ export default function LibroReclamacionesPage() {
             {/* Submit */}
             <div className="space-y-3">
               <p className="text-white/30 text-xs leading-relaxed">
-                Al enviar este formulario, declaras que la información proporcionada es veraz y autoriza a Pachamama
+                Al enviar este formulario, declaras que la información proporcionada es veraz y autoriza a MonetizaLab
                 a contactarte para dar respuesta a tu {form.tipoReclamo.toLowerCase()}.
               </p>
               <button

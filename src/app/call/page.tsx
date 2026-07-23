@@ -21,7 +21,7 @@ function CallContent() {
   const callerId = search.get('callerId') ?? '';
   const anfitrionaId = search.get('anfitrionaId') ?? '';
   const otherUserId = isReceiver ? callerId : anfitrionaId;
-  const anfitrionaName = search.get('anfitrionaName') ?? search.get('name') ?? 'Anfitriona';
+  const anfitrionaName = search.get('anfitrionaName') ?? search.get('name') ?? 'Creador de contenido';
   const anfitrionaAvatar = search.get('anfitrionaAvatar') ?? search.get('avatar') ?? '';
   const callType = (search.get('callType') ?? 'CALL') as CallType;
   const price = Number(search.get('pricePerMinute') ?? search.get('price') ?? 0);

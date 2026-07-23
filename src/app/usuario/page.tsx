@@ -1,8 +1,8 @@
 import { ChatAsistente } from "@/components/ChatAsistente";
 
 export const metadata = {
-  title: "Soy nuevo · Pachamama",
-  description: "Nuestro asistente te guía paso a paso para empezar en Pachamama.",
+  title: "Soy nuevo · MonetizaLab",
+  description: "Nuestro asistente te guía paso a paso para empezar en MonetizaLab.",
 };
 
 export default function UsuarioPage() {
@@ -11,9 +11,9 @@ export default function UsuarioPage() {
       <div className="w-full max-w-md sm:border-x sm:border-white/10">
         <ChatAsistente
           role="usuario"
-          titulo="Asistente Pachamama"
+          titulo="Asistente MonetizaLab"
           subtitulo="Soy nuevo · Te ayudo a empezar"
-          welcomeMessage="¡Hola! 👋 Soy el asistente de Pachamama. Estoy aquí para ayudarte a entender cómo funciona la plataforma y cómo puedes empezar. ¿Qué quieres saber?"
+          welcomeMessage="¡Hola! 👋 Soy el asistente de MonetizaLab. Estoy aquí para ayudarte a entender cómo funciona la plataforma y cómo puedes empezar. ¿Qué quieres saber?"
           sugerencias={[]}
         />
       </div>

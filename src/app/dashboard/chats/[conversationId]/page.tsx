@@ -279,7 +279,7 @@ function ChatThread() {
           <div className="mx-4 mb-2 flex items-center gap-2 bg-brand-soft border border-brand/20 rounded-2xl px-4 py-2.5">
             <Lock size={15} className="text-brand shrink-0" />
             <p className="text-ink-soft text-xs">
-              Enviaste {SPAM_LIMIT} mensajes sin respuesta. Espera a que la anfitriona te conteste.
+              Enviaste {SPAM_LIMIT} mensajes sin respuesta. Espera a que el creador de contenido te conteste.
             </p>
           </div>
         )}
@@ -293,7 +293,7 @@ function ChatThread() {
             disabled={isSpamBlocked}
             placeholder={
               isSpamBlocked
-                ? "Chat bloqueado hasta que la anfitriona responda"
+                ? "Chat bloqueado hasta que el creador de contenido responda"
                 : msgPrice != null
                 ? `Enviar mensaje – ${msgPrice} cr.`
                 : "Escribe un mensaje…"

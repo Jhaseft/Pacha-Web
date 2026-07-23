@@ -168,8 +168,8 @@ export default function AnfitrionasPage() {
     <div className="p-8">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-white text-3xl font-black tracking-tight">Anfitrionas</h1>
-        <p className="text-white/40 text-sm mt-1">Gestiona el acceso de las anfitrionas a la plataforma</p>
+        <h1 className="text-white text-3xl font-black tracking-tight">Creadores de contenido</h1>
+        <p className="text-white/40 text-sm mt-1">Gestiona el acceso de los creadores de contenido a la plataforma</p>
       </div>
 
       {/* Stats pills */}
@@ -209,7 +209,7 @@ export default function AnfitrionasPage() {
       ) : anfitrionas.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-24 gap-3">
           {search ? <UserX size={48} className="text-white/10" /> : <Users size={48} className="text-white/10" />}
-          <p className="text-white/20 text-sm">{search ? "Sin resultados para tu búsqueda" : "No hay anfitrionas"}</p>
+          <p className="text-white/20 text-sm">{search ? "Sin resultados para tu búsqueda" : "No hay creadores de contenido"}</p>
         </div>
       ) : (
         <>
@@ -228,7 +228,7 @@ export default function AnfitrionasPage() {
               >
                 {loadingMore
                   ? <><Loader2 size={16} className="animate-spin" />Cargando...</>
-                  : "Cargar más anfitrionas"}
+                  : "Cargar más creadores de contenido"}
               </button>
             </div>
           )}

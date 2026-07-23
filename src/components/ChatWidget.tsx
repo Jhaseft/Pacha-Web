@@ -9,7 +9,7 @@ type WidgetState = "closed" | "selector" | "chat";
 type Role = "usuario" | "anfitriona";
 
 const AUTO_MESSAGES = [
-  "Hola 😊 ¿Quieres aprender cómo funciona Pachamama?",
+  "Hola 😊 ¿Quieres aprender cómo funciona MonetizaLab?",
   "El chat es gratis ✨",
   "También puedes hacer llamadas y videollamadas en vivo.",
 ];
@@ -105,7 +105,7 @@ export function ChatWidget() {
                     <Image src="/logofull.jpeg" alt="Asistente" width={32} height={32} className="object-cover w-full h-full" />
                   </div>
                   <div>
-                    <p className="text-white font-bold text-sm">Asistente Pachamama</p>
+                    <p className="text-white font-bold text-sm">Asistente MonetizaLab</p>
                     <p className="text-white/40 text-xs">¿Cómo puedo ayudarte?</p>
                   </div>
                 </div>
@@ -177,7 +177,7 @@ export function ChatWidget() {
                   subtitulo=""
                   welcomeMessage={
                     role === "usuario"
-                      ? "¡Hola! 👋 Soy el asistente de Pachamama. ¿En qué te puedo ayudar hoy?"
+                      ? "¡Hola! 👋 Soy el asistente de MonetizaLab. ¿En qué te puedo ayudar hoy?"
                       : "¡Hola! 💫 Soy el asistente para creadoras. ¿Tienes dudas sobre cómo empezar a ganar?"
                   }
                   sugerencias={[]}

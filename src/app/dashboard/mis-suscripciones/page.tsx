@@ -134,7 +134,7 @@ export default function MisSuscripcionesPage() {
             </div>
             <p className="text-ink font-bold text-base">Sin suscripciones</p>
             <p className="text-ink-faint text-sm px-8">
-              Aún no te has suscrito a ninguna anfitriona.
+              Aún no te has suscrito a ningún creador de contenido.
             </p>
           </div>
         ) : (

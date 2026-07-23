@@ -79,7 +79,7 @@ export default function ListWithdrawalRequestPage() {
                         type="text"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        placeholder="Buscar anfitriona"
+                        placeholder="Buscar creador de contenido"
                         className="w-full bg-[#1a1a1a] border border-gray-800 text-white placeholder-gray-500 rounded-xl pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:border-gray-600"
                     />
                 </div>

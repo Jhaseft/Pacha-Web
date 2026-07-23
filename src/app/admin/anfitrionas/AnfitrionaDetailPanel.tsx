@@ -173,7 +173,7 @@ export default function AnfitrionaDetailPanel({ anfitriona, onClose, onUpdated }
           </div>
 
           <p className="text-zinc-600 text-center text-xs pb-2">
-            Puedes actualizar la información de la anfitriona utilizando el modo edición.
+            Puedes actualizar la información del creador de contenido utilizando el modo edición.
           </p>
         </div>
       </div>

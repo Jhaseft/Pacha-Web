@@ -38,7 +38,7 @@ const PASOS_DESCARGA = [
   {
     step: "03",
     title: "Instala y abre la app",
-    desc: "Toca el archivo descargado, instala y abre Pachamama. ¡En segundos estás dentro!",
+    desc: "Toca el archivo descargado, instala y abre MonetizaLab. ¡En segundos estás dentro!",
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-[#A11213]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3" />
@@ -150,14 +150,14 @@ export default function SoyNuevoPage() {
           <Link href="/" className="flex items-center gap-3 shrink-0">
             <Image
               src="/logofull.jpeg"
-              alt="Pachamama"
+              alt="MonetizaLab"
               width={36}
               height={36}
               className="rounded-xl object-cover ring-2 ring-[#A11213]/40"
             />
             <div className="leading-tight">
-              <p className="text-white font-black text-base tracking-tight hidden sm:block">Pachamama</p>
-              <p className="text-white/30 text-[9px] uppercase tracking-widest hidden sm:block">Karaoke Bar · Tarapoto</p>
+              <p className="text-white font-black text-base tracking-tight hidden sm:block">MonetizaLab</p>
+              <p className="text-white/30 text-[9px] uppercase tracking-widest hidden sm:block">Plataforma de creadores</p>
             </div>
           </Link>
           <div className="hidden md:flex items-center gap-6 text-sm text-white/50">
@@ -201,7 +201,7 @@ export default function SoyNuevoPage() {
           </h1>
 
           <p className="text-white/55 text-lg max-w-lg mb-8 leading-relaxed">
-            Descarga Pachamama, crea tu cuenta y conéctate con creadoras en vivo desde tu celular.
+            Descarga MonetizaLab, crea tu cuenta y conéctate con creadores en vivo desde tu celular.
           </p>
 
           <ApkLink
@@ -222,7 +222,7 @@ export default function SoyNuevoPage() {
           {IMAGEN_HERO ? (
             <img
               src={IMAGEN_HERO}
-              alt="Pachamama app"
+              alt="MonetizaLab app"
               className="w-full max-w-sm lg:max-w-md rounded-3xl object-cover shadow-2xl"
             />
           ) : (

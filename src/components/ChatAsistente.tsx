@@ -97,7 +97,7 @@ export function ChatAsistente({ role, titulo, subtitulo, welcomeMessage, sugeren
         <header className="flex-none flex items-center gap-3 px-4 sm:px-6 py-4 bg-black/80 backdrop-blur-xl border-b border-[#A11213]/30">
           <Image
             src="/logofull.jpeg"
-            alt="Pachamama"
+            alt="MonetizaLab"
             width={36}
             height={36}
             style={{ height: "auto" }}

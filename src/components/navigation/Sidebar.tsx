@@ -33,7 +33,7 @@ const tabsByRole: Record<Role, Tab[]> = {
   ADMIN: [
     { href: '/admin', title: 'Inicio', icon: Home },
     { href: '/admin/clientes', title: 'Clientes', icon: User },
-    { href: '/admin/anfitrionas', title: 'Anfitrionas', icon: MessageCircle },
+    { href: '/admin/anfitrionas', title: 'Creadores', icon: MessageCircle },
     { href: '/admin/packages', title: 'Paquetes', icon: Gem },
   ],
 };
@@ -52,7 +52,7 @@ export default function Sidebar() {
     [user.firstName, user.lastName].filter(Boolean).join(' ') || 'Usuario';
   const initials = (user.firstName?.[0] ?? 'U').toUpperCase();
   const roleLabel =
-    role === 'ANFITRIONA' ? 'Anfitriona' : role === 'ADMIN' ? 'Admin' : 'Cliente';
+    role === 'ANFITRIONA' ? 'Creador de contenido' : role === 'ADMIN' ? 'Admin' : 'Cliente';
 
   const isActive = (href: string) => {
     if (href === '/dashboard' || href === '/admin') {

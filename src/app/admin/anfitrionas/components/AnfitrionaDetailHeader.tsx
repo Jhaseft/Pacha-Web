@@ -14,7 +14,7 @@ interface Props {
 export default function AnfitrionaDetailHeader({ editing, saving, onClose, onEdit, onSave, onCancel }: Props) {
   return (
     <div className="flex items-center gap-2 px-4 py-3 border-b border-white/5 shrink-0">
-      <p className="text-white text-base font-black flex-1 min-w-0 truncate">Detalle Anfitriona</p>
+      <p className="text-white text-base font-black flex-1 min-w-0 truncate">Detalle Creador de contenido</p>
 
       <div className="flex items-center gap-2 shrink-0">
         <button

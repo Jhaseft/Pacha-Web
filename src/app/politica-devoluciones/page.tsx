@@ -10,14 +10,14 @@ export default function PoliticaDevolucionesPage() {
           <Link href="/" className="flex items-center gap-3">
             <Image
               src="/logofull.jpeg"
-              alt="Pachamama"
+              alt="MonetizaLab"
               width={36}
               height={36}
               className="rounded-xl object-cover ring-2 ring-[#A11213]/40"
             />
             <div className="leading-tight hidden sm:block">
-              <p className="text-white font-black text-base tracking-tight">Pachamama</p>
-              <p className="text-white/30 text-[9px] uppercase tracking-widest">Bar · Tarapoto</p>
+              <p className="text-white font-black text-base tracking-tight">MonetizaLab</p>
+              <p className="text-white/30 text-[9px] uppercase tracking-widest">Plataforma de creadores</p>
             </div>
           </Link>
           <Link
@@ -53,7 +53,7 @@ export default function PoliticaDevolucionesPage() {
               <div>
                 <p className="text-white font-black text-base mb-1">Créditos no reembolsables</p>
                 <p className="text-white/60">
-                  Los créditos adquiridos dentro de la plataforma Pachamama <strong className="text-white">no son reembolsables</strong> ni
+                  Los créditos adquiridos dentro de la plataforma MonetizaLab <strong className="text-white">no son reembolsables</strong> ni
                   canjeables por dinero en efectivo o por ningún otro medio de pago. Al completar una compra, el
                   usuario acepta expresamente esta condición.
                 </p>
@@ -64,7 +64,7 @@ export default function PoliticaDevolucionesPage() {
           <div className="border border-white/5 rounded-2xl p-6 space-y-3">
             <h2 className="text-white font-black text-lg">Naturaleza del servicio digital</h2>
             <p>
-              Pachamama es una plataforma de entretenimiento digital. Los créditos adquiridos son bienes digitales
+              MonetizaLab es una plataforma de entretenimiento digital. Los créditos adquiridos son bienes digitales
               que se utilizan de forma inmediata al ser acreditados en la billetera virtual del usuario.
             </p>
             <p>

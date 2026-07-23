@@ -10,14 +10,14 @@ export default function TerminosPage() {
           <Link href="/" className="flex items-center gap-3">
             <Image
               src="/logofull.jpeg"
-              alt="Pachamama"
+              alt="MonetizaLab"
               width={36}
               height={36}
               className="rounded-xl object-cover ring-2 ring-[#A11213]/40"
             />
             <div className="leading-tight hidden sm:block">
-              <p className="text-white font-black text-base tracking-tight">Pachamama</p>
-              <p className="text-white/30 text-[9px] uppercase tracking-widest">Karaoke Bar · Tarapoto</p>
+              <p className="text-white font-black text-base tracking-tight">MonetizaLab</p>
+              <p className="text-white/30 text-[9px] uppercase tracking-widest">Plataforma de creadores</p>
             </div>
           </Link>
           <Link
@@ -46,7 +46,7 @@ export default function TerminosPage() {
 
           <Section number="1" title="Naturaleza del servicio">
             <p>
-              Pachamama es una <strong className="text-white">plataforma social de entretenimiento digital</strong> que
+              MonetizaLab es una <strong className="text-white">plataforma social de entretenimiento digital</strong> que
               permite a los usuarios interactuar con creadores mediante mensajes, contenido multimedia y experiencias
               en vivo dentro de la aplicación.
             </p>
@@ -113,7 +113,7 @@ export default function TerminosPage() {
             </p>
           </Section>
 
-          <Section number="8" title="Cuentas de creadores (anfitrionas)">
+          <Section number="8" title="Cuentas de creadores de contenido">
             <p>
               El registro como creador está sujeto a revisión y aprobación por parte de la plataforma. La plataforma
               se reserva el derecho de aprobar o rechazar perfiles, suspender cuentas y eliminar contenido.

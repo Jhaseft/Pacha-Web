@@ -63,7 +63,7 @@ export default function ChatsPage() {
               href="/dashboard"
               className="inline-flex mt-4 bg-linear-to-r from-brand to-brand-violet text-white font-semibold px-6 py-3 rounded-full"
             >
-              Explorar anfitrionas
+              Explorar creadores de contenido
             </Link>
           </div>
         ) : (

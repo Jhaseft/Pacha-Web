@@ -291,7 +291,7 @@ function ProfilePageContent({ params }: ProfilePageProps) {
         </div>
         <h1 className="text-white text-xl font-bold mb-1">Perfil no encontrado</h1>
         <p className="text-white/50 mb-8 max-w-xs">
-          No existe ninguna anfitriona con el usuario <span className="text-white/80 font-semibold">@{username}</span>.
+          No existe ningún creador de contenido con el usuario <span className="text-white/80 font-semibold">@{username}</span>.
         </p>
         <button
           onClick={() => router.push('/creadores')}

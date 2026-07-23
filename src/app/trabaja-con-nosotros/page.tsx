@@ -20,7 +20,7 @@ const PASOS_CREAR_CUENTA = [
   {
     step: "01",
     title: "Descarga la app",
-    desc: "Descarga el APK de Pachamama e instálalo en tu celular Android. Solo toma unos segundos.",
+    desc: "Descarga el APK de MonetizaLab e instálalo en tu celular Android. Solo toma unos segundos.",
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-[#A11213]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3" />
@@ -188,14 +188,14 @@ export default function TrabajaConNosotrosPage() {
           <Link href="/" className="flex items-center gap-3 shrink-0">
             <Image
               src="/logofull.jpeg"
-              alt="Pachamama"
+              alt="MonetizaLab"
               width={36}
               height={36}
               className="rounded-xl object-cover ring-2 ring-[#A11213]/40"
             />
             <div className="leading-tight">
-              <p className="text-white font-black text-base tracking-tight hidden sm:block">Pachamama</p>
-              <p className="text-white/30 text-[9px] uppercase tracking-widest hidden sm:block">Karaoke Bar · Tarapoto</p>
+              <p className="text-white font-black text-base tracking-tight hidden sm:block">MonetizaLab</p>
+              <p className="text-white/30 text-[9px] uppercase tracking-widest hidden sm:block">Plataforma de creadores</p>
             </div>
           </Link>
           <div className="hidden md:flex items-center gap-6 text-sm text-white/50">
@@ -238,11 +238,11 @@ export default function TrabajaConNosotrosPage() {
           </h1>
 
           <p className="text-white/50 text-lg sm:text-xl max-w-xl mb-10 leading-relaxed">
-            Únete a Pachamama y empieza a generar ingresos con horarios totalmente flexibles desde donde quieras.
+            Únete a MonetizaLab y empieza a generar ingresos con horarios totalmente flexibles desde donde quieras.
           </p>
 
           <a
-            href="https://wa.me/51933453022?text=Hola,%20me%20interesa%20trabajar%20como%20anfitriona%20en%20Pachamama"
+            href="https://wa.me/51933453022?text=Hola,%20me%20interesa%20trabajar%20como%20creador%20de%20contenido%20en%20MonetizaLab"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-[#A11213] hover:bg-[#8a0f10] active:scale-95 text-white font-black text-base px-10 py-4 rounded-2xl transition-all shadow-2xl shadow-[#A11213]/40 flex items-center gap-2"
@@ -259,7 +259,7 @@ export default function TrabajaConNosotrosPage() {
           {IMAGEN_TRABAJA ? (
             <img
               src={IMAGEN_TRABAJA}
-              alt="Trabaja con Pachamama"
+              alt="Trabaja con MonetizaLab"
               className="w-full max-w-sm lg:max-w-md rounded-3xl object-cover shadow-2xl"
             />
           ) : (
