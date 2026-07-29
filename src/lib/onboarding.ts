@@ -14,10 +14,11 @@ export interface OnboardingData {
 export interface OnboardingCompletion {
   publicCount: number;
   premiumCount: number;
-  priceOf: (serviceType: string) => number;
+  /** Precio del servicio, o `undefined` si aún no se ha definido (0 = gratis). */
+  priceOf: (serviceType: string) => number | undefined;
   /** Meta 1: perfil (avatar, portada, bio y fotos mínimas). */
   profileOk: boolean;
-  /** Metas 2-3: al menos el chat tiene precio (> 0). */
+  /** Metas 2-3: el chat tiene un precio definido (puede ser 0 = gratis). */
   servicesOk: boolean;
   /** El perfil está listo para operar. */
   complete: boolean;
@@ -49,16 +50,16 @@ export function computeCompletion({
   const publicCount = gallery.filter((g) => !g.isPremium).length;
   const premiumCount = gallery.filter((g) => g.isPremium).length;
   const priceOf = (serviceType: string) =>
-    prices.find((p) => p.serviceType === serviceType)?.price ?? 0;
+    prices.find((p) => p.serviceType === serviceType)?.price;
 
+  // Las fotos de galería son opcionales: el perfil se considera listo con
+  // avatar, portada y bio. La galería se puede completar después.
   const profileOk =
     !!profile.avatarUrl &&
     !!profile.coverUrl &&
-    !!profile.bio?.trim() &&
-    publicCount >= MIN_PUBLIC_PHOTOS &&
-    premiumCount >= MIN_PREMIUM_PHOTOS;
+    !!profile.bio?.trim();
 
-  const servicesOk = priceOf('MESSAGE_SEND') > 0;
+  const servicesOk = priceOf('MESSAGE_SEND') != null;
 
   return {
     publicCount,

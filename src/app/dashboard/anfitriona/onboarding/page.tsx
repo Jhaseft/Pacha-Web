@@ -8,8 +8,6 @@ import { apiCreateGalleryImage, apiUpsertServicePrice } from '@/lib/perfil';
 import {
   loadOnboardingData,
   computeCompletion,
-  MIN_PUBLIC_PHOTOS,
-  MIN_PREMIUM_PHOTOS,
 } from '@/lib/onboarding';
 import type { MyProfileData } from '@/types/perfil';
 import {
@@ -154,10 +152,14 @@ export default function OnboardingPage() {
         setBio(data.profile.bio ?? '');
         setExistingPublic(c.publicCount);
         setExistingPremium(c.premiumCount);
+        const priceStr = (k: ServiceKey) => {
+          const v = c.priceOf(k);
+          return v == null ? '' : String(v);
+        };
         setPrices({
-          MESSAGE_SEND: c.priceOf('MESSAGE_SEND') ? String(c.priceOf('MESSAGE_SEND')) : '',
-          CALL: c.priceOf('CALL') ? String(c.priceOf('CALL')) : '',
-          VIDEO_CALL: c.priceOf('VIDEO_CALL') ? String(c.priceOf('VIDEO_CALL')) : '',
+          MESSAGE_SEND: priceStr('MESSAGE_SEND'),
+          CALL: priceStr('CALL'),
+          VIDEO_CALL: priceStr('VIDEO_CALL'),
         });
       } catch {
         setError('No se pudo cargar tu perfil. Reintenta.');
@@ -197,10 +199,7 @@ export default function OnboardingPage() {
     if (!avatarFile && !profile.avatarUrl) return setError('Sube tu foto de perfil.');
     if (!coverFile && !profile.coverUrl) return setError('Sube tu foto de portada.');
     if (!bio.trim()) return setError('Escribe una breve información sobre ti.');
-    if (totalPublic < MIN_PUBLIC_PHOTOS)
-      return setError(`Sube al menos ${MIN_PUBLIC_PHOTOS} fotos para tu galería.`);
-    if (totalPremium < MIN_PREMIUM_PHOTOS)
-      return setError(`Sube al menos ${MIN_PREMIUM_PHOTOS} fotos exclusivas.`);
+    // Las fotos son opcionales: la anfitriona puede completar su galería más tarde.
     const unlock = Number(premiumUnlock);
     if (premiumFiles.length > 0 && (!unlock || unlock <= 0))
       return setError('Define cuántos créditos cuesta desbloquear tus fotos exclusivas.');
@@ -246,8 +245,8 @@ export default function OnboardingPage() {
     if (!enabled.MESSAGE_SEND) return setError('El chat privado es obligatorio.');
     for (const s of active) {
       const n = Number(prices[s.key]);
-      if (!prices[s.key] || isNaN(n) || n <= 0)
-        return setError(`Define un precio válido para "${s.title}".`);
+      if (prices[s.key].trim() === '' || isNaN(n) || n < 0)
+        return setError(`Define un precio válido para "${s.title}" (0 = gratis).`);
     }
     try {
       setSaving(true);
@@ -337,22 +336,22 @@ export default function OnboardingPage() {
               {/* Galería pública */}
               <FieldRow
                 index={3}
-                title={`Galería de fotos (mínimo ${MIN_PUBLIC_PHOTOS})`}
-                hint="Muestra tu mejor contenido."
-                done={totalPublic >= MIN_PUBLIC_PHOTOS}
+                title="Galería de fotos (opcional)"
+                hint="Muestra tu mejor contenido. Puedes agregarlas ahora o más tarde."
+                done={totalPublic > 0}
               >
                 <MultiImagePicker files={publicFiles} onChange={setPublicFiles} />
                 <p className="mt-1 text-xs font-semibold text-brand-violet">
-                  {totalPublic}/{MIN_PUBLIC_PHOTOS} fotos subidas
+                  {totalPublic} foto{totalPublic === 1 ? '' : 's'} subida{totalPublic === 1 ? '' : 's'}
                 </p>
               </FieldRow>
 
               {/* Fotos exclusivas */}
               <FieldRow
                 index={4}
-                title={`Fotos exclusivas (mínimo ${MIN_PREMIUM_PHOTOS})`}
+                title="Fotos exclusivas (opcional)"
                 hint="Fotos que solo verán tus clientes que paguen por ellas."
-                done={totalPremium >= MIN_PREMIUM_PHOTOS}
+                done={totalPremium > 0}
               >
                 <MultiImagePicker files={premiumFiles} onChange={setPremiumFiles} premium />
                 <div className="mt-2 flex items-center gap-2">
@@ -367,7 +366,7 @@ export default function OnboardingPage() {
                   <span className="text-xs text-ink-soft">créditos c/u</span>
                 </div>
                 <p className="mt-1 text-xs font-semibold text-brand-violet">
-                  {totalPremium}/{MIN_PREMIUM_PHOTOS} fotos exclusivas
+                  {totalPremium} foto{totalPremium === 1 ? '' : 's'} exclusiva{totalPremium === 1 ? '' : 's'}
                 </p>
               </FieldRow>
 
@@ -469,7 +468,7 @@ export default function OnboardingPage() {
                       <span className="text-ink-soft text-sm font-semibold">Cr</span>
                       <input
                         type="number"
-                        min={1}
+                        min={0}
                         value={prices[s.key]}
                         onChange={(e) =>
                           setPrices((p) => ({ ...p, [s.key]: e.target.value }))
