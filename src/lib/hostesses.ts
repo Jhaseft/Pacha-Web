@@ -66,10 +66,19 @@ export type HostessesPage = {
   hasMore: boolean;
 };
 
-/** GET /anfitrionas/public?page=&limit= — público, sin token. */
-export async function getPublicHostesses(page = 1, limit = 10): Promise<HostessesPage> {
+/**
+ * GET /anfitrionas/public?page=&limit= — público, sin token.
+ * `revalidate` solo aplica cuando se llama desde el servidor (ISR); en el
+ * cliente se ignora. Sin él, el fetch no se cachea (default de Next 16).
+ */
+export async function getPublicHostesses(
+  page = 1,
+  limit = 10,
+  opts: { revalidate?: number } = {},
+): Promise<HostessesPage> {
   const res = await apiFetch<ApiListResponse>(
     `/anfitrionas/public?page=${page}&limit=${limit}`,
+    opts.revalidate === undefined ? {} : { next: { revalidate: opts.revalidate } },
   );
   return {
     anfitrionas: res.data.map(mapListItem),

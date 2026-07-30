@@ -1,4 +1,5 @@
 import { apiAxios } from "./apiClient";
+import { apiFetch } from "./api";
 import { CategoryData } from "@/types/category";
 
 function parseApiError(error: any, fallback: string) {
@@ -28,6 +29,17 @@ export const apiGetActiveCategories = async (): Promise<CategoryData[]> => {
     throw new Error(parseApiError(error, "Error al obtener las categorías"));
   }
 };
+
+// CATEGORÍAS ACTIVAS con fetch nativo — para Server Components.
+// A diferencia de apiGetActiveCategories (axios), esta versión sí participa
+// del cache de Next: pasa `revalidate` para que la página use ISR.
+export const getActiveCategories = async (
+  opts: { revalidate?: number } = {},
+): Promise<CategoryData[]> =>
+  apiFetch<CategoryData[]>(
+    "/categories",
+    opts.revalidate === undefined ? {} : { next: { revalidate: opts.revalidate } },
+  );
 
 // CREAR CATEGORÍA
 export const apiCreateCategory = async (
