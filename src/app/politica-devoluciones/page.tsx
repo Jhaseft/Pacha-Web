@@ -88,8 +88,8 @@ export default function PoliticaDevolucionesPage() {
             </ul>
             <p>
               La solicitud deberá enviarse a{" "}
-              <a href="mailto:contacto@pachamama.pe" className="text-[#A11213] hover:text-[#e03030] transition-colors underline">
-                contacto@pachamama.pe
+              <a href="mailto:contacto@monetizalab.vip" className="text-[#A11213] hover:text-[#e03030] transition-colors underline">
+                contacto@monetizalab.vip
               </a>{" "}
               con asunto: <strong className="text-white">"Error de cobro - [nombre del usuario]"</strong>.
             </p>

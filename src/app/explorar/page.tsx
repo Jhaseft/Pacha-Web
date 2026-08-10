@@ -29,7 +29,7 @@ export default function ExplorarPage() {
       setItems((prev) => (replace ? res.anfitrionas : [...prev, ...res.anfitrionas]));
       setHasMore(res.hasMore);
     } catch {
-      setError('No se pudieron cargar las creadoras. Verifica tu conexión.');
+      setError('No se pudieron cargar los creadores. Verifica tu conexión.');
     } finally {
       replace ? setLoading(false) : setLoadingMore(false);
     }
@@ -66,7 +66,7 @@ export default function ExplorarPage() {
           </span>
           <span className="ml-auto hidden sm:inline-flex items-center gap-1.5 text-white/50 text-sm">
             <Users size={16} className="text-secondary" />
-            Explorar creadoras
+            Explorar creadores
           </span>
         </div>
       </header>
@@ -75,7 +75,7 @@ export default function ExplorarPage() {
         {/* Título */}
         <div className="text-center mb-6">
           <h1 className="text-2xl sm:text-3xl font-extrabold">
-            Descubre <span className="text-secondary">creadoras</span>
+            Descubre <span className="text-secondary">creadores</span>
           </h1>
           <p className="text-white/60 mt-1 text-sm">Encuentra con quién quieres conectar</p>
         </div>
@@ -122,7 +122,7 @@ export default function ExplorarPage() {
               <Search size={24} className="text-white/40" />
             </div>
             <p className="text-white/50">
-              {q ? `No se encontraron creadoras para “${query}”.` : 'Aún no hay creadoras.'}
+              {q ? `No se encontraron creadores para “${query}”.` : 'Aún no hay creadores.'}
             </p>
           </div>
         ) : (

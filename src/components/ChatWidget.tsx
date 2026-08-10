@@ -141,7 +141,7 @@ export function ChatWidget() {
                   className="w-full flex items-center gap-4 bg-white/5 hover:bg-[#A11213]/20 border border-white/8 hover:border-[#A11213]/40 rounded-2xl px-5 py-4 transition-all group"
                 >
                   <div className="w-10 h-10 rounded-xl bg-[#A11213]/15 border border-[#A11213]/20 flex items-center justify-center flex-none group-hover:bg-[#A11213]/30 transition-colors text-lg">
-                    💃
+                    🎬
                   </div>
                   <div className="text-left">
                     <p className="text-white font-bold text-sm">¿Quieres trabajar con nosotros?</p>
@@ -178,7 +178,7 @@ export function ChatWidget() {
                   welcomeMessage={
                     role === "usuario"
                       ? "¡Hola! 👋 Soy el asistente de MonetizaLab. ¿En qué te puedo ayudar hoy?"
-                      : "¡Hola! 💫 Soy el asistente para creadoras. ¿Tienes dudas sobre cómo empezar a ganar?"
+                      : "¡Hola! 💫 Soy el asistente para creadores. ¿Tienes dudas sobre cómo empezar a ganar?"
                   }
                   sugerencias={[]}
                   embedded

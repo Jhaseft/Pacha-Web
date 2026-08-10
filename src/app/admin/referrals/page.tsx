@@ -261,7 +261,7 @@ export default function AdminReferralsPage() {
           <p className="text-white text-2xl font-black">{items.length}</p>
         </div>
         <div className="bg-[#111] border border-white/5 rounded-xl px-4 py-3">
-          <p className="text-white/40 text-xs">Total generado por creadoras referidas</p>
+          <p className="text-white/40 text-xs">Total generado por creadores referidos</p>
           <p className="text-white text-2xl font-black">S/ {formatMoney(totals.generated)}</p>
         </div>
         <div className="bg-[#111] border border-white/5 rounded-xl px-4 py-3">

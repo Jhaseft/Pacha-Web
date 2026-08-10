@@ -29,8 +29,8 @@ const PASOS_CREAR_CUENTA = [
   },
   {
     step: "02",
-    title: "Regístrate como creadora",
-    desc: "Abre la app, selecciona 'Soy creadora' y completa tu perfil con tus datos básicos.",
+    title: "Regístrate como creador",
+    desc: "Abre la app, selecciona 'Soy creador' y completa tu perfil con tus datos básicos.",
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-[#A11213]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
@@ -226,7 +226,7 @@ export default function TrabajaConNosotrosPage() {
         <div className="relative flex-1 flex flex-col items-center lg:items-start text-center lg:text-left z-10">
           <div className="mb-6 inline-flex items-center gap-2 bg-[#A11213]/15 border border-[#A11213]/30 rounded-full px-4 py-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-[#A11213] animate-pulse" />
-            <span className="text-[#e07070] text-xs font-bold uppercase tracking-widest">Para creadoras</span>
+            <span className="text-[#e07070] text-xs font-bold uppercase tracking-widest">Para creadores</span>
           </div>
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight mb-5 max-w-2xl">
