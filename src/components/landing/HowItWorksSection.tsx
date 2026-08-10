@@ -4,11 +4,11 @@ import { CtaBanner } from "./CtaBanner";
 
 // ▸ Pon la captura/mockup de cada paso en `img` (opcional).
 const STEPS = [
-  { n: "1", title: "Crea tu cuenta", desc: "Regístrate en segundos y comienza tu viaje como creador.", img: "" },
-  { n: "2", title: "Personaliza tu perfil", desc: "Agrega tu foto, biografía, redes y métodos de pago.", img: "" },
-  { n: "3", title: "Obtén tu enlace único", desc: "Te damos un enlace personalizado listo para compartir.", img: "" },
-  { n: "4", title: "Compártelo con tu comunidad", desc: "Ponlo en tu bio, stories, posts o donde quieras.", img: "" },
-  { n: "5", title: "Comienza a monetizar", desc: "Chatea, llama, haz videollamadas, ofrece contenido y gana.", img: "" },
+  { n: "1", title: "Crea tu cuenta", desc: "Regístrate en segundos y comienza tu viaje como creador.", img: "https://res.cloudinary.com/dcyx3nqj5/image/upload/v1785383115/WhatsApp_Image_2026-07-29_at_11.27.47_PM_uol2kd.jpg" },
+  { n: "2", title: "Personaliza tu perfil", desc: "Agrega tu foto, biografía, redes y métodos de pago.", img: "https://res.cloudinary.com/dcyx3nqj5/image/upload/v1785383122/Gemini_Generated_Image_adjk9eadjk9eadjk_ctaedu.png" },
+  { n: "3", title: "Obtén tu enlace único", desc: "Te damos un enlace personalizado listo para compartir.", img: "https://res.cloudinary.com/dcyx3nqj5/image/upload/v1785383123/Gemini_Generated_Image_tqfxvftqfxvftqfx_dtvq74.png" },
+  { n: "4", title: "Compártelo con tu comunidad", desc: "Ponlo en tu bio, stories, posts o donde quieras.", img: "https://res.cloudinary.com/dcyx3nqj5/image/upload/v1785383131/Gemini_Generated_Image_lsikpjlsikpjlsik_cm0iy5.png" },
+  { n: "5", title: "Comienza a monetizar", desc: "Chatea, llama, haz videollamadas, ofrece contenido y gana.", img: "https://res.cloudinary.com/dcyx3nqj5/image/upload/v1785383127/Gemini_Generated_Image_wdrqbewdrqbewdrq_el7rs7.png" },
 ];
 
 export function HowItWorksSection() {
@@ -30,8 +30,8 @@ export function HowItWorksSection() {
               </svg>
             )}
 
-            <div className="bg-card border border-line rounded-3xl p-5 h-full flex flex-col hover:border-brand/40 hover:shadow-xl hover:shadow-brand/10 transition-all">
-              <span className="w-9 h-9 rounded-full bg-linear-to-br from-brand to-brand-violet text-white font-black text-sm flex items-center justify-center mb-4 shadow-lg shadow-brand/25">
+            <div className="bg-card border border-line rounded-3xl p-4 h-full flex flex-col hover:border-brand/40 hover:shadow-xl hover:shadow-brand/10 transition-all">
+              <span className="w-9 h-9 rounded-2xl bg-linear-to-br from-brand to-brand-violet text-white font-black text-sm flex items-center justify-center mb-4 shadow-lg shadow-brand/25">
                 {s.n}
               </span>
               <div className="mb-4">
