@@ -259,7 +259,7 @@ export default function CreatorLoginScreen() {
                   }}
                   className="block w-full text-center text-ink-faint text-xs hover:text-ink-soft transition-colors"
                 >
-                  ¿Administrador o creadora? Inicia sesión con correo y contraseña
+                  ¿Administrador o creador? Inicia sesión con correo y contraseña
                 </button>
               ) : (
                 <div className="space-y-3">

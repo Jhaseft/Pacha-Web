@@ -25,7 +25,7 @@ export default function Footer() {
                 <CheckCircle size={28} className="text-brand" />
               </div>
               <h3 className="text-ink font-bold text-sm sm:text-base mb-1">
-                Creadora Verificada
+                Creador Verificado
               </h3>
               <p className="text-ink-faint text-xs sm:text-sm">
                 Perfil autenticado por MonetizaLab.

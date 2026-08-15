@@ -297,7 +297,7 @@ function ProfilePageContent({ params }: ProfilePageProps) {
           onClick={() => router.push('/creadores')}
           className="bg-linear-to-r from-secondary to-purple hover:opacity-90 text-white px-8 py-3 rounded-full font-bold transition"
         >
-          Ver otras creadoras
+          Ver otros creadores
         </button>
       </div>
     );
@@ -686,7 +686,7 @@ function ProfilePageContent({ params }: ProfilePageProps) {
                 icon={<BadgeCheck size={22} className="text-purple" />}
                 title={
                   <span className="bg-linear-to-r from-secondary to-purple bg-clip-text text-transparent">
-                    Creadora verificada
+                    Creador verificado
                   </span>
                 }
                 text="Perfil autenticado por MonetizaLab"

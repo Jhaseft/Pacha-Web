@@ -5,10 +5,10 @@ import { trackPixel } from "@/lib/pixel";
 const CONTACT = {
   whatsapp: "+51 933 453 022",
   whatsappLink: "https://wa.me/51933453022",
-  email: "pachamamabar2020@gmail.com",
+  email: "contacto@monetizalab.vip",
   address: "Jirón Limatambo 386, Tarapoto 22202, Perú",
   facebook: "https://www.facebook.com/share/1CXaS1fbq3/",
-  tiktok: "https://www.tiktok.com/@pachamama.tarapot?_r=1&_t=ZS-958bCZCbA4w",
+  tiktok: "https://www.tiktok.com/@monetizalab",
 };
 
 function ContactCard({

@@ -29,7 +29,7 @@ const tabsByRole = {
   ADMIN: [
     { name: 'admin', title: 'Inicio', icon: Home },
     { name: 'admin/clientes', title: 'Clientes', icon: User },
-    { name: 'admin/anfitrionas', title: 'Anfitrionas', icon: MessageCircle },
+    { name: 'admin/anfitrionas', title: 'Creadores', icon: MessageCircle },
     { name: 'admin/packages', title: 'Paquetes', icon: Gem },
   ],
 };

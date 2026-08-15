@@ -100,7 +100,7 @@ export default function DashboardReferralsPage() {
           <div>
             <h1 className="text-ink text-3xl font-black tracking-tight">Creadores referidos</h1>
             <p className="text-ink-faint text-sm mt-1">
-              Revisa tus contratos de referido y las comisiones generadas por cada creadora de contenido.
+              Revisa tus contratos de referido y las comisiones generadas por cada creador de contenido.
             </p>
           </div>
           <Link
