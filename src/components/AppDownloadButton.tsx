@@ -3,11 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import { trackPixel } from "@/lib/pixel";
 
-const APK_URL = process.env.NEXT_PUBLIC_APK_URL;
+const STORE_URL = process.env.NEXT_PUBLIC_APK_URL;
 
-const AndroidIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 shrink-0" viewBox="0 0 24 24" fill="white">
-    <path d="M17.523 15.341a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm-11.046 0a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM2.1 8.4h19.8A1.1 1.1 0 0 1 23 9.5v6a1.1 1.1 0 0 1-1.1 1.1H21v2.65a.75.75 0 0 1-1.5 0V16.6H4.5v2.65a.75.75 0 0 1-1.5 0V16.6h-.9A1.1 1.1 0 0 1 1 15.5v-6A1.1 1.1 0 0 1 2.1 8.4Zm.9 1.5v5h18v-5H3ZM8.22 2.47a.75.75 0 0 1 1.02-.28L12 3.8l2.76-1.61a.75.75 0 1 1 .75 1.3L13.5 4.8V7.4h-3V4.8L8.5 3.49a.75.75 0 0 1-.28-1.02Z" />
+const GooglePlayIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 shrink-0" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+    <path d="M22.018 13.298l-3.919 2.218-3.515-3.493 3.543-3.521 3.891 2.202a1.49 1.49 0 0 1 0 2.594zM1.337.924a1.486 1.486 0 0 0-.112.568v21.017c0 .217.045.419.124.6l11.155-11.087L1.337.924zm12.207 10.065l3.258-3.238L3.45.195a1.466 1.466 0 0 0-.946-.179l11.04 10.973zm0 2.067l-11 10.933c.298.036.612-.016.906-.183l13.324-7.54-3.23-3.21z" />
   </svg>
 );
 
@@ -31,6 +31,9 @@ export function AppDownloadButton({ variant = "general" }: { variant?: "cliente"
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Sin URL configurada preferimos no pintar un botón muerto.
+  if (!STORE_URL) return null;
 
   const baseClasses = [
     "fixed z-40",
@@ -62,33 +65,38 @@ export function AppDownloadButton({ variant = "general" }: { variant?: "cliente"
     "w-auto h-auto px-6 py-3.5 rounded-2xl",
   ];
 
+  // Enlace externo a Google Play: se abre en pestaña nueva y en Android
+  // lo intercepta la app de Play Store.
+  const linkProps = {
+    href: STORE_URL,
+    target: "_blank",
+    rel: "noopener noreferrer",
+    onClick: () => trackPixel(eventName),
+  } as const;
+
   return (
     <>
       {/* Mobile compact (circular) */}
       <a
-        href={APK_URL}
-        download
-        title="Descargar app Android"
-        onClick={() => trackPixel(eventName)}
+        {...linkProps}
+        title="Descargar en Google Play"
         className={[...baseClasses, ...mobileCompact, compact ? "" : "hidden"].join(" ")}
       >
-        <AndroidIcon />
+        <GooglePlayIcon />
       </a>
 
       {/* Mobile full-width bar */}
       <a
-        href={APK_URL}
-        download
-        title="Descargar aplicación Android"
-        onClick={() => trackPixel(eventName)}
+        {...linkProps}
+        title="Descargar en Google Play"
         className={[...baseClasses, ...mobileFull, compact ? "hidden" : ""].join(" ")}
       >
-        <AndroidIcon />
+        <GooglePlayIcon />
         <span className="flex flex-col leading-tight flex-1">
           <span className="text-white/65 text-[10px] font-semibold uppercase tracking-widest leading-none">
-            Descargar app
+            Descargar en
           </span>
-          <span className="text-sm leading-tight">Android .apk</span>
+          <span className="text-sm leading-tight">Google Play</span>
         </span>
         <span className="flex flex-col items-end leading-tight border-l border-white/25 pl-3">
           <span className="text-white font-black text-sm leading-none">+500</span>
@@ -98,18 +106,16 @@ export function AppDownloadButton({ variant = "general" }: { variant?: "cliente"
 
       {/* Desktop pill */}
       <a
-        href={APK_URL}
-        download
-        title="Descargar aplicación Android"
-        onClick={() => trackPixel(eventName)}
+        {...linkProps}
+        title="Descargar en Google Play"
         className={[...baseClasses, ...desktop].join(" ")}
       >
-        <AndroidIcon />
+        <GooglePlayIcon />
         <span className="flex flex-col leading-tight">
           <span className="text-white/65 text-[10px] font-semibold uppercase tracking-widest leading-none">
-            Descargar app
+            Descargar en
           </span>
-          <span className="text-sm leading-tight">Android .apk</span>
+          <span className="text-sm leading-tight">Google Play</span>
         </span>
       </a>
     </>

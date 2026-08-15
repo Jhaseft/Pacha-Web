@@ -336,16 +336,14 @@ function ProfilePageContent({ params }: ProfilePageProps) {
               </div>
 
               <span
-                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold ${
-                  profile.isOnline
-                    ? 'bg-emerald-500/15 border border-emerald-400/40 text-emerald-300'
-                    : 'bg-white/10 border border-white/15 text-white/70'
-                }`}
+                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold ${profile.isOnline
+                  ? 'bg-emerald-500/15 border border-emerald-400/40 text-emerald-300'
+                  : 'bg-white/10 border border-white/15 text-white/70'
+                  }`}
               >
                 <span
-                  className={`w-1.5 h-1.5 rounded-full ${
-                    profile.isOnline ? 'bg-emerald-400 animate-pulse' : 'bg-white/50'
-                  }`}
+                  className={`w-1.5 h-1.5 rounded-full ${profile.isOnline ? 'bg-emerald-400 animate-pulse' : 'bg-white/50'
+                    }`}
                 />
                 {profile.isOnline ? 'EN LÍNEA AHORA' : 'DESCONECTADA'}
               </span>
@@ -514,9 +512,8 @@ function ProfilePageContent({ params }: ProfilePageProps) {
                   <Link
                     href={`/anfitrionas/${username}/desbloquear`}
                     key={img.id}
-                    className={`group relative aspect-square rounded-2xl overflow-hidden border border-surface-border ${
-                      idx >= 3 ? 'hidden sm:block' : ''
-                    }`}
+                    className={`group relative aspect-square rounded-2xl overflow-hidden border border-surface-border ${idx >= 3 ? 'hidden sm:block' : ''
+                      }`}
                   >
                     <Image
                       src={img.imageUrl}
@@ -575,9 +572,8 @@ function ProfilePageContent({ params }: ProfilePageProps) {
                   <button
                     key={img.id}
                     onClick={() => setViewingImage(img.imageUrl)}
-                    className={`group relative aspect-square rounded-2xl overflow-hidden border border-surface-border ${
-                      idx >= 3 ? 'hidden sm:block' : ''
-                    }`}
+                    className={`group relative aspect-square rounded-2xl overflow-hidden border border-surface-border ${idx >= 3 ? 'hidden sm:block' : ''
+                      }`}
                   >
                     <Image
                       src={img.imageUrl}
@@ -903,11 +899,10 @@ function ConnectCard({
     <button
       onClick={enabled ? onClick : undefined}
       disabled={!enabled}
-      className={`relative flex flex-col items-start gap-3 rounded-2xl border p-4 text-left transition ${
-        highlight
-          ? 'border-amber-400/60 bg-linear-to-br from-amber-500/15 to-surface-card shadow-lg shadow-amber-500/30 ring-1 ring-amber-400/30 hover:shadow-amber-500/50'
-          : 'border-surface-border bg-surface-card shadow-lg shadow-black/40 hover:border-white/30'
-      } ${enabled ? 'hover:-translate-y-0.5 cursor-pointer' : 'opacity-50 cursor-not-allowed'}`}
+      className={`relative flex flex-col items-start gap-3 rounded-2xl border p-4 text-left transition ${highlight
+        ? 'border-amber-400/60 bg-linear-to-br from-amber-500/15 to-surface-card shadow-lg shadow-amber-500/30 ring-1 ring-amber-400/30 hover:shadow-amber-500/50'
+        : 'border-surface-border bg-surface-card shadow-lg shadow-black/40 hover:border-white/30'
+        } ${enabled ? 'hover:-translate-y-0.5 cursor-pointer' : 'opacity-50 cursor-not-allowed'}`}
     >
       {highlight && (
         <span className="absolute top-2 right-2 rounded-full bg-linear-to-r from-amber-300 to-amber-500 px-2 py-0.5 text-[9px] font-extrabold text-black shadow shadow-amber-400/50">
